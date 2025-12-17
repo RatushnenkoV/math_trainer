@@ -120,11 +120,11 @@ class QuadraticEquationsProblemGenerator {
         const b = -leadingCoef * (x1 + x2);
         const c = leadingCoef * x1 * x2;
 
-        // Создаём три члена уравнения
+        // Создаём три члена уравнения с указанием их стороны (left/right)
         const terms = [
-            { coef: a, variable: 'x^2', value: a },
-            { coef: b, variable: 'x', value: b },
-            { coef: c, variable: '', value: c }
+            { coef: a, variable: 'x^2', value: a, side: 'left' },
+            { coef: b, variable: 'x', value: b, side: 'left' },
+            { coef: c, variable: '', value: c, side: 'left' }
         ];
 
         // Фильтруем ненулевые члены
@@ -141,8 +141,14 @@ class QuadraticEquationsProblemGenerator {
         // Случайно распределяем члены между левой и правой частью
         // Левая часть должна быть не пустой
         const leftCount = this.randomInt(1, shuffled.length);
-        const leftTerms = shuffled.slice(0, leftCount);
-        const rightTerms = shuffled.slice(leftCount);
+
+        // Помечаем, какие члены в какой части
+        shuffled.forEach((term, index) => {
+            term.side = index < leftCount ? 'left' : 'right';
+        });
+
+        const leftTerms = shuffled.filter(t => t.side === 'left');
+        const rightTerms = shuffled.filter(t => t.side === 'right');
 
         // Формируем левую часть
         let leftSide = this.formatSide(leftTerms, true);
@@ -157,14 +163,39 @@ class QuadraticEquationsProblemGenerator {
 
         const equation = `${leftSide}=${rightSide}`;
 
+        // Вычисляем реальные коэффициенты с учётом переноса членов
+        // Члены в правой части при переносе меняют знак
+        let finalA = 0, finalB = 0, finalC = 0;
+
+        shuffled.forEach(term => {
+            const sign = term.side === 'left' ? 1 : -1;
+            if (term.variable === 'x^2') {
+                finalA += sign * term.value;
+            } else if (term.variable === 'x') {
+                finalB += sign * term.value;
+            } else {
+                finalC += sign * term.value;
+            }
+        });
+
+        // Вычисляем корни по формуле квадратного уравнения
+        const discriminant = finalB * finalB - 4 * finalA * finalC;
+        let rootX1, rootX2;
+
+        if (discriminant >= 0) {
+            const sqrtD = Math.sqrt(discriminant);
+            rootX1 = (-finalB + sqrtD) / (2 * finalA);
+            rootX2 = (-finalB - sqrtD) / (2 * finalA);
+        }
+
         return {
             equation: equation,
             solution: {
-                x1: x1,
-                x2: x2,
-                discriminant: b * b - 4 * a * c
+                x1: Math.round(rootX1),
+                x2: Math.round(rootX2),
+                discriminant: discriminant
             },
-            coefficients: { a, b, c },
+            coefficients: { a: finalA, b: finalB, c: finalC },
             isLatex: true
         };
     }
