@@ -58,10 +58,21 @@ class QuadraticEquationsProblemGenerator {
     }
 
     // Генерация стандартного квадратного уравнения: ax^2 + bx + c = 0
+    // Уравнение генерируется от целых корней x1 и x2
     generateStandard() {
-        const a = this.randomNonZero(-10, 10);
-        const b = this.randomWithZero(-20, 20);
-        const c = this.randomWithZero(-20, 20);
+        // Генерируем целые корни
+        const x1 = this.randomInt(-10, 10);
+        const x2 = this.randomInt(-10, 10);
+
+        // Генерируем коэффициент a (может быть любым ненулевым числом)
+        const leadingCoef = this.randomNonZero(-5, 5);
+
+        // Вычисляем коэффициенты по формуле: a(x - x1)(x - x2) = 0
+        // Раскрываем: a(x^2 - x1*x - x2*x + x1*x2) = 0
+        // Получаем: a*x^2 - a*(x1+x2)*x + a*x1*x2 = 0
+        const a = leadingCoef;
+        const b = -leadingCoef * (x1 + x2);
+        const c = leadingCoef * x1 * x2;
 
         let equation = '';
 
@@ -83,31 +94,13 @@ class QuadraticEquationsProblemGenerator {
 
         equation += '=0';
 
-        // Вычисляем корни для проверки
-        const discriminant = b * b - 4 * a * c;
-        let solution = null;
-
-        if (discriminant >= 0) {
-            const sqrtD = Math.sqrt(discriminant);
-            const x1 = (-b + sqrtD) / (2 * a);
-            const x2 = (-b - sqrtD) / (2 * a);
-
-            // Округляем до 4 знаков после запятой
-            solution = {
-                x1: Math.round(x1 * 10000) / 10000,
-                x2: Math.round(x2 * 10000) / 10000,
-                discriminant: discriminant
-            };
-        } else {
-            solution = {
-                discriminant: discriminant,
-                noRealRoots: true
-            };
-        }
-
         return {
             equation: equation,
-            solution: solution,
+            solution: {
+                x1: x1,
+                x2: x2,
+                discriminant: b * b - 4 * a * c
+            },
             coefficients: { a, b, c },
             isLatex: true
         };
@@ -115,9 +108,17 @@ class QuadraticEquationsProblemGenerator {
 
     // Генерация уравнения в нестандартном виде (члены перемешаны)
     generateNonStandard() {
-        const a = this.randomNonZero(-10, 10);
-        const b = this.randomWithZero(-20, 20);
-        const c = this.randomWithZero(-20, 20);
+        // Генерируем целые корни
+        const x1 = this.randomInt(-10, 10);
+        const x2 = this.randomInt(-10, 10);
+
+        // Генерируем коэффициент a (может быть любым ненулевым числом)
+        const leadingCoef = this.randomNonZero(-5, 5);
+
+        // Вычисляем коэффициенты по формуле: a(x - x1)(x - x2) = 0
+        const a = leadingCoef;
+        const b = -leadingCoef * (x1 + x2);
+        const c = leadingCoef * x1 * x2;
 
         // Создаём три члена уравнения
         const terms = [
@@ -156,30 +157,13 @@ class QuadraticEquationsProblemGenerator {
 
         const equation = `${leftSide}=${rightSide}`;
 
-        // Вычисляем корни (используем исходные коэффициенты a, b, c)
-        const discriminant = b * b - 4 * a * c;
-        let solution = null;
-
-        if (discriminant >= 0) {
-            const sqrtD = Math.sqrt(discriminant);
-            const x1 = (-b + sqrtD) / (2 * a);
-            const x2 = (-b - sqrtD) / (2 * a);
-
-            solution = {
-                x1: Math.round(x1 * 10000) / 10000,
-                x2: Math.round(x2 * 10000) / 10000,
-                discriminant: discriminant
-            };
-        } else {
-            solution = {
-                discriminant: discriminant,
-                noRealRoots: true
-            };
-        }
-
         return {
             equation: equation,
-            solution: solution,
+            solution: {
+                x1: x1,
+                x2: x2,
+                discriminant: b * b - 4 * a * c
+            },
             coefficients: { a, b, c },
             isLatex: true
         };
