@@ -15,6 +15,7 @@
             <button id="fractions-btn" class="menu-button">Обыкновенные дроби</button>
             <button id="decimals-btn" class="menu-button">Десятичные дроби</button>
             <button id="negatives-btn" class="menu-button">Отрицательные числа</button>
+            <button id="divisibility-btn" class="menu-button">Делимость</button>
         </div>
 
         <!-- Fractions Test Screen -->
@@ -259,6 +260,85 @@
             </div>
         </div>
 
+        <!-- Divisibility Test Screen -->
+        <div id="divisibility-screen" class="screen">
+            <div class="header">
+                <button id="divisibility-back-btn" class="icon-button">←</button>
+                <div id="divisibility-progress-container" class="progress-container">
+                    <div class="progress-info">
+                        <span id="divisibility-level-text">Уровень 1</span>
+                        <span id="divisibility-progress-text">0/10</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div id="divisibility-progress-fill" class="progress-fill"></div>
+                    </div>
+                </div>
+                <button id="divisibility-settings-btn" class="icon-button">⚙</button>
+            </div>
+
+            <div class="content">
+                <div id="divisibility-problem-display" class="problem-display">
+                    <div class="divisibility-question">
+                        Делится ли число <span id="divisibility-number" class="divisibility-number"></span> на <span id="divisibility-divisor" class="divisibility-divisor"></span>?
+                    </div>
+                </div>
+
+                <div class="divisibility-buttons">
+                    <button id="divisibility-yes-btn" class="divisibility-btn yes-btn">Да</button>
+                    <button id="divisibility-no-btn" class="divisibility-btn no-btn">Нет</button>
+                </div>
+
+                <div id="divisibility-result-message" class="result-message"></div>
+            </div>
+        </div>
+
+        <!-- Divisibility Settings Screen -->
+        <div id="divisibility-settings-screen" class="screen">
+            <div class="header">
+                <button id="divisibility-settings-back-btn" class="icon-button">←</button>
+                <h2>Настройки</h2>
+                <div></div>
+            </div>
+
+            <div class="settings-content">
+                <div class="settings-group">
+                    <h3>Делимость на</h3>
+                    <label class="switch-label">
+                        <input type="checkbox" id="divisibility-div2" checked>
+                        <span>2</span>
+                    </label>
+                    <label class="switch-label">
+                        <input type="checkbox" id="divisibility-div3" checked>
+                        <span>3</span>
+                    </label>
+                    <label class="switch-label">
+                        <input type="checkbox" id="divisibility-div4" checked>
+                        <span>4</span>
+                    </label>
+                    <label class="switch-label">
+                        <input type="checkbox" id="divisibility-div5" checked>
+                        <span>5</span>
+                    </label>
+                    <label class="switch-label">
+                        <input type="checkbox" id="divisibility-div6" checked>
+                        <span>6</span>
+                    </label>
+                    <label class="switch-label">
+                        <input type="checkbox" id="divisibility-div8" checked>
+                        <span>8</span>
+                    </label>
+                    <label class="switch-label">
+                        <input type="checkbox" id="divisibility-div9" checked>
+                        <span>9</span>
+                    </label>
+                    <label class="switch-label">
+                        <input type="checkbox" id="divisibility-div10" checked>
+                        <span>10</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
         <!-- Emoji Animation Container -->
         <div id="emoji-container"></div>
     </div>
@@ -271,12 +351,14 @@
     <script src="src/utils/generators/FractionsGenerator.js"></script>
     <script src="src/utils/generators/DecimalsGenerator.js"></script>
     <script src="src/utils/generators/NegativesGenerator.js"></script>
+    <script src="src/utils/generators/DivisibilityGenerator.js"></script>
 
     <!-- Тренажёры -->
     <script src="src/trainers/BaseTrainer.js"></script>
     <script src="src/trainers/FractionsTrainer.js"></script>
     <script src="src/trainers/DecimalsTrainer.js"></script>
     <script src="src/trainers/NegativesTrainer.js"></script>
+    <script src="src/trainers/DivisibilityTrainer.js"></script>
 
     <!-- Главное приложение -->
     <script src="src/app.js"></script>

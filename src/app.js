@@ -23,11 +23,13 @@ function initApp() {
     trainers.fractions = new FractionsTrainer();
     trainers.decimals = new DecimalsTrainer();
     trainers.negatives = new NegativesTrainer();
+    trainers.divisibility = new DivisibilityTrainer();
 
     // Инициализация DOM для каждого тренажёра
     trainers.fractions.initDOM();
     trainers.decimals.initDOM();
     trainers.negatives.initDOM();
+    trainers.divisibility.initDOM();
 
     // Инициализация главного меню
     initMainMenu();
@@ -77,6 +79,12 @@ function initMainMenu() {
         showScreen('negatives-screen');
         trainers.negatives.startTest();
     });
+
+    const divisibilityBtn = document.getElementById('divisibility-btn');
+    divisibilityBtn.addEventListener('click', () => {
+        showScreen('divisibility-screen');
+        trainers.divisibility.startTest();
+    });
 }
 
 // Инициализация Telegram BackButton
@@ -101,6 +109,7 @@ function handleBackButton() {
         case 'fractions-screen':
         case 'decimals-screen':
         case 'negatives-screen':
+        case 'divisibility-screen':
             // Из экрана тренажёра возвращаемся в главное меню
             showScreen('main-menu');
             break;
@@ -121,6 +130,12 @@ function handleBackButton() {
             // Из настроек отрицательных чисел возвращаемся к тренажёру отрицательных чисел
             showScreen('negatives-screen');
             trainers.negatives.generateNewProblem();
+            break;
+
+        case 'divisibility-settings-screen':
+            // Из настроек делимости возвращаемся к тренажёру делимости
+            showScreen('divisibility-screen');
+            trainers.divisibility.generateNewProblem();
             break;
 
         case 'main-menu':
@@ -163,6 +178,8 @@ function initHistoryNavigation() {
                 trainers.decimals.generateNewProblem();
             } else if (screenId === 'negatives-screen') {
                 trainers.negatives.generateNewProblem();
+            } else if (screenId === 'divisibility-screen') {
+                trainers.divisibility.generateNewProblem();
             }
         } else {
             // Если нет состояния, возвращаемся в главное меню
