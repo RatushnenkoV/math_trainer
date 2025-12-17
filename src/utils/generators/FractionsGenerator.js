@@ -42,8 +42,8 @@ class ProblemGenerator {
         const fraction = new Fraction(numerator, denominator, whole);
         fraction.simplify();
 
-        // Если разрешены отрицательные числа
-        if (allowNegative && this.settings.negativeNumbers && Math.random() > 0.7) {
+        // Если разрешены отрицательные числа, делаем 50% дробей отрицательными
+        if (allowNegative && this.settings.negativeNumbers && Math.random() > 0.5) {
             if (fraction.whole !== 0) {
                 fraction.whole = -fraction.whole;
             } else {
@@ -103,8 +103,10 @@ class ProblemGenerator {
             attempt++;
 
             const operation = this.generateOperation();
-            const fraction1 = this.generateFraction(true);
-            const fraction2 = this.generateFraction(operation === '-');
+            // Первое число может быть отрицательным, если включена настройка
+            const fraction1 = this.generateFraction(this.settings.negativeNumbers);
+            // Второе число может быть отрицательным для вычитания или если включена настройка
+            const fraction2 = this.generateFraction(this.settings.negativeNumbers);
 
             let result;
             try {
@@ -120,6 +122,14 @@ class ProblemGenerator {
             // Если не разрешены отрицательные числа, проверяем результат
             if (!this.settings.negativeNumbers && result.numerator < 0) {
                 continue;
+            }
+
+            // Если не разрешены отрицательные числа, проверяем также операнды
+            if (!this.settings.negativeNumbers) {
+                if (fraction1.numerator < 0 || fraction1.whole < 0 ||
+                    fraction2.numerator < 0 || fraction2.whole < 0) {
+                    continue;
+                }
             }
 
             // Сокращаем результат

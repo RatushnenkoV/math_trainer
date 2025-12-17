@@ -1,13 +1,14 @@
 // Система прогресса и уровней
 
 class ProgressTracker {
-    constructor() {
+    constructor(storageKey = 'mathTrainerProgress') {
+        this.storageKey = storageKey;
         this.loadProgress();
     }
 
     // Загрузка прогресса из localStorage
     loadProgress() {
-        const saved = localStorage.getItem('mathTrainerProgress');
+        const saved = localStorage.getItem(this.storageKey);
         if (saved) {
             const data = JSON.parse(saved);
             this.level = data.level || 1;
@@ -24,7 +25,7 @@ class ProgressTracker {
 
     // Сохранение прогресса
     saveProgress() {
-        localStorage.setItem('mathTrainerProgress', JSON.stringify({
+        localStorage.setItem(this.storageKey, JSON.stringify({
             level: this.level,
             currentProgress: this.currentProgress,
             totalCorrect: this.totalCorrect,

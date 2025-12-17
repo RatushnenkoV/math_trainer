@@ -197,6 +197,17 @@ body {
     font-size: 36px;
 }
 
+.parenthesis {
+    font-size: 36px;
+    font-weight: 400;
+}
+
+.minus {
+    font-size: 36px;
+    font-weight: 400;
+    margin-right: 4px;
+}
+
 .question {
     font-size: 36px;
     color: var(--tg-theme-hint-color, #999999);
