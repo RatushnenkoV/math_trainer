@@ -5,6 +5,12 @@ let progressTracker;
 let currentProblem;
 let settings;
 
+// Для десятичных дробей
+let decimalGenerator;
+let decimalProgressTracker;
+let currentDecimalProblem;
+let decimalSettings;
+
 // Инициализация Telegram WebApp
 if (window.Telegram && window.Telegram.WebApp) {
     const tg = window.Telegram.WebApp;
@@ -20,15 +26,21 @@ document.addEventListener('DOMContentLoaded', () => {
 function initApp() {
     // Загрузка настроек
     loadSettings();
+    loadDecimalSettings();
 
     // Инициализация генератора и трекера прогресса
     generator = new ProblemGenerator(settings);
     progressTracker = new ProgressTracker();
 
+    decimalGenerator = new DecimalProblemGenerator(decimalSettings);
+    decimalProgressTracker = new DecimalProgressTracker();
+
     // Инициализация экранов
     initMainMenu();
     initFractionsScreen();
     initSettingsScreen();
+    initDecimalsScreen();
+    initDecimalsSettingsScreen();
 
     // Показываем главное меню
     showScreen('main-menu');
@@ -58,6 +70,27 @@ function saveSettings() {
     localStorage.setItem('mathTrainerSettings', JSON.stringify(settings));
 }
 
+// Загрузка настроек для десятичных дробей
+function loadDecimalSettings() {
+    const saved = localStorage.getItem('mathTrainerDecimalSettings');
+    if (saved) {
+        decimalSettings = JSON.parse(saved);
+    } else {
+        decimalSettings = {
+            addition: true,
+            subtraction: true,
+            multiplication: false,
+            division: false,
+            negativeNumbers: false
+        };
+    }
+}
+
+// Сохранение настроек для десятичных дробей
+function saveDecimalSettings() {
+    localStorage.setItem('mathTrainerDecimalSettings', JSON.stringify(decimalSettings));
+}
+
 // Показ экрана
 function showScreen(screenId) {
     document.querySelectorAll('.screen').forEach(screen => {
@@ -72,6 +105,12 @@ function initMainMenu() {
     fractionsBtn.addEventListener('click', () => {
         showScreen('fractions-screen');
         startFractionsTest();
+    });
+
+    const decimalsBtn = document.getElementById('decimals-btn');
+    decimalsBtn.addEventListener('click', () => {
+        showScreen('decimals-screen');
+        startDecimalsTest();
     });
 }
 
@@ -424,4 +463,216 @@ function enableInputs() {
     document.getElementById('numerator-input').disabled = false;
     document.getElementById('denominator-input').disabled = false;
     document.getElementById('check-btn').disabled = false;
+}
+
+// ============== ФУНКЦИИ ДЛЯ ДЕСЯТИЧНЫХ ДРОБЕЙ ==============
+
+// Инициализация экрана десятичных дробей
+function initDecimalsScreen() {
+    // Кнопка назад
+    document.getElementById('decimals-back-btn').addEventListener('click', () => {
+        showScreen('main-menu');
+    });
+
+    // Кнопка настроек
+    document.getElementById('decimals-settings-btn').addEventListener('click', () => {
+        showScreen('decimals-settings-screen');
+    });
+
+    // Кнопка проверки
+    document.getElementById('decimals-check-btn').addEventListener('click', checkDecimalAnswer);
+
+    // Enter для проверки ответа
+    document.getElementById('decimal-answer-input').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            checkDecimalAnswer();
+        }
+    });
+
+    // Валидация ввода
+    document.getElementById('decimal-answer-input').addEventListener('input', validateDecimalAnswer);
+}
+
+// Инициализация экрана настроек для десятичных дробей
+function initDecimalsSettingsScreen() {
+    // Кнопка назад
+    document.getElementById('decimals-settings-back-btn').addEventListener('click', () => {
+        showScreen('decimals-screen');
+        generateNewDecimalProblem();
+    });
+
+    // Загрузка текущих настроек
+    document.getElementById('decimals-addition').checked = decimalSettings.addition;
+    document.getElementById('decimals-subtraction').checked = decimalSettings.subtraction;
+    document.getElementById('decimals-multiplication').checked = decimalSettings.multiplication;
+    document.getElementById('decimals-division').checked = decimalSettings.division;
+    document.getElementById('decimals-negative-numbers').checked = decimalSettings.negativeNumbers;
+
+    // Обработка изменений настроек
+    const settingIds = [
+        'decimals-addition', 'decimals-subtraction', 'decimals-multiplication',
+        'decimals-division', 'decimals-negative-numbers'
+    ];
+
+    settingIds.forEach(id => {
+        document.getElementById(id).addEventListener('change', (e) => {
+            const key = id.replace('decimals-', '').replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+            decimalSettings[key] = e.target.checked;
+            saveDecimalSettings();
+            decimalGenerator.updateSettings(decimalSettings);
+        });
+    });
+}
+
+// Начало теста десятичных дробей
+function startDecimalsTest() {
+    updateDecimalProgressDisplay();
+    generateNewDecimalProblem();
+}
+
+// Проверка, выбрана ли хотя бы одна операция
+function hasDecimalOperationsSelected() {
+    return decimalSettings.addition || decimalSettings.subtraction ||
+           decimalSettings.multiplication || decimalSettings.division;
+}
+
+// Генерация нового примера с десятичными дробями
+function generateNewDecimalProblem() {
+    if (!hasDecimalOperationsSelected()) {
+        showNoDecimalOperationsMessage();
+        disableDecimalInputs();
+        return;
+    }
+
+    hideNoDecimalOperationsMessage();
+    enableDecimalInputs();
+    currentDecimalProblem = decimalGenerator.generate();
+    displayDecimalProblem(currentDecimalProblem);
+    clearDecimalInputs();
+}
+
+// Отображение примера с десятичными дробями
+function displayDecimalProblem(problem) {
+    document.getElementById('decimal1').textContent = problem.num1;
+    document.getElementById('decimals-operator').textContent = problem.operation;
+    document.getElementById('decimal2').textContent = problem.num2;
+}
+
+// Очистка полей ввода для десятичных дробей
+function clearDecimalInputs() {
+    document.getElementById('decimal-answer-input').value = '';
+    document.getElementById('decimal-answer-input').focus();
+}
+
+// Валидация ответа для десятичных дробей
+function validateDecimalAnswer() {
+    const input = document.getElementById('decimal-answer-input').value.trim();
+    const checkBtn = document.getElementById('decimals-check-btn');
+
+    if (input === '' || input === '-') {
+        checkBtn.disabled = true;
+    } else {
+        checkBtn.disabled = false;
+    }
+}
+
+// Проверка ответа для десятичных дробей
+function checkDecimalAnswer() {
+    const input = document.getElementById('decimal-answer-input').value.trim();
+
+    // Заменяем запятую на точку для парсинга
+    const normalizedInput = input.replace(',', '.');
+
+    // Парсим ответ пользователя
+    const userAnswer = parseFloat(normalizedInput);
+
+    if (isNaN(userAnswer)) {
+        showDecimalResultMessage(false);
+        showEmoji(false);
+        return;
+    }
+
+    const correctAnswer = currentDecimalProblem.result;
+
+    // Проверяем с учетом погрешности для десятичных дробей
+    const isCorrect = Math.abs(userAnswer - correctAnswer) < 0.001;
+
+    if (isCorrect) {
+        const result = decimalProgressTracker.correctAnswer();
+        showDecimalResultMessage(true);
+        showEmoji(true);
+
+        if (result.levelUp) {
+            setTimeout(() => {
+                alert(`Поздравляем! Вы перешли на ${result.newLevel} уровень!`);
+            }, 500);
+        }
+
+        setTimeout(() => {
+            generateNewDecimalProblem();
+            updateDecimalProgressDisplay();
+        }, 1000);
+    } else {
+        decimalProgressTracker.wrongAnswer();
+        showDecimalResultMessage(false);
+        showEmoji(false);
+
+        setTimeout(() => {
+            updateDecimalProgressDisplay();
+        }, 1000);
+    }
+}
+
+// Обновление отображения прогресса для десятичных дробей
+function updateDecimalProgressDisplay() {
+    document.getElementById('decimals-level-text').textContent = decimalProgressTracker.getLevelName();
+    document.getElementById('decimals-progress-text').textContent = decimalProgressTracker.getProgressText();
+    document.getElementById('decimals-progress-fill').style.width = decimalProgressTracker.getProgressPercent() + '%';
+}
+
+// Показ сообщения с результатом для десятичных дробей
+function showDecimalResultMessage(isCorrect) {
+    const messageElement = document.getElementById('decimals-result-message');
+
+    if (isCorrect) {
+        messageElement.textContent = 'Верно!';
+        messageElement.className = 'result-message correct show';
+    } else {
+        messageElement.textContent = 'Неверно';
+        messageElement.className = 'result-message wrong show';
+    }
+
+    setTimeout(() => {
+        messageElement.classList.remove('show');
+    }, 1000);
+}
+
+// Показать сообщение об отсутствии операций для десятичных дробей
+function showNoDecimalOperationsMessage() {
+    const problemDisplay = document.getElementById('decimals-problem-display');
+    problemDisplay.innerHTML = '<span class="no-operations-message">Не выбрано ни одной операции в настройках 😢</span>';
+}
+
+// Скрыть сообщение об отсутствии операций для десятичных дробей
+function hideNoDecimalOperationsMessage() {
+    const problemDisplay = document.getElementById('decimals-problem-display');
+    problemDisplay.innerHTML = `
+        <span class="decimal-display" id="decimal1"></span>
+        <span class="operator" id="decimals-operator"></span>
+        <span class="decimal-display" id="decimal2"></span>
+        <span class="equals">=</span>
+        <span class="question">?</span>
+    `;
+}
+
+// Отключить поля ввода и кнопку для десятичных дробей
+function disableDecimalInputs() {
+    document.getElementById('decimal-answer-input').disabled = true;
+    document.getElementById('decimals-check-btn').disabled = true;
+}
+
+// Включить поля ввода и кнопку для десятичных дробей
+function enableDecimalInputs() {
+    document.getElementById('decimal-answer-input').disabled = false;
+    document.getElementById('decimals-check-btn').disabled = false;
 }

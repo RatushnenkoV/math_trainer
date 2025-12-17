@@ -59,7 +59,7 @@ body {
     border-radius: 12px;
     cursor: pointer;
     transition: transform 0.2s, opacity 0.2s;
-    min-width: 200px;
+    width: 280px;
 }
 
 .menu-button:active {
@@ -435,9 +435,24 @@ body {
 }
 
 /* Settings header */
-#settings-screen .header h2 {
+#settings-screen .header h2,
+#decimals-settings-screen .header h2 {
     flex: 1;
     text-align: center;
     font-size: 18px;
     font-weight: 600;
+}
+
+/* Decimal input */
+.input-group.decimal-input input {
+    width: 200px;
+    padding: 14px;
+    font-size: 28px;
+    font-weight: 500;
+}
+
+/* Decimal display */
+.decimal-display {
+    font-size: 36px;
+    font-weight: 500;
 }
