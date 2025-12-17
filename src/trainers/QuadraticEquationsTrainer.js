@@ -35,7 +35,6 @@ class QuadraticEquationsTrainer extends BaseTrainer {
             // Поля ввода ответа
             x1Input: document.getElementById('quadratic-equations-x1-input'),
             x2Input: document.getElementById('quadratic-equations-x2-input'),
-            noRootsCheckbox: document.getElementById('quadratic-equations-no-roots'),
             checkBtn: document.getElementById('quadratic-equations-check-btn')
         };
 
@@ -54,20 +53,6 @@ class QuadraticEquationsTrainer extends BaseTrainer {
                     this.checkAnswer();
                 }
             });
-        });
-
-        // Обработка чекбокса "Нет корней"
-        this.elements.noRootsCheckbox.addEventListener('change', (e) => {
-            const isChecked = e.target.checked;
-            this.elements.x1Input.disabled = isChecked;
-            this.elements.x2Input.disabled = isChecked;
-
-            if (isChecked) {
-                this.elements.x1Input.value = '';
-                this.elements.x2Input.value = '';
-            } else {
-                this.elements.x1Input.focus();
-            }
         });
 
         // Автофокус на первое поле ввода
@@ -120,24 +105,6 @@ class QuadraticEquationsTrainer extends BaseTrainer {
 
     // Проверка ответа
     checkAnswer() {
-        const noRoots = this.elements.noRootsCheckbox.checked;
-
-        // Проверяем на отсутствие корней
-        if (noRoots) {
-            if (this.currentProblem.solution.noRealRoots) {
-                this.handleCorrectAnswer();
-            } else {
-                this.handleWrongAnswer();
-            }
-            return;
-        }
-
-        // Если уравнение не имеет действительных корней, а пользователь ввёл корни
-        if (this.currentProblem.solution.noRealRoots) {
-            this.handleWrongAnswer();
-            return;
-        }
-
         const x1Input = this.elements.x1Input.value.trim();
         const x2Input = this.elements.x2Input.value.trim();
 
@@ -218,9 +185,6 @@ class QuadraticEquationsTrainer extends BaseTrainer {
     clearInputs() {
         this.elements.x1Input.value = '';
         this.elements.x2Input.value = '';
-        this.elements.noRootsCheckbox.checked = false;
-        this.elements.x1Input.disabled = false;
-        this.elements.x2Input.disabled = false;
         this.elements.x1Input.focus();
     }
 
@@ -242,7 +206,6 @@ class QuadraticEquationsTrainer extends BaseTrainer {
     disableInputs() {
         this.elements.x1Input.disabled = true;
         this.elements.x2Input.disabled = true;
-        this.elements.noRootsCheckbox.disabled = true;
         this.elements.checkBtn.disabled = true;
     }
 
@@ -250,7 +213,6 @@ class QuadraticEquationsTrainer extends BaseTrainer {
     enableInputs() {
         this.elements.x1Input.disabled = false;
         this.elements.x2Input.disabled = false;
-        this.elements.noRootsCheckbox.disabled = false;
         this.elements.checkBtn.disabled = false;
     }
 
