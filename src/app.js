@@ -22,10 +22,12 @@ function initApp() {
     // Создание экземпляров тренажёров
     trainers.fractions = new FractionsTrainer();
     trainers.decimals = new DecimalsTrainer();
+    trainers.negatives = new NegativesTrainer();
 
     // Инициализация DOM для каждого тренажёра
     trainers.fractions.initDOM();
     trainers.decimals.initDOM();
+    trainers.negatives.initDOM();
 
     // Инициализация главного меню
     initMainMenu();
@@ -69,6 +71,12 @@ function initMainMenu() {
         showScreen('decimals-screen');
         trainers.decimals.startTest();
     });
+
+    const negativesBtn = document.getElementById('negatives-btn');
+    negativesBtn.addEventListener('click', () => {
+        showScreen('negatives-screen');
+        trainers.negatives.startTest();
+    });
 }
 
 // Инициализация Telegram BackButton
@@ -92,6 +100,7 @@ function handleBackButton() {
     switch (screenId) {
         case 'fractions-screen':
         case 'decimals-screen':
+        case 'negatives-screen':
             // Из экрана тренажёра возвращаемся в главное меню
             showScreen('main-menu');
             break;
@@ -106,6 +115,12 @@ function handleBackButton() {
             // Из настроек десятичных дробей возвращаемся к тренажёру десятичных дробей
             showScreen('decimals-screen');
             trainers.decimals.generateNewProblem();
+            break;
+
+        case 'negatives-settings-screen':
+            // Из настроек отрицательных чисел возвращаемся к тренажёру отрицательных чисел
+            showScreen('negatives-screen');
+            trainers.negatives.generateNewProblem();
             break;
 
         case 'main-menu':
@@ -146,6 +161,8 @@ function initHistoryNavigation() {
                 trainers.fractions.generateNewProblem();
             } else if (screenId === 'decimals-screen') {
                 trainers.decimals.generateNewProblem();
+            } else if (screenId === 'negatives-screen') {
+                trainers.negatives.generateNewProblem();
             }
         } else {
             // Если нет состояния, возвращаемся в главное меню
