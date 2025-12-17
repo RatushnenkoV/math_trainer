@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create:*)",
+      "Bash(node --version:*)",
+      "Bash(mkdir:*)",
+      "Bash(python -m http.server:*)"
+    ]
+  }
+}

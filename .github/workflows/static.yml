@@ -1,0 +1,42 @@
+# Рабочий процесс для деплоя статического контента на GitHub Pages
+name: Deploy static content to Pages
+
+on:
+  # Запускается при пуше в ветку main
+  push:
+    branches: ["main"]
+
+  # Позволяет запускать этот workflow вручную из вкладки Actions
+  workflow_dispatch:
+
+# Устанавливает права GITHUB_TOKEN для деплоя на Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Разрешает только один одновременный деплой
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Одна задача деплоя
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Загружает весь репозиторий
+          path: '.'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

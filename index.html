@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Дроби - Тренажер</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="src/styles/main.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Main Menu Screen -->
+        <div id="main-menu" class="screen active">
+            <h1>Математический тренажер</h1>
+            <button id="fractions-btn" class="menu-button">Дроби</button>
+        </div>
+
+        <!-- Fractions Test Screen -->
+        <div id="fractions-screen" class="screen">
+            <div class="header">
+                <button id="back-btn" class="icon-button">←</button>
+                <div id="progress-container" class="progress-container">
+                    <div class="progress-info">
+                        <span id="level-text">Уровень 1</span>
+                        <span id="progress-text">0/10</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div id="progress-fill" class="progress-fill"></div>
+                    </div>
+                </div>
+                <button id="settings-btn" class="icon-button">⚙</button>
+            </div>
+
+            <div class="content">
+                <div id="problem-display" class="problem-display">
+                    <span class="fraction-display" id="fraction1"></span>
+                    <span class="operator" id="operator"></span>
+                    <span class="fraction-display" id="fraction2"></span>
+                    <span class="equals">=</span>
+                    <span class="question">?</span>
+                </div>
+
+                <div class="answer-input">
+                    <div class="input-group whole-input">
+                        <input type="text" id="whole-input" placeholder="0" inputmode="numeric">
+                    </div>
+                    <div class="fraction-input">
+                        <div class="input-group">
+                            <input type="number" id="numerator-input" placeholder="0" required>
+                        </div>
+                        <div class="fraction-line"></div>
+                        <div class="input-group">
+                            <input type="number" id="denominator-input" placeholder="1" required>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="check-btn" class="check-button">Проверить</button>
+                <div id="result-message" class="result-message"></div>
+            </div>
+        </div>
+
+        <!-- Settings Screen -->
+        <div id="settings-screen" class="screen">
+            <div class="header">
+                <button id="settings-back-btn" class="icon-button">←</button>
+                <h2>Настройки</h2>
+                <div></div>
+            </div>
+
+            <div class="settings-content">
+                <div class="settings-group">
+                    <h3>Типы дробей</h3>
+                    <label class="switch-label">
+                        <input type="checkbox" id="mixed-fractions" checked>
+                        <span>Смешанные дроби</span>
+                    </label>
+                    <label class="switch-label">
+                        <input type="checkbox" id="decimal-fractions">
+                        <span>Десятичные дроби</span>
+                    </label>
+                </div>
+
+                <div class="settings-group">
+                    <h3>Операции</h3>
+                    <label class="switch-label">
+                        <input type="checkbox" id="addition" checked>
+                        <span>Сложение</span>
+                    </label>
+                    <label class="switch-label">
+                        <input type="checkbox" id="subtraction" checked>
+                        <span>Вычитание</span>
+                    </label>
+                    <label class="switch-label">
+                        <input type="checkbox" id="multiplication">
+                        <span>Умножение</span>
+                    </label>
+                    <label class="switch-label">
+                        <input type="checkbox" id="division">
+                        <span>Деление</span>
+                    </label>
+                </div>
+
+                <div class="settings-group">
+                    <h3>Дополнительно</h3>
+                    <label class="switch-label">
+                        <input type="checkbox" id="negative-numbers">
+                        <span>Отрицательные числа</span>
+                    </label>
+                    <label class="switch-label">
+                        <input type="checkbox" id="require-simplification" checked>
+                        <span>Требовать сокращение</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Emoji Animation Container -->
+        <div id="emoji-container"></div>
+    </div>
+
+    <script src="src/utils/fractions.js"></script>
+    <script src="src/utils/generator.js"></script>
+    <script src="src/utils/progress.js"></script>
+    <script src="src/app.js"></script>
+</body>
+</html>
