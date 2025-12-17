@@ -550,3 +550,103 @@ body {
     font-size: 18px;
     font-weight: 600;
 }
+
+/* Linear Equations trainer */
+.linear-equations-equation-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    overflow: hidden;
+}
+
+.linear-equations-equation {
+    font-size: clamp(16px, 4vw, 28px);
+    font-weight: 500;
+    text-align: center;
+    line-height: 1.6;
+    padding: 20px;
+    white-space: nowrap;
+    color: var(--tg-theme-text-color, #000000);
+    max-width: 100%;
+}
+
+.linear-equations-input {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.linear-equations-input label {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--tg-theme-text-color, #000000);
+    flex-shrink: 0;
+}
+
+.linear-equations-input input {
+    flex: 1;
+    font-size: 22px;
+    min-width: 0;
+}
+
+/* Linear Equations settings header */
+#linear-equations-settings-screen .header h2 {
+    flex: 1;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* Quadratic Equations trainer */
+.quadratic-equations-equation-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    overflow: hidden;
+}
+
+.quadratic-equations-equation {
+    font-size: clamp(16px, 4vw, 28px);
+    font-weight: 500;
+    text-align: center;
+    line-height: 1.6;
+    padding: 20px;
+    white-space: nowrap;
+    color: var(--tg-theme-text-color, #000000);
+    max-width: 100%;
+}
+
+.quadratic-equations-input {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.quadratic-equations-input label {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--tg-theme-text-color, #000000);
+    flex-shrink: 0;
+}
+
+.quadratic-equations-input input {
+    flex: 1;
+    font-size: 22px;
+    min-width: 0;
+}
+
+/* Quadratic Equations settings header */
+#quadratic-equations-settings-screen .header h2 {
+    flex: 1;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+}

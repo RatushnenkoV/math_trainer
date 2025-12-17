@@ -24,12 +24,16 @@ function initApp() {
     trainers.decimals = new DecimalsTrainer();
     trainers.negatives = new NegativesTrainer();
     trainers.divisibility = new DivisibilityTrainer();
+    trainers.linearEquations = new LinearEquationsTrainer();
+    trainers.quadraticEquations = new QuadraticEquationsTrainer();
 
     // Инициализация DOM для каждого тренажёра
     trainers.fractions.initDOM();
     trainers.decimals.initDOM();
     trainers.negatives.initDOM();
     trainers.divisibility.initDOM();
+    trainers.linearEquations.initDOM();
+    trainers.quadraticEquations.initDOM();
 
     // Инициализация главного меню
     initMainMenu();
@@ -85,6 +89,18 @@ function initMainMenu() {
         showScreen('divisibility-screen');
         trainers.divisibility.startTest();
     });
+
+    const linearEquationsBtn = document.getElementById('linear-equations-btn');
+    linearEquationsBtn.addEventListener('click', () => {
+        showScreen('linear-equations-screen');
+        trainers.linearEquations.startTest();
+    });
+
+    const quadraticEquationsBtn = document.getElementById('quadratic-equations-btn');
+    quadraticEquationsBtn.addEventListener('click', () => {
+        showScreen('quadratic-equations-screen');
+        trainers.quadraticEquations.startTest();
+    });
 }
 
 // Инициализация Telegram BackButton
@@ -110,6 +126,8 @@ function handleBackButton() {
         case 'decimals-screen':
         case 'negatives-screen':
         case 'divisibility-screen':
+        case 'linear-equations-screen':
+        case 'quadratic-equations-screen':
             // Из экрана тренажёра возвращаемся в главное меню
             showScreen('main-menu');
             break;
@@ -136,6 +154,18 @@ function handleBackButton() {
             // Из настроек делимости возвращаемся к тренажёру делимости
             showScreen('divisibility-screen');
             trainers.divisibility.generateNewProblem();
+            break;
+
+        case 'linear-equations-settings-screen':
+            // Из настроек линейных уравнений возвращаемся к тренажёру линейных уравнений
+            showScreen('linear-equations-screen');
+            trainers.linearEquations.generateNewProblem();
+            break;
+
+        case 'quadratic-equations-settings-screen':
+            // Из настроек квадратных уравнений возвращаемся к тренажёру квадратных уравнений
+            showScreen('quadratic-equations-screen');
+            trainers.quadraticEquations.generateNewProblem();
             break;
 
         case 'main-menu':
@@ -180,6 +210,10 @@ function initHistoryNavigation() {
                 trainers.negatives.generateNewProblem();
             } else if (screenId === 'divisibility-screen') {
                 trainers.divisibility.generateNewProblem();
+            } else if (screenId === 'linear-equations-screen') {
+                trainers.linearEquations.generateNewProblem();
+            } else if (screenId === 'quadratic-equations-screen') {
+                trainers.quadraticEquations.generateNewProblem();
             }
         } else {
             // Если нет состояния, возвращаемся в главное меню
