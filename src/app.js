@@ -33,16 +33,24 @@ function initApp() {
     // Инициализация Telegram BackButton
     initTelegramBackButton();
 
+    // Инициализация обработки кнопки "Назад" браузера/Android
+    initHistoryNavigation();
+
     // Показываем главное меню
     showScreen('main-menu');
 }
 
 // Показ экрана
-function showScreen(screenId) {
+function showScreen(screenId, addToHistory = true) {
     document.querySelectorAll('.screen').forEach(screen => {
         screen.classList.remove('active');
     });
     document.getElementById(screenId).classList.add('active');
+
+    // Добавляем в историю браузера для поддержки кнопки "Назад"
+    if (addToHistory) {
+        history.pushState({ screen: screenId }, '', `#${screenId}`);
+    }
 
     // Управление Telegram BackButton
     updateTelegramBackButton(screenId);
@@ -119,4 +127,37 @@ function updateTelegramBackButton(screenId) {
     } else {
         tg.BackButton.show();
     }
+}
+
+// Инициализация навигации через историю браузера (для кнопки "Назад" Android)
+function initHistoryNavigation() {
+    // Добавляем начальное состояние в историю
+    history.replaceState({ screen: 'main-menu' }, '', '#main-menu');
+
+    // Обработка события popstate (кнопка "Назад" браузера/Android)
+    window.addEventListener('popstate', (event) => {
+        if (event.state && event.state.screen) {
+            // Переходим на экран из истории без добавления в историю
+            const screenId = event.state.screen;
+            showScreen(screenId, false);
+
+            // Если это экран настроек, генерируем новый пример при возврате
+            if (screenId === 'fractions-screen') {
+                trainers.fractions.generateNewProblem();
+            } else if (screenId === 'decimals-screen') {
+                trainers.decimals.generateNewProblem();
+            }
+        } else {
+            // Если нет состояния, возвращаемся в главное меню
+            showScreen('main-menu', false);
+        }
+    });
+
+    // Предотвращаем закрытие приложения при нажатии "Назад" на главном экране
+    // Вместо этого добавляем пустую запись в историю
+    window.addEventListener('load', () => {
+        // Добавляем дополнительную запись в историю
+        // Это предотвратит закрытие приложения при первом нажатии "Назад"
+        history.pushState({ screen: 'main-menu' }, '', '#main-menu');
+    });
 }
