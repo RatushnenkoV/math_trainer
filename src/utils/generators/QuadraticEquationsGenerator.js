@@ -46,7 +46,7 @@ class QuadraticEquationsProblemGenerator {
         // Добавляем число
         if (withVariable) {
             if (coef === 1) {
-                result += isFirst ? '' : '+';
+                result += isFirst ? '' : '';
             } else if (coef === -1) {
                 result += '-';
             } else {
