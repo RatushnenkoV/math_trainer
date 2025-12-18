@@ -25,7 +25,8 @@ function initApp() {
     trainers.negatives = new NegativesTrainer();
     trainers.divisibility = new DivisibilityTrainer();
     trainers.linearEquations = new LinearEquationsTrainer();
-    trainers.quadraticEquations = new QuadraticEquationsTrainer();
+    // Квадратные уравнения теперь используют компонент и инициализируются автоматически
+    trainers.quadraticEquations = document.querySelector('quadratic-equations-trainer')?.trainer;
 
     // Инициализация DOM для каждого тренажёра
     trainers.fractions.initDOM();
@@ -33,7 +34,7 @@ function initApp() {
     trainers.negatives.initDOM();
     trainers.divisibility.initDOM();
     trainers.linearEquations.initDOM();
-    trainers.quadraticEquations.initDOM();
+    // quadraticEquations инициализируется автоматически через компонент
 
     // Инициализация главного меню
     initMainMenu();
@@ -99,7 +100,11 @@ function initMainMenu() {
     const quadraticEquationsBtn = document.getElementById('quadratic-equations-btn');
     quadraticEquationsBtn.addEventListener('click', () => {
         showScreen('quadratic-equations-screen');
-        trainers.quadraticEquations.startTest();
+        // Получаем trainer из компонента, если ещё не получили
+        if (!trainers.quadraticEquations) {
+            trainers.quadraticEquations = document.querySelector('quadratic-equations-trainer')?.trainer;
+        }
+        trainers.quadraticEquations?.startTest();
     });
 }
 
