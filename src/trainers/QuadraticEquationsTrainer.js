@@ -4,7 +4,8 @@ class QuadraticEquationsTrainer extends BaseTrainer {
         // Загрузка настроек
         const savedSettings = localStorage.getItem('mathTrainerQuadraticEquationsSettings');
         const settings = savedSettings ? JSON.parse(savedSettings) : {
-            nonStandardForm: false
+            nonStandardForm: false,
+            aEqualsOne: false
         };
 
         super({
@@ -62,13 +63,21 @@ class QuadraticEquationsTrainer extends BaseTrainer {
     // Инициализация обработчиков настроек
     initSettingsHandlers() {
         const nonStandardElement = document.getElementById('quadratic-equations-non-standard');
+        const aEqualsOneElement = document.getElementById('quadratic-equations-a-equals-one');
 
         // Загрузка текущих настроек
         nonStandardElement.checked = this.settings.nonStandardForm;
+        aEqualsOneElement.checked = this.settings.aEqualsOne;
 
         // Обработка изменений
         nonStandardElement.addEventListener('change', (e) => {
             this.settings.nonStandardForm = e.target.checked;
+            this.saveSettings();
+            this.updateGeneratorSettings();
+        });
+
+        aEqualsOneElement.addEventListener('change', (e) => {
+            this.settings.aEqualsOne = e.target.checked;
             this.saveSettings();
             this.updateGeneratorSettings();
         });

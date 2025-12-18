@@ -7,7 +7,8 @@ class QuadraticEquationsProblemGenerator {
 
     getDefaultSettings() {
         return {
-            nonStandardForm: false  // Перемешанный вид уравнения
+            nonStandardForm: false,  // Перемешанный вид уравнения
+            aEqualsOne: false        // Генерировать только уравнения с a = 1
         };
     }
 
@@ -65,7 +66,8 @@ class QuadraticEquationsProblemGenerator {
         const x2 = this.randomInt(-10, 10);
 
         // Генерируем коэффициент a (может быть любым ненулевым числом)
-        const leadingCoef = this.randomNonZero(-5, 5);
+        // Если включена настройка aEqualsOne, то a = 1
+        const leadingCoef = this.settings.aEqualsOne ? 1 : this.randomNonZero(-5, 5);
 
         // Вычисляем коэффициенты по формуле: a(x - x1)(x - x2) = 0
         // Раскрываем: a(x^2 - x1*x - x2*x + x1*x2) = 0
@@ -113,7 +115,8 @@ class QuadraticEquationsProblemGenerator {
         const x2 = this.randomInt(-10, 10);
 
         // Генерируем коэффициент a (может быть любым ненулевым числом)
-        const leadingCoef = this.randomNonZero(-5, 5);
+        // Если включена настройка aEqualsOne, то a = 1
+        const leadingCoef = this.settings.aEqualsOne ? 1 : this.randomNonZero(-5, 5);
 
         // Вычисляем коэффициенты по формуле: a(x - x1)(x - x2) = 0
         const a = leadingCoef;

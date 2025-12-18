@@ -70,6 +70,13 @@ class QuadraticEquationsComponent extends BaseTrainerComponent {
                             <span>Нестандартный вид</span>
                         </label>
                     </div>
+                    <div class="settings-group">
+                        <h3>Коэффициенты</h3>
+                        <label class="switch-label">
+                            <input type="checkbox" id="quadratic-equations-a-equals-one">
+                            <span>a = 1</span>
+                        </label>
+                    </div>
                 </div>
             </div>
         `;
