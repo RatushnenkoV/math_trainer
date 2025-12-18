@@ -211,10 +211,16 @@ class BaseTrainer {
 
     // Переключение экранов
     showScreen(screenId) {
-        document.querySelectorAll('.screen').forEach(screen => {
-            screen.classList.remove('active');
-        });
-        document.getElementById(screenId).classList.add('active');
+        // Используем глобальную функцию showScreen из app.js
+        if (window.showScreen) {
+            window.showScreen(screenId);
+        } else {
+            // Fallback на случай, если глобальная функция недоступна
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+        }
     }
 
     // Показать экран настроек (переопределяется в подклассах)

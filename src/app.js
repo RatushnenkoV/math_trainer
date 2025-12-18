@@ -40,8 +40,8 @@ function initApp() {
     showScreen('main-menu');
 }
 
-// Показ экрана
-function showScreen(screenId, addToHistory = true) {
+// Показ экрана (делаем глобальной для использования в тренажёрах)
+window.showScreen = function showScreen(screenId, addToHistory = true) {
     // Убираем класс active у всех экранов (включая те, что внутри компонентов)
     document.querySelectorAll('.screen').forEach(screen => {
         screen.classList.remove('active');
