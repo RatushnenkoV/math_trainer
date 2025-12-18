@@ -76,6 +76,10 @@ class QuadraticEquationsComponent extends BaseTrainerComponent {
                             <input type="checkbox" id="quadratic-equations-a-equals-one">
                             <span>a = 1</span>
                         </label>
+                        <label class="switch-label">
+                            <input type="checkbox" id="quadratic-equations-allow-incomplete" checked>
+                            <span>Неполные уравнения</span>
+                        </label>
                     </div>
                 </div>
             </div>

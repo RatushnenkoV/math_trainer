@@ -5,7 +5,8 @@ class QuadraticEquationsTrainer extends BaseTrainer {
         const savedSettings = localStorage.getItem('mathTrainerQuadraticEquationsSettings');
         const settings = savedSettings ? JSON.parse(savedSettings) : {
             nonStandardForm: false,
-            aEqualsOne: false
+            aEqualsOne: false,
+            allowIncomplete: true
         };
 
         super({
@@ -64,10 +65,12 @@ class QuadraticEquationsTrainer extends BaseTrainer {
     initSettingsHandlers() {
         const nonStandardElement = document.getElementById('quadratic-equations-non-standard');
         const aEqualsOneElement = document.getElementById('quadratic-equations-a-equals-one');
+        const allowIncompleteElement = document.getElementById('quadratic-equations-allow-incomplete');
 
         // Загрузка текущих настроек
         nonStandardElement.checked = this.settings.nonStandardForm;
         aEqualsOneElement.checked = this.settings.aEqualsOne;
+        allowIncompleteElement.checked = this.settings.allowIncomplete;
 
         // Обработка изменений
         nonStandardElement.addEventListener('change', (e) => {
@@ -78,6 +81,12 @@ class QuadraticEquationsTrainer extends BaseTrainer {
 
         aEqualsOneElement.addEventListener('change', (e) => {
             this.settings.aEqualsOne = e.target.checked;
+            this.saveSettings();
+            this.updateGeneratorSettings();
+        });
+
+        allowIncompleteElement.addEventListener('change', (e) => {
+            this.settings.allowIncomplete = e.target.checked;
             this.saveSettings();
             this.updateGeneratorSettings();
         });

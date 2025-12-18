@@ -8,7 +8,8 @@ class QuadraticEquationsProblemGenerator {
     getDefaultSettings() {
         return {
             nonStandardForm: false,  // Перемешанный вид уравнения
-            aEqualsOne: false        // Генерировать только уравнения с a = 1
+            aEqualsOne: false,       // Генерировать только уравнения с a = 1
+            allowIncomplete: true    // Разрешить неполные уравнения (b=0 или c=0)
         };
     }
 
@@ -61,20 +62,27 @@ class QuadraticEquationsProblemGenerator {
     // Генерация стандартного квадратного уравнения: ax^2 + bx + c = 0
     // Уравнение генерируется от целых корней x1 и x2
     generateStandard() {
-        // Генерируем целые корни
-        const x1 = this.randomInt(-10, 10);
-        const x2 = this.randomInt(-10, 10);
+        let x1, x2, a, b, c;
 
-        // Генерируем коэффициент a (может быть любым ненулевым числом)
-        // Если включена настройка aEqualsOne, то a = 1
-        const leadingCoef = this.settings.aEqualsOne ? 1 : this.randomNonZero(-5, 5);
+        // Повторяем генерацию, пока не получим подходящее уравнение
+        do {
+            // Генерируем целые корни
+            x1 = this.randomInt(-10, 10);
+            x2 = this.randomInt(-10, 10);
 
-        // Вычисляем коэффициенты по формуле: a(x - x1)(x - x2) = 0
-        // Раскрываем: a(x^2 - x1*x - x2*x + x1*x2) = 0
-        // Получаем: a*x^2 - a*(x1+x2)*x + a*x1*x2 = 0
-        const a = leadingCoef;
-        const b = -leadingCoef * (x1 + x2);
-        const c = leadingCoef * x1 * x2;
+            // Генерируем коэффициент a (может быть любым ненулевым числом)
+            // Если включена настройка aEqualsOne, то a = 1
+            const leadingCoef = this.settings.aEqualsOne ? 1 : this.randomNonZero(-5, 5);
+
+            // Вычисляем коэффициенты по формуле: a(x - x1)(x - x2) = 0
+            // Раскрываем: a(x^2 - x1*x - x2*x + x1*x2) = 0
+            // Получаем: a*x^2 - a*(x1+x2)*x + a*x1*x2 = 0
+            a = leadingCoef;
+            b = -leadingCoef * (x1 + x2);
+            c = leadingCoef * x1 * x2;
+
+            // Если неполные уравнения запрещены, повторяем пока b и c не будут ненулевыми
+        } while (!this.settings.allowIncomplete && (b === 0 || c === 0));
 
         let equation = '';
 
@@ -110,18 +118,25 @@ class QuadraticEquationsProblemGenerator {
 
     // Генерация уравнения в нестандартном виде (члены перемешаны)
     generateNonStandard() {
-        // Генерируем целые корни
-        const x1 = this.randomInt(-10, 10);
-        const x2 = this.randomInt(-10, 10);
+        let x1, x2, a, b, c;
 
-        // Генерируем коэффициент a (может быть любым ненулевым числом)
-        // Если включена настройка aEqualsOne, то a = 1
-        const leadingCoef = this.settings.aEqualsOne ? 1 : this.randomNonZero(-5, 5);
+        // Повторяем генерацию, пока не получим подходящее уравнение
+        do {
+            // Генерируем целые корни
+            x1 = this.randomInt(-10, 10);
+            x2 = this.randomInt(-10, 10);
 
-        // Вычисляем коэффициенты по формуле: a(x - x1)(x - x2) = 0
-        const a = leadingCoef;
-        const b = -leadingCoef * (x1 + x2);
-        const c = leadingCoef * x1 * x2;
+            // Генерируем коэффициент a (может быть любым ненулевым числом)
+            // Если включена настройка aEqualsOne, то a = 1
+            const leadingCoef = this.settings.aEqualsOne ? 1 : this.randomNonZero(-5, 5);
+
+            // Вычисляем коэффициенты по формуле: a(x - x1)(x - x2) = 0
+            a = leadingCoef;
+            b = -leadingCoef * (x1 + x2);
+            c = leadingCoef * x1 * x2;
+
+            // Если неполные уравнения запрещены, повторяем пока b и c не будут ненулевыми
+        } while (!this.settings.allowIncomplete && (b === 0 || c === 0));
 
         // Создаём три члена уравнения с указанием их стороны (left/right)
         const terms = [
