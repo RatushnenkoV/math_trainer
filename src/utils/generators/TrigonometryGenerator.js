@@ -41,7 +41,7 @@ class TrigonometryProblemGenerator {
             '-sqrt3': { value: -Math.sqrt(3), latex: '-\\sqrt{3}' },
             'sqrt3/3': { value: Math.sqrt(3) / 3, latex: '\\frac{\\sqrt{3}}{3}' },
             '-sqrt3/3': { value: -Math.sqrt(3) / 3, latex: '-\\frac{\\sqrt{3}}{3}' },
-            'undefined': { value: null, latex: '\\text{не существует}' }
+            'undefined': { value: null, latex: '\\text{∅}' }
         };
 
         // Таблица значений sin, cos, tg, ctg для базовых углов

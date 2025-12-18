@@ -13,7 +13,9 @@
       "Bash(move:*)",
       "Bash(move decimalGenerator.js generatorsDecimalsGenerator.js)",
       "Bash(git add:*)",
-      "Bash(node -e:*)"
+      "Bash(node -e:*)",
+      "Bash(cat:*)",
+      "Bash(start:*)"
     ]
   }
 }

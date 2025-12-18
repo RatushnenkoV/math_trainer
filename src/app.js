@@ -29,6 +29,7 @@ function initApp() {
     trainers.linearEquations = document.querySelector('linear-equations-trainer')?.trainer;
     trainers.quadraticEquations = document.querySelector('quadratic-equations-trainer')?.trainer;
     trainers.trigonometry = document.querySelector('trigonometry-trainer')?.trainer;
+    trainers.percentages = document.querySelector('percentages-trainer')?.trainer;
 
     // Инициализация главного меню
     initMainMenu();
@@ -51,7 +52,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
     });
 
     // Скрываем все компоненты тренажеров
-    document.querySelectorAll('multiplication-table-trainer, square-roots-trainer, fractions-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, quadratic-equations-trainer, trigonometry-trainer').forEach(trainer => {
+    document.querySelectorAll('multiplication-table-trainer, square-roots-trainer, fractions-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, quadratic-equations-trainer, trigonometry-trainer, percentages-trainer').forEach(trainer => {
         trainer.classList.remove('active');
     });
 
@@ -61,7 +62,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
         targetScreen.classList.add('active');
 
         // Если экран находится внутри компонента тренажера, показываем этот компонент
-        const trainerComponent = targetScreen.closest('multiplication-table-trainer, square-roots-trainer, fractions-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, quadratic-equations-trainer, trigonometry-trainer');
+        const trainerComponent = targetScreen.closest('multiplication-table-trainer, square-roots-trainer, fractions-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, quadratic-equations-trainer, trigonometry-trainer, percentages-trainer');
         if (trainerComponent) {
             trainerComponent.classList.add('active');
         }
@@ -87,7 +88,8 @@ function initMainMenu() {
         { id: 'divisibility-btn', screen: 'divisibility-screen', trainer: 'divisibility' },
         { id: 'linear-equations-btn', screen: 'linear-equations-screen', trainer: 'linearEquations' },
         { id: 'quadratic-equations-btn', screen: 'quadratic-equations-screen', trainer: 'quadraticEquations' },
-        { id: 'trigonometry-btn', screen: 'trigonometry-screen', trainer: 'trigonometry' }
+        { id: 'trigonometry-btn', screen: 'trigonometry-screen', trainer: 'trigonometry' },
+        { id: 'percentages-btn', screen: 'percentages-screen', trainer: 'percentages' }
     ];
 
     trainerButtons.forEach(({ id, screen, trainer }) => {
@@ -132,6 +134,7 @@ function handleBackButton() {
         case 'linear-equations-screen':
         case 'quadratic-equations-screen':
         case 'trigonometry-screen':
+        case 'percentages-screen':
             // Из экрана тренажёра возвращаемся в главное меню
             showScreen('main-menu');
             break;
@@ -190,6 +193,12 @@ function handleBackButton() {
             trainers.trigonometry.generateNewProblem();
             break;
 
+        case 'percentages-settings-screen':
+            // Из настроек процентов возвращаемся к тренажёру процентов
+            showScreen('percentages-screen');
+            trainers.percentages.generateNewProblem();
+            break;
+
         case 'main-menu':
             // Из главного меню закрываем приложение
             if (tg) {
@@ -242,6 +251,8 @@ function initHistoryNavigation() {
                 trainers.quadraticEquations.generateNewProblem();
             } else if (screenId === 'trigonometry-screen') {
                 trainers.trigonometry.generateNewProblem();
+            } else if (screenId === 'percentages-screen') {
+                trainers.percentages.generateNewProblem();
             }
         } else {
             // Если нет состояния, возвращаемся в главное меню
