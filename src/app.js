@@ -19,22 +19,13 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initApp() {
-    // Создание экземпляров тренажёров
-    trainers.fractions = new FractionsTrainer();
-    trainers.decimals = new DecimalsTrainer();
-    trainers.negatives = new NegativesTrainer();
-    trainers.divisibility = new DivisibilityTrainer();
-    trainers.linearEquations = new LinearEquationsTrainer();
-    // Квадратные уравнения теперь используют компонент и инициализируются автоматически
+    // Все тренажёры теперь используют компоненты и инициализируются автоматически
+    trainers.fractions = document.querySelector('fractions-trainer')?.trainer;
+    trainers.decimals = document.querySelector('decimals-trainer')?.trainer;
+    trainers.negatives = document.querySelector('negatives-trainer')?.trainer;
+    trainers.divisibility = document.querySelector('divisibility-trainer')?.trainer;
+    trainers.linearEquations = document.querySelector('linear-equations-trainer')?.trainer;
     trainers.quadraticEquations = document.querySelector('quadratic-equations-trainer')?.trainer;
-
-    // Инициализация DOM для каждого тренажёра
-    trainers.fractions.initDOM();
-    trainers.decimals.initDOM();
-    trainers.negatives.initDOM();
-    trainers.divisibility.initDOM();
-    trainers.linearEquations.initDOM();
-    // quadraticEquations инициализируется автоматически через компонент
 
     // Инициализация главного меню
     initMainMenu();
@@ -67,44 +58,26 @@ function showScreen(screenId, addToHistory = true) {
 
 // Инициализация главного меню
 function initMainMenu() {
-    const fractionsBtn = document.getElementById('fractions-btn');
-    fractionsBtn.addEventListener('click', () => {
-        showScreen('fractions-screen');
-        trainers.fractions.startTest();
-    });
+    const trainerButtons = [
+        { id: 'fractions-btn', screen: 'fractions-screen', trainer: 'fractions' },
+        { id: 'decimals-btn', screen: 'decimals-screen', trainer: 'decimals' },
+        { id: 'negatives-btn', screen: 'negatives-screen', trainer: 'negatives' },
+        { id: 'divisibility-btn', screen: 'divisibility-screen', trainer: 'divisibility' },
+        { id: 'linear-equations-btn', screen: 'linear-equations-screen', trainer: 'linearEquations' },
+        { id: 'quadratic-equations-btn', screen: 'quadratic-equations-screen', trainer: 'quadraticEquations' }
+    ];
 
-    const decimalsBtn = document.getElementById('decimals-btn');
-    decimalsBtn.addEventListener('click', () => {
-        showScreen('decimals-screen');
-        trainers.decimals.startTest();
-    });
-
-    const negativesBtn = document.getElementById('negatives-btn');
-    negativesBtn.addEventListener('click', () => {
-        showScreen('negatives-screen');
-        trainers.negatives.startTest();
-    });
-
-    const divisibilityBtn = document.getElementById('divisibility-btn');
-    divisibilityBtn.addEventListener('click', () => {
-        showScreen('divisibility-screen');
-        trainers.divisibility.startTest();
-    });
-
-    const linearEquationsBtn = document.getElementById('linear-equations-btn');
-    linearEquationsBtn.addEventListener('click', () => {
-        showScreen('linear-equations-screen');
-        trainers.linearEquations.startTest();
-    });
-
-    const quadraticEquationsBtn = document.getElementById('quadratic-equations-btn');
-    quadraticEquationsBtn.addEventListener('click', () => {
-        showScreen('quadratic-equations-screen');
-        // Получаем trainer из компонента, если ещё не получили
-        if (!trainers.quadraticEquations) {
-            trainers.quadraticEquations = document.querySelector('quadratic-equations-trainer')?.trainer;
-        }
-        trainers.quadraticEquations?.startTest();
+    trainerButtons.forEach(({ id, screen, trainer }) => {
+        const button = document.getElementById(id);
+        button.addEventListener('click', () => {
+            showScreen(screen);
+            // Получаем trainer из компонента, если ещё не получили
+            if (!trainers[trainer]) {
+                const componentTag = screen.replace('-screen', '-trainer');
+                trainers[trainer] = document.querySelector(componentTag)?.trainer;
+            }
+            trainers[trainer]?.startTest();
+        });
     });
 }
 
