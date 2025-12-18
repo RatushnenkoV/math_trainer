@@ -28,7 +28,9 @@ negatives-trainer,
 divisibility-trainer,
 linear-equations-trainer,
 quadratic-equations-trainer,
-trigonometry-trainer {
+trigonometry-trainer,
+percentages-trainer,
+system-of-equations-trainer {
     display: none;
     position: absolute;
     top: 0;
@@ -45,7 +47,9 @@ negatives-trainer.active,
 divisibility-trainer.active,
 linear-equations-trainer.active,
 quadratic-equations-trainer.active,
-trigonometry-trainer.active {
+trigonometry-trainer.active,
+percentages-trainer.active,
+system-of-equations-trainer.active {
     display: block;
     z-index: 10;
 }
@@ -1015,4 +1019,34 @@ trigonometry-trainer.active {
     font-size: 12px;
     color: var(--tg-theme-hint-color, #999999);
     font-weight: 500;
+}
+
+/* Система уравнений */
+.system-of-equations-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 20px;
+}
+
+.system-bracket {
+    font-size: 80px;
+    font-weight: 200;
+    color: var(--tg-theme-text-color, #000000);
+    line-height: 1;
+    margin-top: -10px;
+}
+
+.system-equations {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.system-equation {
+    font-size: 24px;
+    min-height: 30px;
+    display: flex;
+    align-items: center;
 }

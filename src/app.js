@@ -30,6 +30,7 @@ function initApp() {
     trainers.quadraticEquations = document.querySelector('quadratic-equations-trainer')?.trainer;
     trainers.trigonometry = document.querySelector('trigonometry-trainer')?.trainer;
     trainers.percentages = document.querySelector('percentages-trainer')?.trainer;
+    trainers.systemOfEquations = document.querySelector('system-of-equations-trainer')?.trainer;
 
     // Инициализация главного меню
     initMainMenu();
@@ -52,7 +53,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
     });
 
     // Скрываем все компоненты тренажеров
-    document.querySelectorAll('multiplication-table-trainer, square-roots-trainer, fractions-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, quadratic-equations-trainer, trigonometry-trainer, percentages-trainer').forEach(trainer => {
+    document.querySelectorAll('multiplication-table-trainer, square-roots-trainer, fractions-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, quadratic-equations-trainer, trigonometry-trainer, percentages-trainer, system-of-equations-trainer').forEach(trainer => {
         trainer.classList.remove('active');
     });
 
@@ -62,7 +63,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
         targetScreen.classList.add('active');
 
         // Если экран находится внутри компонента тренажера, показываем этот компонент
-        const trainerComponent = targetScreen.closest('multiplication-table-trainer, square-roots-trainer, fractions-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, quadratic-equations-trainer, trigonometry-trainer, percentages-trainer');
+        const trainerComponent = targetScreen.closest('multiplication-table-trainer, square-roots-trainer, fractions-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, quadratic-equations-trainer, trigonometry-trainer, percentages-trainer, system-of-equations-trainer');
         if (trainerComponent) {
             trainerComponent.classList.add('active');
         }
@@ -89,7 +90,8 @@ function initMainMenu() {
         { id: 'linear-equations-btn', screen: 'linear-equations-screen', trainer: 'linearEquations' },
         { id: 'quadratic-equations-btn', screen: 'quadratic-equations-screen', trainer: 'quadraticEquations' },
         { id: 'trigonometry-btn', screen: 'trigonometry-screen', trainer: 'trigonometry' },
-        { id: 'percentages-btn', screen: 'percentages-screen', trainer: 'percentages' }
+        { id: 'percentages-btn', screen: 'percentages-screen', trainer: 'percentages' },
+        { id: 'system-of-equations-btn', screen: 'system-of-equations-screen', trainer: 'systemOfEquations' }
     ];
 
     trainerButtons.forEach(({ id, screen, trainer }) => {
@@ -135,6 +137,7 @@ function handleBackButton() {
         case 'quadratic-equations-screen':
         case 'trigonometry-screen':
         case 'percentages-screen':
+        case 'system-of-equations-screen':
             // Из экрана тренажёра возвращаемся в главное меню
             showScreen('main-menu');
             break;
@@ -199,6 +202,12 @@ function handleBackButton() {
             trainers.percentages.generateNewProblem();
             break;
 
+        case 'system-of-equations-settings-screen':
+            // Из настроек систем уравнений возвращаемся к тренажёру систем уравнений
+            showScreen('system-of-equations-screen');
+            trainers.systemOfEquations.generateNewProblem();
+            break;
+
         case 'main-menu':
             // Из главного меню закрываем приложение
             if (tg) {
@@ -253,6 +262,8 @@ function initHistoryNavigation() {
                 trainers.trigonometry.generateNewProblem();
             } else if (screenId === 'percentages-screen') {
                 trainers.percentages.generateNewProblem();
+            } else if (screenId === 'system-of-equations-screen') {
+                trainers.systemOfEquations.generateNewProblem();
             }
         } else {
             // Если нет состояния, возвращаемся в главное меню
