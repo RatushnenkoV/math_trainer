@@ -42,10 +42,16 @@ function initApp() {
 
 // Показ экрана
 function showScreen(screenId, addToHistory = true) {
+    // Убираем класс active у всех экранов (включая те, что внутри компонентов)
     document.querySelectorAll('.screen').forEach(screen => {
         screen.classList.remove('active');
     });
-    document.getElementById(screenId).classList.add('active');
+
+    // Ищем экран по ID (может быть как на верхнем уровне, так и внутри компонента)
+    const targetScreen = document.getElementById(screenId);
+    if (targetScreen) {
+        targetScreen.classList.add('active');
+    }
 
     // Добавляем в историю браузера для поддержки кнопки "Назад"
     if (addToHistory) {
