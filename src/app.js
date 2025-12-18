@@ -27,6 +27,7 @@ function initApp() {
     trainers.negatives = document.querySelector('negatives-trainer')?.trainer;
     trainers.divisibility = document.querySelector('divisibility-trainer')?.trainer;
     trainers.linearEquations = document.querySelector('linear-equations-trainer')?.trainer;
+    trainers.linearInequalities = document.querySelector('linear-inequalities-trainer')?.trainer;
     trainers.quadraticEquations = document.querySelector('quadratic-equations-trainer')?.trainer;
     trainers.trigonometry = document.querySelector('trigonometry-trainer')?.trainer;
     trainers.percentages = document.querySelector('percentages-trainer')?.trainer;
@@ -53,7 +54,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
     });
 
     // Скрываем все компоненты тренажеров
-    document.querySelectorAll('multiplication-table-trainer, square-roots-trainer, fractions-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, quadratic-equations-trainer, trigonometry-trainer, percentages-trainer, system-of-equations-trainer').forEach(trainer => {
+    document.querySelectorAll('multiplication-table-trainer, square-roots-trainer, fractions-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, trigonometry-trainer, percentages-trainer, system-of-equations-trainer').forEach(trainer => {
         trainer.classList.remove('active');
     });
 
@@ -63,7 +64,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
         targetScreen.classList.add('active');
 
         // Если экран находится внутри компонента тренажера, показываем этот компонент
-        const trainerComponent = targetScreen.closest('multiplication-table-trainer, square-roots-trainer, fractions-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, quadratic-equations-trainer, trigonometry-trainer, percentages-trainer, system-of-equations-trainer');
+        const trainerComponent = targetScreen.closest('multiplication-table-trainer, square-roots-trainer, fractions-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, trigonometry-trainer, percentages-trainer, system-of-equations-trainer');
         if (trainerComponent) {
             trainerComponent.classList.add('active');
         }
@@ -88,6 +89,7 @@ function initMainMenu() {
         { id: 'negatives-btn', screen: 'negatives-screen', trainer: 'negatives' },
         { id: 'divisibility-btn', screen: 'divisibility-screen', trainer: 'divisibility' },
         { id: 'linear-equations-btn', screen: 'linear-equations-screen', trainer: 'linearEquations' },
+        { id: 'linear-inequalities-btn', screen: 'linear-inequalities-screen', trainer: 'linearInequalities' },
         { id: 'quadratic-equations-btn', screen: 'quadratic-equations-screen', trainer: 'quadraticEquations' },
         { id: 'trigonometry-btn', screen: 'trigonometry-screen', trainer: 'trigonometry' },
         { id: 'percentages-btn', screen: 'percentages-screen', trainer: 'percentages' },
@@ -134,6 +136,7 @@ function handleBackButton() {
         case 'negatives-screen':
         case 'divisibility-screen':
         case 'linear-equations-screen':
+        case 'linear-inequalities-screen':
         case 'quadratic-equations-screen':
         case 'trigonometry-screen':
         case 'percentages-screen':
@@ -182,6 +185,12 @@ function handleBackButton() {
             // Из настроек линейных уравнений возвращаемся к тренажёру линейных уравнений
             showScreen('linear-equations-screen');
             trainers.linearEquations.generateNewProblem();
+            break;
+
+        case 'linear-inequalities-settings-screen':
+            // Из настроек линейных неравенств возвращаемся к тренажёру линейных неравенств
+            showScreen('linear-inequalities-screen');
+            trainers.linearInequalities.generateNewProblem();
             break;
 
         case 'quadratic-equations-settings-screen':
@@ -256,6 +265,8 @@ function initHistoryNavigation() {
                 trainers.divisibility.generateNewProblem();
             } else if (screenId === 'linear-equations-screen') {
                 trainers.linearEquations.generateNewProblem();
+            } else if (screenId === 'linear-inequalities-screen') {
+                trainers.linearInequalities.generateNewProblem();
             } else if (screenId === 'quadratic-equations-screen') {
                 trainers.quadraticEquations.generateNewProblem();
             } else if (screenId === 'trigonometry-screen') {
