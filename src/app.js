@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function initApp() {
     // Все тренажёры теперь используют компоненты и инициализируются автоматически
+    trainers.multiplicationTable = document.querySelector('multiplication-table-trainer')?.trainer;
     trainers.fractions = document.querySelector('fractions-trainer')?.trainer;
     trainers.decimals = document.querySelector('decimals-trainer')?.trainer;
     trainers.negatives = document.querySelector('negatives-trainer')?.trainer;
@@ -48,7 +49,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
     });
 
     // Скрываем все компоненты тренажеров
-    document.querySelectorAll('fractions-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, quadratic-equations-trainer').forEach(trainer => {
+    document.querySelectorAll('multiplication-table-trainer, fractions-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, quadratic-equations-trainer').forEach(trainer => {
         trainer.classList.remove('active');
     });
 
@@ -58,7 +59,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
         targetScreen.classList.add('active');
 
         // Если экран находится внутри компонента тренажера, показываем этот компонент
-        const trainerComponent = targetScreen.closest('fractions-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, quadratic-equations-trainer');
+        const trainerComponent = targetScreen.closest('multiplication-table-trainer, fractions-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, quadratic-equations-trainer');
         if (trainerComponent) {
             trainerComponent.classList.add('active');
         }
@@ -76,6 +77,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
 // Инициализация главного меню
 function initMainMenu() {
     const trainerButtons = [
+        { id: 'multiplication-table-btn', screen: 'multiplication-table-screen', trainer: 'multiplicationTable' },
         { id: 'fractions-btn', screen: 'fractions-screen', trainer: 'fractions' },
         { id: 'decimals-btn', screen: 'decimals-screen', trainer: 'decimals' },
         { id: 'negatives-btn', screen: 'negatives-screen', trainer: 'negatives' },
@@ -117,6 +119,7 @@ function handleBackButton() {
 
     // Логика навигации назад в зависимости от текущего экрана
     switch (screenId) {
+        case 'multiplication-table-screen':
         case 'fractions-screen':
         case 'decimals-screen':
         case 'negatives-screen':
@@ -125,6 +128,12 @@ function handleBackButton() {
         case 'quadratic-equations-screen':
             // Из экрана тренажёра возвращаемся в главное меню
             showScreen('main-menu');
+            break;
+
+        case 'multiplication-table-settings-screen':
+            // Из настроек таблицы умножения возвращаемся к тренажёру таблицы умножения
+            showScreen('multiplication-table-screen');
+            trainers.multiplicationTable.generateNewProblem();
             break;
 
         case 'settings-screen':
@@ -197,7 +206,9 @@ function initHistoryNavigation() {
             showScreen(screenId, false);
 
             // Если это экран настроек, генерируем новый пример при возврате
-            if (screenId === 'fractions-screen') {
+            if (screenId === 'multiplication-table-screen') {
+                trainers.multiplicationTable.generateNewProblem();
+            } else if (screenId === 'fractions-screen') {
                 trainers.fractions.generateNewProblem();
             } else if (screenId === 'decimals-screen') {
                 trainers.decimals.generateNewProblem();
