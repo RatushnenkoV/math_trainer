@@ -33,15 +33,16 @@ quadratic-equations-trainer {
     left: 0;
     width: 100%;
     height: 100%;
+    z-index: 10;
 }
 
-/* Показываем компонент, когда его внутренний экран активен */
-fractions-trainer:has(.screen.active),
-decimals-trainer:has(.screen.active),
-negatives-trainer:has(.screen.active),
-divisibility-trainer:has(.screen.active),
-linear-equations-trainer:has(.screen.active),
-quadratic-equations-trainer:has(.screen.active) {
+/* Показываем компонент, когда он активен */
+fractions-trainer.active,
+decimals-trainer.active,
+negatives-trainer.active,
+divisibility-trainer.active,
+linear-equations-trainer.active,
+quadratic-equations-trainer.active {
     display: block;
 }
 
@@ -62,6 +63,7 @@ quadratic-equations-trainer:has(.screen.active) {
 /* Main Menu */
 #main-menu {
     padding: 0;
+    z-index: 1;
 }
 
 #main-menu h1 {

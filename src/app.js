@@ -47,10 +47,21 @@ function showScreen(screenId, addToHistory = true) {
         screen.classList.remove('active');
     });
 
+    // Скрываем все компоненты тренажеров
+    document.querySelectorAll('fractions-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, quadratic-equations-trainer').forEach(trainer => {
+        trainer.classList.remove('active');
+    });
+
     // Ищем экран по ID (может быть как на верхнем уровне, так и внутри компонента)
     const targetScreen = document.getElementById(screenId);
     if (targetScreen) {
         targetScreen.classList.add('active');
+
+        // Если экран находится внутри компонента тренажера, показываем этот компонент
+        const trainerComponent = targetScreen.closest('fractions-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, quadratic-equations-trainer');
+        if (trainerComponent) {
+            trainerComponent.classList.add('active');
+        }
     }
 
     // Добавляем в историю браузера для поддержки кнопки "Назад"
