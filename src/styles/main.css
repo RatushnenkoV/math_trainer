@@ -20,13 +20,32 @@ body {
     overflow: hidden;
 }
 
-.screen,
-fractions-trainer .screen,
-decimals-trainer .screen,
-negatives-trainer .screen,
-divisibility-trainer .screen,
-linear-equations-trainer .screen,
-quadratic-equations-trainer .screen {
+/* Trainer components должны занимать весь экран и быть скрыты по умолчанию */
+fractions-trainer,
+decimals-trainer,
+negatives-trainer,
+divisibility-trainer,
+linear-equations-trainer,
+quadratic-equations-trainer {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Показываем компонент, когда его внутренний экран активен */
+fractions-trainer:has(.screen.active),
+decimals-trainer:has(.screen.active),
+negatives-trainer:has(.screen.active),
+divisibility-trainer:has(.screen.active),
+linear-equations-trainer:has(.screen.active),
+quadratic-equations-trainer:has(.screen.active) {
+    display: block;
+}
+
+.screen {
     display: none;
     width: 100%;
     height: 100%;
