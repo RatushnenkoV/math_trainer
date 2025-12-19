@@ -1296,3 +1296,27 @@ system-of-equations-trainer.active {
     align-self: flex-start;
     margin-top: 20px;
 }
+
+/* System of Inequalities - compact layout */
+#system-of-inequalities-screen .content {
+    gap: 16px;
+    padding: 16px;
+}
+
+#system-of-inequalities-screen .problem-display {
+    font-size: clamp(20px, 5vw, 28px);
+    margin: 0;
+}
+
+#system-of-inequalities-screen .number-line-container {
+    gap: 12px;
+}
+
+#system-of-inequalities-screen .instructions {
+    font-size: 13px;
+    margin: 0;
+}
+
+#system-of-inequalities-screen .check-button {
+    margin-top: 8px;
+}

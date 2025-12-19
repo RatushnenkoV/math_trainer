@@ -327,6 +327,11 @@ ${problem.inequality2.inequality}
                 displayMode: true,
                 throwOnError: false
             });
+
+            // Автоматическое уменьшение шрифта, если не влезает
+            setTimeout(() => {
+                this.adjustSystemFontSize(problemDisplay);
+            }, 0);
         } catch (e) {
             // Если не получилось отрендерить, показываем текстом
             problemDisplay.innerHTML = `
@@ -336,6 +341,29 @@ ${problem.inequality2.inequality}
                     &nbsp;&nbsp;${problem.inequality2.inequality}
                 </div>
             `;
+        }
+    }
+
+    // Автоматическая подстройка размера шрифта системы
+    adjustSystemFontSize(element) {
+        const container = element.parentElement;
+        if (!container) return;
+
+        const containerWidth = container.clientWidth - 32; // вычитаем padding
+        let currentSize = 28; // начальный размер из CSS clamp
+
+        // Сбрасываем размер
+        element.style.fontSize = '';
+
+        // Проверяем, влезает ли
+        if (element.scrollWidth <= containerWidth) {
+            return; // Всё влезает, ничего не делаем
+        }
+
+        // Уменьшаем шрифт пока не влезет
+        while (element.scrollWidth > containerWidth && currentSize > 16) {
+            currentSize -= 2;
+            element.style.fontSize = currentSize + 'px';
         }
     }
 

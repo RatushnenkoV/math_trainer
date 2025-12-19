@@ -36,7 +36,7 @@ class LinearInequalitiesComponent extends BaseTrainerComponent {
                     </div>
 
                     <div class="number-line-container">
-                        <svg id="number-line-svg" width="100%" height="140" viewBox="0 0 600 140">
+                        <svg id="number-line-svg" width="100%" height="170" viewBox="0 0 600 170">
                             <!-- Основная линия -->
                             <line x1="50" y1="60" x2="550" y2="60" stroke="#007bff" stroke-width="2"/>
 
@@ -56,11 +56,11 @@ class LinearInequalitiesComponent extends BaseTrainerComponent {
                                     fill="white" stroke="#007bff" stroke-width="2" cursor="pointer"/>
 
                             <!-- Поле ввода под точкой -->
-                            <foreignObject x="250" y="80" width="100" height="50">
-                                <input type="text" id="point-value-input" placeholder="0" inputmode="decimal"
+                            <foreignObject x="250" y="80" width="100" height="80">
+                                <input type="text" id="point-value-input" placeholder="?" inputmode="decimal"
                                        xmlns="http://www.w3.org/1999/xhtml"
-                                       style="width: 100%; padding: 8px; font-size: 16px; text-align: center;
-                                              border: 2px solid #007bff; border-radius: 6px; background: white;"/>
+                                       style="width: 100%; height: 100%; padding: 0; font-size: 32px; text-align: center;
+                                              border: 3px solid #007bff; border-radius: 12px; background: white; box-sizing: border-box;"/>
                             </foreignObject>
                         </svg>
 
