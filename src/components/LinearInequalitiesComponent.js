@@ -38,10 +38,10 @@ class LinearInequalitiesComponent extends BaseTrainerComponent {
                     <div class="number-line-container">
                         <svg id="number-line-svg" width="100%" height="140" viewBox="0 0 600 140">
                             <!-- Основная линия -->
-                            <line x1="50" y1="60" x2="550" y2="60" stroke="#333" stroke-width="2"/>
+                            <line x1="50" y1="60" x2="550" y2="60" stroke="#007bff" stroke-width="2"/>
 
                             <!-- Стрелка справа -->
-                            <polygon points="555,60 545,55 545,65" fill="#333"/>
+                            <polygon points="555,60 545,55 545,65" fill="#007bff"/>
 
                             <!-- Левая область -->
                             <rect id="left-region" x="50" y="45" width="230" height="30"
