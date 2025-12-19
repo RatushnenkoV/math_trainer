@@ -450,19 +450,12 @@ function addToRecentTrainers(trainerId) {
 // Инициализация кнопки доната
 function initDonateButton() {
     const donateBtn = document.getElementById('donate-btn');
+    
 
     if (!donateBtn) return;
 
     donateBtn.addEventListener('click', () => {
         // Используем Telegram WebApp API для отправки invoice
-        if (tg && tg.openInvoice) {
-            // Здесь будет ссылка на invoice для доната через Telegram Stars
-            // Формат: https://t.me/$YOUR_BOT?start=donate
-            // Или используем tg.openInvoice() с invoice link
-            tg.openInvoice('https://t.me/rat_math_trainer_bot/donate');
-        } else {
-            // Fallback: открываем бота для доната
-            window.open('https://t.me/rat_math_trainer_bot?start=donate', '_blank');
-        }
+        tg.sendData("donate");
     });
 }
