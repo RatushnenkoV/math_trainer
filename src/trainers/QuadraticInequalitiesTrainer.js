@@ -97,29 +97,29 @@ class QuadraticInequalitiesTrainer extends BaseTrainer {
         // Создаём элемент точки на SVG
         const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
         circle.setAttribute('cy', this.lineY);
-        circle.setAttribute('r', '8');
+        circle.setAttribute('r', '16');
         circle.setAttribute('fill', 'white');
         circle.setAttribute('stroke', '#007bff');
-        circle.setAttribute('stroke-width', '2');
+        circle.setAttribute('stroke-width', '3');
         circle.setAttribute('cursor', 'pointer');
         circle.classList.add('point');
 
         // Создаём foreignObject для поля ввода
         const foreignObject = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
-        foreignObject.setAttribute('y', '100');
-        foreignObject.setAttribute('width', '100');
-        foreignObject.setAttribute('height', '50');
+        foreignObject.setAttribute('y', '110');
+        foreignObject.setAttribute('width', '120');
+        foreignObject.setAttribute('height', '60');
 
         const input = document.createElement('input');
         input.type = 'text';
-        input.placeholder = '0';
+        input.placeholder = '?';
         input.inputMode = 'decimal';
         input.style.width = '100%';
-        input.style.padding = '8px';
-        input.style.fontSize = '16px';
+        input.style.padding = '12px';
+        input.style.fontSize = '20px';
         input.style.textAlign = 'center';
         input.style.border = '2px solid #007bff';
-        input.style.borderRadius = '6px';
+        input.style.borderRadius = '8px';
         input.style.background = 'white';
 
         foreignObject.appendChild(input);
@@ -130,7 +130,7 @@ class QuadraticInequalitiesTrainer extends BaseTrainer {
 
         // Создаём объект точки
         const point = {
-            value: 0,
+            value: null,  // Изначально null, чтобы отличить от введённого 0
             included: false,
             circleElement: circle,
             inputElement: input,
@@ -149,6 +149,8 @@ class QuadraticInequalitiesTrainer extends BaseTrainer {
             const value = parseFloat(e.target.value);
             if (!isNaN(value)) {
                 point.value = value;
+            } else if (e.target.value.trim() === '') {
+                point.value = null;
             }
         });
 
@@ -201,7 +203,7 @@ class QuadraticInequalitiesTrainer extends BaseTrainer {
         this.points.forEach((point, index) => {
             const xPosition = this.calculatePointX(index, totalPoints);
             point.circleElement.setAttribute('cx', xPosition);
-            point.foreignObject.setAttribute('x', xPosition - 50);
+            point.foreignObject.setAttribute('x', xPosition - 60);  // Центрируем увеличенное поле (120/2 = 60)
         });
     }
 
@@ -369,8 +371,8 @@ class QuadraticInequalitiesTrainer extends BaseTrainer {
             const point = this.points[i];
             const inputValue = point.inputElement.value.trim();
 
-            if (inputValue === '' || inputValue === '0' && point.value === 0) {
-                // Поле не заполнено или осталось значение по умолчанию
+            if (inputValue === '' || point.value === null) {
+                // Поле не заполнено
                 point.inputElement.style.borderColor = '#dc3545';
                 this.showInvalidFormatMessage();
 
