@@ -1320,3 +1320,62 @@ system-of-equations-trainer.active {
 #system-of-inequalities-screen .check-button {
     margin-top: 8px;
 }
+
+/* Donate Section */
+#donate-section {
+    margin-top: 16px;
+    border-top: 2px solid var(--tg-theme-hint-color, #e0e0e0);
+    padding-top: 16px;
+}
+
+.section-header-donate {
+    padding: 12px 20px;
+    text-align: center;
+}
+
+.section-header-donate h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.section-content-donate {
+    padding: 0 20px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.donate-text {
+    font-size: 15px;
+    line-height: 1.5;
+    text-align: center;
+    color: var(--tg-theme-text-color, #000000);
+    margin: 0;
+    max-width: 400px;
+}
+
+.donate-button {
+    padding: 14px 32px;
+    font-size: 17px;
+    font-weight: 600;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #000000;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+    min-width: 200px;
+}
+
+.donate-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(255, 215, 0, 0.4);
+}
+
+.donate-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+}
