@@ -459,10 +459,10 @@ function initDonateButton() {
             // Здесь будет ссылка на invoice для доната через Telegram Stars
             // Формат: https://t.me/$YOUR_BOT?start=donate
             // Или используем tg.openInvoice() с invoice link
-            tg.openInvoice('https://t.me/$RatushnenkoV_bot/donate');
+            tg.openInvoice('https://t.me/rat_math_trainer_bot/donate');
         } else {
             // Fallback: открываем бота для доната
-            window.open('https://t.me/RatushnenkoV_bot?start=donate', '_blank');
+            window.open('https://t.me/rat_math_trainer_bot?start=donate', '_blank');
         }
     });
 }

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест RealSet</title>
+</head>
+<body>
+    <h1>Тест модуля RealSet</h1>
+    <div id="results"></div>
+
+    <script src="src/utils/RealSet.js"></script>
+    <script>
+        const results = document.getElementById('results');
+
+        function test(name, fn) {
+            try {
+                fn();
+                results.innerHTML += `<p style="color: green;">✓ ${name}</p>`;
+            } catch (e) {
+                results.innerHTML += `<p style="color: red;">✗ ${name}: ${e.message}</p>`;
+                console.error(e);
+            }
+        }
+
+        // Тест 1: Пустое множество
+        test('EmptySet не содержит элементов', () => {
+            const empty = new EmptySet();
+            if (empty.includes(5)) throw new Error('EmptySet содержит 5');
+            if (empty.toString() !== '∅') throw new Error('Неверное представление');
+        });
+
+        // Тест 2: Точка
+        test('Point содержит свой элемент', () => {
+            const point = new Point(3);
+            if (!point.includes(3)) throw new Error('Point не содержит 3');
+            if (point.includes(4)) throw new Error('Point содержит 4');
+            if (point.toString() !== '{3}') throw new Error('Неверное представление');
+        });
+
+        // Тест 3: Интервал
+        test('Interval работает корректно', () => {
+            const interval = new Interval(1, 5, true, false);
+            if (!interval.includes(1)) throw new Error('Не включает левую границу');
+            if (interval.includes(5)) throw new Error('Включает правую границу');
+            if (!interval.includes(3)) throw new Error('Не включает внутреннюю точку');
+            if (interval.toString() !== '[1, 5)') throw new Error('Неверное представление');
+        });
+
+        // Тест 4: Пересечение интервалов
+        test('Пересечение интервалов', () => {
+            const i1 = new Interval(1, 5, true, true);  // [1, 5]
+            const i2 = new Interval(3, 7, true, true);  // [3, 7]
+            const result = i1.intersection(i2);
+
+            if (!(result instanceof Interval)) throw new Error('Результат не интервал');
+            if (result.left !== 3 || result.right !== 5) throw new Error('Неверные границы');
+            if (!result.leftClosed || !result.rightClosed) throw new Error('Неверная закрытость');
+        });
+
+        // Тест 5: Объединение интервалов
+        test('Объединение интервалов', () => {
+            const i1 = new Interval(1, 3, true, true);
+            const i2 = new Interval(3, 5, true, true);
+            const result = i1.union(i2);
+
+            // Должно объединиться в один интервал [1, 5]
+            if (!(result instanceof Interval)) throw new Error('Результат не интервал');
+            if (result.left !== 1 || result.right !== 5) throw new Error('Неверные границы');
+        });
+
+        // Тест 6: Пересечение с пустым множеством
+        test('Пересечение с EmptySet дает EmptySet', () => {
+            const interval = new Interval(1, 5, true, true);
+            const empty = new EmptySet();
+            const result = interval.intersection(empty);
+
+            if (!(result instanceof EmptySet)) throw new Error('Результат не EmptySet');
+        });
+
+        // Тест 7: Объединение непересекающихся интервалов
+        test('Объединение непересекающихся интервалов', () => {
+            const i1 = new Interval(1, 2, true, true);
+            const i2 = new Interval(4, 5, true, true);
+            const result = i1.union(i2);
+
+            if (!(result instanceof UnionSet)) throw new Error('Результат не UnionSet');
+            if (result.parts.length !== 2) throw new Error('Должно быть 2 части');
+        });
+
+        // Тест 8: Проверка equals
+        test('Сравнение множеств', () => {
+            const i1 = new Interval(1, 5, true, false);
+            const i2 = new Interval(1, 5, true, false);
+            const i3 = new Interval(1, 5, true, true);
+
+            if (!i1.equals(i2)) throw new Error('Одинаковые интервалы не равны');
+            if (i1.equals(i3)) throw new Error('Разные интервалы равны');
+        });
+
+        results.innerHTML += '<h2>Все тесты завершены!</h2>';
+    </script>
+</body>
+</html>
