@@ -450,12 +450,20 @@ function addToRecentTrainers(trainerId) {
 // Инициализация кнопки доната
 function initDonateButton() {
     const donateBtn = document.getElementById('donate-btn');
-    
 
     if (!donateBtn) return;
 
     donateBtn.addEventListener('click', () => {
-        // Используем Telegram WebApp API для отправки invoice
-        tg.sendData("donate");
+        // Проверяем доступность Telegram WebApp API
+        if (!tg) {
+            console.error('Telegram WebApp API недоступен');
+            return;
+        }
+
+        // Отправляем данные боту через sendData
+        // После этого приложение автоматически закроется
+        tg.sendData(JSON.stringify({
+            action: 'donate'
+        }));
     });
 }
