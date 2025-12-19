@@ -39,12 +39,12 @@ class QuadraticInequalitiesComponent extends BaseTrainerComponent {
                         <div class="number-line-wrapper">
                             <button id="remove-point-btn" class="point-control-btn">−</button>
 
-                            <svg id="number-line-svg" width="100%" height="180" viewBox="0 0 600 180">
+                            <svg id="number-line-svg" width="100%" height="240" viewBox="0 0 600 240">
                                 <!-- Основная линия -->
-                                <line x1="50" y1="80" x2="550" y2="80" stroke="#007bff" stroke-width="2"/>
+                                <line x1="50" y1="50" x2="550" y2="50" stroke="#007bff" stroke-width="2"/>
 
                                 <!-- Стрелка справа -->
-                                <polygon points="555,80 545,75 545,85" fill="#007bff"/>
+                                <polygon points="555,50 545,45 545,55" fill="#007bff"/>
 
                                 <!-- Группа для областей (будет заполняться динамически) -->
                                 <g id="regions-group"></g>

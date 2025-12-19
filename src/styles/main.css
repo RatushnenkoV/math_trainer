@@ -1211,13 +1211,13 @@ system-of-equations-trainer.active {
     color: #ccc;
 }
 
-/* Position buttons at the bottom of the line */
+/* Position buttons at the top of the line */
 #remove-point-btn {
-    align-self: flex-end;
-    margin-bottom: 50px;
+    align-self: flex-start;
+    margin-top: 20px;
 }
 
 #add-point-btn {
-    align-self: flex-end;
-    margin-bottom: 50px;
+    align-self: flex-start;
+    margin-top: 20px;
 }

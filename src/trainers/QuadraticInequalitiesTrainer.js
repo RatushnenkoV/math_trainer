@@ -26,7 +26,7 @@ class QuadraticInequalitiesTrainer extends BaseTrainer {
         // Константы для SVG
         this.lineStart = 50;
         this.lineEnd = 550;
-        this.lineY = 80;
+        this.lineY = 50;
     }
 
     // Инициализация DOM элементов
@@ -106,21 +106,23 @@ class QuadraticInequalitiesTrainer extends BaseTrainer {
 
         // Создаём foreignObject для поля ввода
         const foreignObject = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
-        foreignObject.setAttribute('y', '110');
-        foreignObject.setAttribute('width', '120');
-        foreignObject.setAttribute('height', '60');
+        foreignObject.setAttribute('y', '80');
+        foreignObject.setAttribute('width', '100');
+        foreignObject.setAttribute('height', '80');
 
         const input = document.createElement('input');
         input.type = 'text';
         input.placeholder = '?';
         input.inputMode = 'decimal';
         input.style.width = '100%';
-        input.style.padding = '12px';
-        input.style.fontSize = '20px';
+        input.style.height = '100%';
+        input.style.padding = '0';
+        input.style.fontSize = '32px';
         input.style.textAlign = 'center';
-        input.style.border = '2px solid #007bff';
-        input.style.borderRadius = '8px';
+        input.style.border = '3px solid #007bff';
+        input.style.borderRadius = '12px';
         input.style.background = 'white';
+        input.style.boxSizing = 'border-box';
 
         foreignObject.appendChild(input);
 
@@ -203,7 +205,7 @@ class QuadraticInequalitiesTrainer extends BaseTrainer {
         this.points.forEach((point, index) => {
             const xPosition = this.calculatePointX(index, totalPoints);
             point.circleElement.setAttribute('cx', xPosition);
-            point.foreignObject.setAttribute('x', xPosition - 60);  // Центрируем увеличенное поле (120/2 = 60)
+            point.foreignObject.setAttribute('x', xPosition - 50);  // Центрируем поле (100/2 = 50)
         });
     }
 
@@ -251,7 +253,7 @@ class QuadraticInequalitiesTrainer extends BaseTrainer {
             rect.setAttribute('x', x1);
             rect.setAttribute('y', this.lineY - 15);
             rect.setAttribute('width', width);
-            rect.setAttribute('height', 30);
+            rect.setAttribute('height', 50);
             rect.setAttribute('fill', 'transparent');
             rect.setAttribute('stroke', 'none');
             rect.setAttribute('cursor', 'pointer');
