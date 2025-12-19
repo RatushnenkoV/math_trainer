@@ -88,34 +88,109 @@ system-of-equations-trainer.active {
     flex-shrink: 0;
 }
 
-.menu-buttons-container {
+.menu-container {
     flex: 1;
     overflow-y: auto;
-    padding: 20px;
+    padding: 16px;
+}
+
+.menu-section {
+    margin-bottom: 12px;
+    background: var(--tg-theme-secondary-bg-color, #f7f7f7);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.2s;
+}
+
+.section-header:active {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.section-header h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.toggle-icon {
+    font-size: 14px;
+    transition: transform 0.25s ease;
+    color: var(--tg-theme-hint-color, #999);
+}
+
+.section-header.collapsed .toggle-icon {
+    transform: rotate(-90deg);
+}
+
+.section-content {
+    max-height: 1000px;
+    opacity: 1;
+    transition: max-height 0.3s ease, opacity 0.25s ease, padding 0.3s ease;
+    padding: 0 12px 12px 12px;
+}
+
+.section-content.collapsed {
+    max-height: 0;
+    opacity: 0;
+    padding: 0 12px;
+    overflow: hidden;
+}
+
+.menu-buttons-container {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    align-items: center;
+    gap: 12px;
 }
 
 .menu-button {
-    padding: 20px 40px;
-    font-size: 20px;
+    padding: 16px 24px;
+    font-size: 16px;
     font-weight: 500;
     background: var(--tg-theme-button-color, #3390ec);
     color: var(--tg-theme-button-text-color, #ffffff);
     border: none;
     border-radius: 12px;
     cursor: pointer;
-    transition: transform 0.2s, opacity 0.2s;
+    transition: transform 0.15s, opacity 0.15s, background-color 0.2s;
     width: 100%;
-    max-width: 400px;
-    flex-shrink: 0;
+    text-align: center;
 }
 
 .menu-button:active {
-    transform: scale(0.95);
-    opacity: 0.8;
+    transform: scale(0.97);
+    opacity: 0.85;
+}
+
+.menu-button:hover {
+    background: var(--tg-theme-button-color, #2a85d8);
+}
+
+/* Недавнее */
+#recent-section {
+    border: 2px solid var(--tg-theme-button-color, #3390ec);
+    background: var(--tg-theme-bg-color, #ffffff);
+}
+
+#recent-section .section-header {
+    cursor: default;
+}
+
+#recent-section .menu-button {
+    position: relative;
+}
+
+#recent-section .menu-button::before {
+    content: '⏱️';
+    margin-right: 8px;
 }
 
 /* Header */

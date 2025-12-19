@@ -14,20 +14,78 @@
         <!-- Main Menu Screen -->
         <div id="main-menu" class="screen active">
             <h1>Математический тренажер</h1>
-            <div class="menu-buttons-container">
-                <button id="multiplication-table-btn" class="menu-button">Таблица умножения</button>
-                <button id="divisibility-btn" class="menu-button">Делимость</button>
-                <button id="fractions-btn" class="menu-button">Обыкновенные дроби</button>
-                <button id="decimals-btn" class="menu-button">Десятичные дроби</button>
-                <button id="percentages-btn" class="menu-button">Проценты</button>
-                <button id="negatives-btn" class="menu-button">Отрицательные числа</button>
-                <button id="square-roots-btn" class="menu-button">Квадратные корни</button>
-                <button id="linear-equations-btn" class="menu-button">Линейные уравнения</button>
-                <button id="linear-inequalities-btn" class="menu-button">Линейные неравенства</button>
-                <button id="system-of-equations-btn" class="menu-button">Системы линейных уравнений</button>
-                <button id="quadratic-equations-btn" class="menu-button">Квадратные уравнения</button>
-                <button id="quadratic-inequalities-btn" class="menu-button">Квадратные неравенства</button>
-                <button id="trigonometry-btn" class="menu-button">Тригонометрия</button>
+            <div class="menu-container">
+                <!-- Недавнее -->
+                <div id="recent-section" class="menu-section" style="display: none;">
+                    <div class="section-header">
+                        <h2>📌 Недавнее</h2>
+                    </div>
+                    <div class="section-content">
+                        <div id="recent-trainers" class="menu-buttons-container"></div>
+                    </div>
+                </div>
+
+                <!-- Арифметика -->
+                <div class="menu-section">
+                    <div class="section-header" data-section="arithmetic">
+                        <h2>🔢 Арифметика</h2>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content" data-section="arithmetic">
+                        <div class="menu-buttons-container">
+                            <button id="multiplication-table-btn" class="menu-button">Таблица умножения</button>
+                            <button id="divisibility-btn" class="menu-button">Делимость</button>
+                            <button id="fractions-btn" class="menu-button">Обыкновенные дроби</button>
+                            <button id="decimals-btn" class="menu-button">Десятичные дроби</button>
+                            <button id="percentages-btn" class="menu-button">Проценты</button>
+                            <button id="negatives-btn" class="menu-button">Отрицательные числа</button>
+                            <button id="square-roots-btn" class="menu-button">Квадратные корни</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Уравнения -->
+                <div class="menu-section">
+                    <div class="section-header" data-section="equations">
+                        <h2>🟰 Уравнения</h2>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content" data-section="equations">
+                        <div class="menu-buttons-container">
+                            <button id="linear-equations-btn" class="menu-button">Линейные уравнения</button>
+                            <button id="system-of-equations-btn" class="menu-button">Системы линейных уравнений</button>
+                            <button id="quadratic-equations-btn" class="menu-button">Квадратные уравнения</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Неравенства -->
+                <div class="menu-section">
+                    <div class="section-header" data-section="inequalities">
+                        <h2>⚖️ Неравенства</h2>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content" data-section="inequalities">
+                        <div class="menu-buttons-container">
+                            <button id="linear-inequalities-btn" class="menu-button">Линейные неравенства</button>
+                            <button id="quadratic-inequalities-btn" class="menu-button">Квадратные неравенства</button>
+                            <button id="system-of-inequalities-btn" class="menu-button">Системы неравенств</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Тригонометрия -->
+                <div class="menu-section">
+                    <div class="section-header" data-section="trigonometry">
+                        <h2>📐 Тригонометрия</h2>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content" data-section="trigonometry">
+                        <div class="menu-buttons-container">
+                            <button id="trigonometry-btn" class="menu-button">Тригонометрия</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -45,6 +103,7 @@
         <trigonometry-trainer></trigonometry-trainer>
         <percentages-trainer></percentages-trainer>
         <system-of-equations-trainer></system-of-equations-trainer>
+        <system-of-inequalities-trainer></system-of-inequalities-trainer>
 
         <!-- Emoji Animation Container -->
         <div id="emoji-container"></div>
@@ -53,6 +112,7 @@
     <!-- Утилиты -->
     <script src="src/utils/fractions.js"></script>
     <script src="src/utils/progress.js"></script>
+    <script src="src/utils/RealSet.js"></script>
 
     <!-- Генераторы -->
     <script src="src/utils/generators/MultiplicationTableGenerator.js"></script>
@@ -68,6 +128,7 @@
     <script src="src/utils/generators/TrigonometryGenerator.js"></script>
     <script src="src/utils/generators/PercentagesGenerator.js"></script>
     <script src="src/utils/generators/SystemOfEquationsGenerator.js"></script>
+    <script src="src/utils/generators/SystemOfInequalitiesGenerator.js"></script>
 
     <!-- Тренажёры -->
     <script src="src/trainers/BaseTrainer.js"></script>
@@ -84,6 +145,7 @@
     <script src="src/trainers/TrigonometryTrainer.js"></script>
     <script src="src/trainers/PercentagesTrainer.js"></script>
     <script src="src/trainers/SystemOfEquationsTrainer.js"></script>
+    <script src="src/trainers/SystemOfInequalitiesTrainer.js"></script>
 
     <!-- Компоненты -->
     <script src="src/components/BaseTrainerComponent.js"></script>
@@ -100,6 +162,7 @@
     <script src="src/components/TrigonometryComponent.js"></script>
     <script src="src/components/PercentagesComponent.js"></script>
     <script src="src/components/SystemOfEquationsComponent.js"></script>
+    <script src="src/components/SystemOfInequalitiesComponent.js"></script>
 
     <!-- Главное приложение -->
     <script src="src/app.js"></script>

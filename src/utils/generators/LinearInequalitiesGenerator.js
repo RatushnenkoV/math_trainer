@@ -69,6 +69,25 @@ class LinearInequalitiesProblemGenerator {
         return signs[this.randomInt(0, signs.length - 1)];
     }
 
+    // Преобразование решения линейного неравенства в множество RealSet
+    solutionToSet(criticalPoint, solutionLeft, solutionRight, pointIncluded) {
+        const INF = 1e9;
+
+        if (solutionLeft && solutionRight) {
+            // Решение - вся прямая (не должно быть)
+            return new Interval(-INF, INF, true, true);
+        } else if (solutionLeft) {
+            // x <= criticalPoint или x < criticalPoint
+            return new Interval(-INF, criticalPoint, true, pointIncluded);
+        } else if (solutionRight) {
+            // x >= criticalPoint или x > criticalPoint
+            return new Interval(criticalPoint, INF, pointIncluded, true);
+        } else {
+            // Нет решения
+            return new EmptySet();
+        }
+    }
+
     // Определение решения неравенства
     determineSolution(leftCoef, rightValue, sign) {
         // После приведения к виду: leftCoef * x <sign> rightValue
@@ -112,11 +131,14 @@ class LinearInequalitiesProblemGenerator {
             }
         }
 
+        const roundedPoint = Math.round(criticalPoint);
+
         return {
-            criticalPoint: Math.round(criticalPoint),
+            criticalPoint: roundedPoint,
             solutionLeft,
             solutionRight,
-            pointIncluded
+            pointIncluded,
+            solutionSet: this.solutionToSet(roundedPoint, solutionLeft, solutionRight, pointIncluded)
         };
     }
 

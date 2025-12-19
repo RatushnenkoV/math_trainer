@@ -33,9 +33,16 @@ function initApp() {
     trainers.trigonometry = document.querySelector('trigonometry-trainer')?.trainer;
     trainers.percentages = document.querySelector('percentages-trainer')?.trainer;
     trainers.systemOfEquations = document.querySelector('system-of-equations-trainer')?.trainer;
+    trainers.systemOfInequalities = document.querySelector('system-of-inequalities-trainer')?.trainer;
 
     // Инициализация главного меню
     initMainMenu();
+
+    // Инициализация сворачиваемых разделов
+    initCollapsibleSections();
+
+    // Инициализация раздела "Недавнее"
+    initRecentTrainers();
 
     // Инициализация Telegram BackButton
     initTelegramBackButton();
@@ -55,7 +62,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
     });
 
     // Скрываем все компоненты тренажеров
-    document.querySelectorAll('multiplication-table-trainer, square-roots-trainer, fractions-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, percentages-trainer, system-of-equations-trainer').forEach(trainer => {
+    document.querySelectorAll('multiplication-table-trainer, square-roots-trainer, fractions-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer').forEach(trainer => {
         trainer.classList.remove('active');
     });
 
@@ -65,7 +72,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
         targetScreen.classList.add('active');
 
         // Если экран находится внутри компонента тренажера, показываем этот компонент
-        const trainerComponent = targetScreen.closest('multiplication-table-trainer, square-roots-trainer, fractions-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, percentages-trainer, system-of-equations-trainer');
+        const trainerComponent = targetScreen.closest('multiplication-table-trainer, square-roots-trainer, fractions-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer');
         if (trainerComponent) {
             trainerComponent.classList.add('active');
         }
@@ -95,12 +102,16 @@ function initMainMenu() {
         { id: 'quadratic-inequalities-btn', screen: 'quadratic-inequalities-screen', trainer: 'quadraticInequalities' },
         { id: 'trigonometry-btn', screen: 'trigonometry-screen', trainer: 'trigonometry' },
         { id: 'percentages-btn', screen: 'percentages-screen', trainer: 'percentages' },
-        { id: 'system-of-equations-btn', screen: 'system-of-equations-screen', trainer: 'systemOfEquations' }
+        { id: 'system-of-equations-btn', screen: 'system-of-equations-screen', trainer: 'systemOfEquations' },
+        { id: 'system-of-inequalities-btn', screen: 'system-of-inequalities-screen', trainer: 'systemOfInequalities' }
     ];
 
     trainerButtons.forEach(({ id, screen, trainer }) => {
         const button = document.getElementById(id);
         button.addEventListener('click', () => {
+            // Добавляем тренажёр в список недавних
+            addToRecentTrainers(id);
+
             showScreen(screen);
             // Получаем trainer из компонента, если ещё не получили
             if (!trainers[trainer]) {
@@ -144,6 +155,7 @@ function handleBackButton() {
         case 'trigonometry-screen':
         case 'percentages-screen':
         case 'system-of-equations-screen':
+        case 'system-of-inequalities-screen':
             // Из экрана тренажёра возвращаемся в главное меню
             showScreen('main-menu');
             break;
@@ -286,6 +298,8 @@ function initHistoryNavigation() {
                 trainers.percentages.generateNewProblem();
             } else if (screenId === 'system-of-equations-screen') {
                 trainers.systemOfEquations.generateNewProblem();
+            } else if (screenId === 'system-of-inequalities-screen') {
+                trainers.systemOfInequalities.generateNewProblem();
             }
         } else {
             // Если нет состояния, возвращаемся в главное меню
@@ -300,4 +314,132 @@ function initHistoryNavigation() {
         // Это предотвратит закрытие приложения при первом нажатии "Назад"
         history.pushState({ screen: 'main-menu' }, '', '#main-menu');
     });
+}
+
+// Инициализация сворачиваемых разделов
+function initCollapsibleSections() {
+    // Получаем все заголовки разделов с атрибутом data-section
+    const sectionHeaders = document.querySelectorAll('.section-header[data-section]');
+
+    sectionHeaders.forEach(header => {
+        const sectionName = header.getAttribute('data-section');
+        const content = document.querySelector(`.section-content[data-section="${sectionName}"]`);
+
+        if (!content) return;
+
+        // Загружаем сохранённое состояние раздела
+        const savedState = localStorage.getItem(`menu-section-${sectionName}`);
+        const isCollapsed = savedState === 'collapsed';
+
+        if (isCollapsed) {
+            header.classList.add('collapsed');
+            content.classList.add('collapsed');
+        }
+
+        // Обработчик клика на заголовок
+        header.addEventListener('click', () => {
+            const isCurrentlyCollapsed = header.classList.contains('collapsed');
+
+            if (isCurrentlyCollapsed) {
+                // Разворачиваем
+                header.classList.remove('collapsed');
+                content.classList.remove('collapsed');
+                localStorage.setItem(`menu-section-${sectionName}`, 'expanded');
+            } else {
+                // Сворачиваем
+                header.classList.add('collapsed');
+                content.classList.add('collapsed');
+                localStorage.setItem(`menu-section-${sectionName}`, 'collapsed');
+            }
+        });
+    });
+}
+
+// Инициализация раздела "Недавнее"
+function initRecentTrainers() {
+    updateRecentTrainers();
+}
+
+// Обновление раздела "Недавнее"
+function updateRecentTrainers() {
+    const recentSection = document.getElementById('recent-section');
+    const recentContainer = document.getElementById('recent-trainers');
+
+    if (!recentContainer) return;
+
+    // Загружаем список недавних тренажёров из localStorage
+    const recentData = localStorage.getItem('recent-trainers');
+    const recentTrainers = recentData ? JSON.parse(recentData) : [];
+
+    if (recentTrainers.length === 0) {
+        // Скрываем раздел, если нет недавних тренажёров
+        recentSection.style.display = 'none';
+        return;
+    }
+
+    // Показываем раздел
+    recentSection.style.display = 'block';
+
+    // Очищаем контейнер
+    recentContainer.innerHTML = '';
+
+    // Словарь названий тренажёров
+    const trainerNames = {
+        'multiplication-table-btn': 'Таблица умножения',
+        'divisibility-btn': 'Делимость',
+        'fractions-btn': 'Обыкновенные дроби',
+        'decimals-btn': 'Десятичные дроби',
+        'percentages-btn': 'Проценты',
+        'negatives-btn': 'Отрицательные числа',
+        'square-roots-btn': 'Квадратные корни',
+        'linear-equations-btn': 'Линейные уравнения',
+        'linear-inequalities-btn': 'Линейные неравенства',
+        'system-of-equations-btn': 'Системы линейных уравнений',
+        'quadratic-equations-btn': 'Квадратные уравнения',
+        'quadratic-inequalities-btn': 'Квадратные неравенства',
+        'system-of-inequalities-btn': 'Системы неравенств',
+        'trigonometry-btn': 'Тригонометрия'
+    };
+
+    // Берём только последние 3 тренажёра
+    const displayTrainers = recentTrainers.slice(0, 3);
+
+    displayTrainers.forEach(trainerId => {
+        const name = trainerNames[trainerId] || trainerId;
+        const button = document.createElement('button');
+        button.id = trainerId;
+        button.className = 'menu-button';
+        button.textContent = name;
+
+        // Добавляем обработчик клика
+        const originalButton = document.getElementById(trainerId);
+        if (originalButton) {
+            button.addEventListener('click', () => {
+                originalButton.click();
+            });
+        }
+
+        recentContainer.appendChild(button);
+    });
+}
+
+// Добавление тренажёра в список недавних
+function addToRecentTrainers(trainerId) {
+    const recentData = localStorage.getItem('recent-trainers');
+    let recentTrainers = recentData ? JSON.parse(recentData) : [];
+
+    // Удаляем тренажёр из списка, если он уже есть
+    recentTrainers = recentTrainers.filter(id => id !== trainerId);
+
+    // Добавляем тренажёр в начало списка
+    recentTrainers.unshift(trainerId);
+
+    // Ограничиваем список 3 элементами
+    recentTrainers = recentTrainers.slice(0, 3);
+
+    // Сохраняем обновлённый список
+    localStorage.setItem('recent-trainers', JSON.stringify(recentTrainers));
+
+    // Обновляем отображение
+    updateRecentTrainers();
 }
