@@ -451,12 +451,15 @@ function addToRecentTrainers(trainerId) {
 function initDonateButton() {
     const donateBtn = document.getElementById('donate-btn');
 
-    if (!donateBtn) return;
+    if (!donateBtn) {
+        if (tg) tg.showAlert('Ошибка: кнопка donate-btn не найдена!');
+        return;
+    }
 
     donateBtn.addEventListener('click', () => {
         // Проверяем доступность Telegram WebApp API
         if (!tg) {
-            console.error('Telegram WebApp API недоступен');
+            alert('Telegram WebApp API недоступен');
             return;
         }
 
@@ -476,8 +479,9 @@ function initDonateButton() {
             if (buttonId && buttonId !== 'cancel') {
                 // Отправляем выбранную сумму боту
                 // Открываем ссылку на бота с параметром
-                const botUsername = 'rat_math_trainer_bot'; // Замените на username вашего бота
-                tg.openTelegramLink(`https://t.me/${botUsername}?start=donate_${buttonId}`);
+                const botUsername = 'rat_math_trainer_bot';
+                const link = `https://t.me/${botUsername}?start=donate_${buttonId}`;
+                tg.openTelegramLink(link);
             }
         });
     });
