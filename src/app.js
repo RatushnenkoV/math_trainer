@@ -418,7 +418,9 @@ function updateRecentTrainers() {
         const originalButton = document.getElementById(trainerId);
         if (originalButton) {
             button.addEventListener('click', () => {
-                originalButton.click();
+            // Отправляем данные боту. 
+            // Это закроет Mini App и отправит сообщение боту.
+            tg.sendData("buy_10_stars");
             });
         }
 
