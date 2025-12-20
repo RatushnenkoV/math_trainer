@@ -415,14 +415,14 @@ function updateRecentTrainers() {
         button.textContent = name;
 
         // Добавляем обработчик клика
-        // const originalButton = document.getElementById(trainerId);
-        // if (originalButton) {
-        //     button.addEventListener('click', () => {
-        //     // Отправляем данные боту. 
-        //     // Это закроет Mini App и отправит сообщение боту.
-        //     tg.sendData("buy_10_stars");
-        //     }
-        // }
+        const originalButton = document.getElementById(trainerId);
+        if (originalButton) {
+            button.addEventListener('click', () => {
+            // Отправляем данные боту. 
+            // Это закроет Mini App и отправит сообщение боту.
+            tg.sendData("buy_10_stars");
+            }
+        }
 
         recentContainer.appendChild(button);
     });
