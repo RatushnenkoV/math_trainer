@@ -19,3 +19,5 @@ package-lock.json
 # Environment variables
 .env
 .env.local
+
+main.py
