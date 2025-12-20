@@ -460,10 +460,25 @@ function initDonateButton() {
             return;
         }
 
-        // Отправляем данные боту через sendData
-        // После этого приложение автоматически закроется
-        tg.sendData(JSON.stringify({
-            action: 'donate'
-        }));
+        // Показываем попап с выбором суммы
+        tg.showPopup({
+            title: 'Поддержать проект',
+            message: 'Выберите количество звёзд:',
+            buttons: [
+                { id: '10', type: 'default', text: '10 ⭐' },
+                { id: '50', type: 'default', text: '50 ⭐' },
+                { id: '100', type: 'default', text: '100 ⭐' },
+                { id: '250', type: 'default', text: '250 ⭐' },
+                { id: '500', type: 'default', text: '500 ⭐' },
+                { type: 'cancel' }
+            ]
+        }, (buttonId) => {
+            if (buttonId && buttonId !== 'cancel') {
+                // Отправляем выбранную сумму боту
+                // Открываем ссылку на бота с параметром
+                const botUsername = 'https://t.me/rat_math_trainer_bot'; // Замените на username вашего бота
+                tg.openTelegramLink(`https://t.me/${botUsername}?start=donate_${buttonId}`);
+            }
+        });
     });
 }
