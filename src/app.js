@@ -418,10 +418,8 @@ function updateRecentTrainers() {
         const originalButton = document.getElementById(trainerId);
         if (originalButton) {
             button.addEventListener('click', () => {
-            // Отправляем данные боту. 
-            // Это закроет Mini App и отправит сообщение боту.
-            tg.sendData("buy_10_stars");
-            }
+                originalButton.click();
+            });
         }
 
         recentContainer.appendChild(button);
@@ -453,7 +451,10 @@ function addToRecentTrainers(trainerId) {
 function initDonateButton() {
     const donateBtn = document.getElementById('donate-btn');
 
-    if (!donateBtn) return;
+    if (!donateBtn) {
+        if (tg) tg.showAlert('Ошибка: кнопка donate-btn не найдена!');
+        return;
+    }
 
     donateBtn.addEventListener('click', () => {
         // Проверяем доступность Telegram WebApp API
@@ -462,11 +463,43 @@ function initDonateButton() {
             return;
         }
 
-        // Отправляем запрос на донат 100 звёзд
-        const botUsername = 'rat_math_trainer_bot';
+        openDonateLink(100)
 
-        // Используем openLink вместо openTelegramLink для передачи параметров
-        const link = `https://t.me/${botUsername}?start=donate`;
-        tg.openLink(link);
+        // Показываем первый попап с выбором суммы (максимум 3 кнопки)
+        // tg.showPopup({
+        //     title: 'Поддержать проект',
+        //     message: 'Выберите количество звёзд:',
+        //     buttons: [
+        //         { id: '50', type: 'default', text: '50 ⭐' },
+        //         { id: '100', type: 'default', text: '100 ⭐' },
+        //         { id: 'more', type: 'default', text: 'Другая сумма...' }
+        //     ]
+        // }, (buttonId) => {
+        //     if (buttonId === 'more') {
+        //         // Показываем второй попап с дополнительными суммами
+        //         // tg.showPopup({
+        //         //     title: 'Другая сумма',
+        //         //     message: 'Выберите количество звёзд:',
+        //         //     buttons: [
+        //         //         { id: '10', type: 'default', text: '10 ⭐' },
+        //         //         { id: '250', type: 'default', text: '250 ⭐' },
+        //         //         { id: '500', type: 'default', text: '500 ⭐' }
+        //         //     ]
+        //         // }, (buttonId2) => {
+        //         //     if (buttonId2) {
+        //         //         openDonateLink(buttonId2);
+        //         //     }
+        //         // });
+        //     } else if (buttonId) {
+        //         openDonateLink(buttonId);
+        //     }
+        // });
     });
+}
+
+// Функция открытия ссылки на донат
+function openDonateLink(amount) {
+    const botUsername = 'rat_math_trainer_bot';
+    const link = `https://t.me/${botUsername}?start=donate_${amount}`;
+    tg.openTelegramLink(link);
 }
