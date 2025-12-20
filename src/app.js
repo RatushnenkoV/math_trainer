@@ -462,7 +462,9 @@ function initDonateButton() {
 
         // Отправляем запрос на донат 100 звёзд
         const botUsername = 'rat_math_trainer_bot';
+
+        // Используем openLink вместо openTelegramLink для передачи параметров
         const link = `https://t.me/${botUsername}?start=donate_100`;
-        tg.openTelegramLink(link);
+        tg.openLink(link);
     });
 }
