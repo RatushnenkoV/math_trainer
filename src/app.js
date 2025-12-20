@@ -465,7 +465,6 @@ function initDonateButton() {
 
         const botUsername = 'rat_math_trainer_bot';
         const link = `https://t.me/${botUsername}?start=donate`;
-        alert("Ну что такое? (((")
         tg.openTelegramLink(link);
     });
 }
