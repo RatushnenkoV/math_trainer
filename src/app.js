@@ -463,35 +463,37 @@ function initDonateButton() {
             return;
         }
 
+        openDonateLink(100);
+
         // Показываем первый попап с выбором суммы (максимум 3 кнопки)
-        tg.showPopup({
-            title: 'Поддержать проект',
-            message: 'Выберите количество звёзд:',
-            buttons: [
-                { id: '50', type: 'default', text: '50 ⭐' },
-                { id: '100', type: 'default', text: '100 ⭐' },
-                { id: 'more', type: 'default', text: 'Другая сумма...' }
-            ]
-        }, (buttonId) => {
-            if (buttonId === 'more') {
-                // Показываем второй попап с дополнительными суммами
-                tg.showPopup({
-                    title: 'Другая сумма',
-                    message: 'Выберите количество звёзд:',
-                    buttons: [
-                        { id: '10', type: 'default', text: '10 ⭐' },
-                        { id: '250', type: 'default', text: '250 ⭐' },
-                        { id: '500', type: 'default', text: '500 ⭐' }
-                    ]
-                }, (buttonId2) => {
-                    if (buttonId2) {
-                        openDonateLink(buttonId2);
-                    }
-                });
-            } else if (buttonId) {
-                openDonateLink(buttonId);
-            }
-        });
+        // tg.showPopup({
+        //     title: 'Поддержать проект',
+        //     message: 'Выберите количество звёзд:',
+        //     buttons: [
+        //         { id: '50', type: 'default', text: '50 ⭐' },
+        //         { id: '100', type: 'default', text: '100 ⭐' },
+        //         { id: 'more', type: 'default', text: 'Другая сумма...' }
+        //     ]
+        // }, (buttonId) => {
+        //     if (buttonId === 'more') {
+        //         // Показываем второй попап с дополнительными суммами
+        //         // tg.showPopup({
+        //         //     title: 'Другая сумма',
+        //         //     message: 'Выберите количество звёзд:',
+        //         //     buttons: [
+        //         //         { id: '10', type: 'default', text: '10 ⭐' },
+        //         //         { id: '250', type: 'default', text: '250 ⭐' },
+        //         //         { id: '500', type: 'default', text: '500 ⭐' }
+        //         //     ]
+        //         // }, (buttonId2) => {
+        //         //     if (buttonId2) {
+        //         //         openDonateLink(buttonId2);
+        //         //     }
+        //         // });
+        //     } else if (buttonId) {
+        //         openDonateLink(buttonId);
+        //     }
+        // });
     });
 }
 
