@@ -476,7 +476,7 @@ function initDonateButton() {
             if (buttonId && buttonId !== 'cancel') {
                 // Отправляем выбранную сумму боту
                 // Открываем ссылку на бота с параметром
-                const botUsername = 'https://t.me/rat_math_trainer_bot'; // Замените на username вашего бота
+                const botUsername = 'rat_math_trainer_bot'; // Замените на username вашего бота
                 tg.openTelegramLink(`https://t.me/${botUsername}?start=donate_${buttonId}`);
             }
         });
