@@ -30,7 +30,6 @@ class SquareRootsComponent extends BaseTrainerComponent {
 
                 <div class="content">
                     <div id="square-roots-problem-display" class="problem-display">
-                        <span class="operator" id="square-roots-operator"></span>
                         <span class="number-display" id="square-roots-number"></span>
                         <span class="equals">=</span>
                         <span class="question">?</span>

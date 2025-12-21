@@ -96,11 +96,11 @@ class SquareRootsTrainer extends BaseTrainer {
 
     // Отображение примера
     displayProblem(problem) {
-        const operatorElem = document.getElementById('square-roots-operator');
         const numberElem = document.getElementById('square-roots-number');
-
-        operatorElem.textContent = problem.operation;
-        numberElem.textContent = problem.number;
+        katex.render("\\sqrt{" + problem.number + "}", numberElem, {
+                    displayMode: true,
+                    throwOnError: false
+                });
     }
 
     // Очистка полей ввода
