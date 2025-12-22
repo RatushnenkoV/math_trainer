@@ -135,11 +135,6 @@ class ProblemGenerator {
             // Сокращаем результат
             result.simplify();
 
-            // Проверка на ноль в результате
-            if (result.numerator === 0) {
-                result.numerator = 1; // Заменяем ноль на единицу
-            }
-
             // Если включены смешанные дроби, преобразуем в смешанную
             if (this.settings.mixedFractions) {
                 result.toMixed();

@@ -197,11 +197,11 @@ class FractionsTrainer extends BaseTrainer {
             wholeInput = parseInt(wholeInputValue) || 0;
         }
 
-        if (wholeInput === 0 && numeratorInput === 0 && wholeInputValue !== '-') {
-            this.elements.checkBtn.disabled = true;
-        } else {
-            this.elements.checkBtn.disabled = false;
-        }
+        // if (wholeInput === 0 && numeratorInput === 0 && wholeInputValue !== '-') {
+        //     this.elements.checkBtn.disabled = true;
+        // } else {
+        //     this.elements.checkBtn.disabled = false;
+        // }
     }
 
     // Проверка ответа
@@ -237,6 +237,7 @@ class FractionsTrainer extends BaseTrainer {
 
         const userAnswer = new Fraction(numeratorInput, denominatorInput, wholeInput);
         const correctAnswer = this.currentProblem.result.clone();
+        console.log(correctAnswer);
 
         // Проверка на правильность
         let isCorrect = userAnswer.equals(correctAnswer);

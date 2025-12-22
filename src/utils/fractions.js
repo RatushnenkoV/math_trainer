@@ -127,7 +127,7 @@ class Fraction {
         f1.simplify();
         f2.simplify();
 
-        return f1.numerator === f2.numerator && f1.denominator === f2.denominator;
+        return (f1.numerator === f2.numerator) && (f1.denominator === f2.denominator || f1.numerator === 0) ;
     }
 
     // Проверка, является ли дробь сокращенной
