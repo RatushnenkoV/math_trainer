@@ -90,11 +90,8 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
     updateTelegramBackButton(screenId);
 
     document.querySelectorAll('input[data-decimal]').forEach(input => {
-    if (Telegram.WebApp.platform === 'android') {
-        input.setAttribute('inputmode', 'decimal');
-    } else {
+    if (Telegram.WebApp.platform != 'android') {
         input.removeAttribute('inputmode');
-    }
     });
 }
 

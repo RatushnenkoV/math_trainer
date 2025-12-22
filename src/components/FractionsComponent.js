@@ -39,7 +39,7 @@ class FractionsComponent extends BaseTrainerComponent {
 
                     <div class="answer-input">
                         <div class="input-group whole-input">
-                            <input type="text" id="whole-input" placeholder="0" inputmode="numeric">
+                            <input type="number" id="whole-input" placeholder="0">
                         </div>
                         <div class="fraction-input">
                             <div class="input-group">
