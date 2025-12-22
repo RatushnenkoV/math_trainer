@@ -113,9 +113,9 @@ class SystemOfInequalitiesTrainer extends BaseTrainer {
         foreignObject.setAttribute('height', '80');
 
         const input = document.createElement('input');
-        input.type = 'text';
+        input.type = 'number';
         input.placeholder = '?';
-        input.inputMode = 'decimal';
+        // input.inputMode = 'decimal';
         input.style.width = '100%';
         input.style.height = '100%';
         input.style.padding = '0';

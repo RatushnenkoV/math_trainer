@@ -34,7 +34,7 @@ class PercentagesComponent extends BaseTrainerComponent {
 
                     <div class="answer-input">
                         <div class="input-group">
-                            <input type="text" id="percentages-answer-input" placeholder="Введите ответ" inputmode="decimal">
+                            <input type="number" id="percentages-answer-input" placeholder="Введите ответ">
                         </div>
                     </div>
 

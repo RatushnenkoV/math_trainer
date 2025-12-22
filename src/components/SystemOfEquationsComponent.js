@@ -42,11 +42,11 @@ class SystemOfEquationsComponent extends BaseTrainerComponent {
                     <div class="answer-input">
                         <div class="input-group">
                             <label for="system-of-equations-answer-x">x =</label>
-                            <input type="text" id="system-of-equations-answer-x" placeholder="0" inputmode="decimal">
+                            <input type="number" id="system-of-equations-answer-x" placeholder="0" >
                         </div>
                         <div class="input-group">
                             <label for="system-of-equations-answer-y">y =</label>
-                            <input type="text" id="system-of-equations-answer-y" placeholder="0" inputmode="decimal">
+                            <input type="number" id="system-of-equations-answer-y" placeholder="0" >
                         </div>
                     </div>
 

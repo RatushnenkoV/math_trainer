@@ -37,7 +37,7 @@ class SquareRootsComponent extends BaseTrainerComponent {
 
                     <div class="answer-input">
                         <div class="input-group">
-                            <input type="number" id="square-roots-answer-input" placeholder="0" inputmode="numeric">
+                            <input type="number" id="square-roots-answer-input" placeholder="0">
                         </div>
                     </div>
 

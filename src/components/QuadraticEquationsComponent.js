@@ -38,11 +38,11 @@ class QuadraticEquationsComponent extends BaseTrainerComponent {
                     <div class="answer-input">
                         <div class="input-group quadratic-equations-input">
                             <label for="quadratic-equations-x1-input">x₁ =</label>
-                            <input type="text" id="quadratic-equations-x1-input" placeholder="" inputmode="decimal">
+                            <input type="number" id="quadratic-equations-x1-input" placeholder="" >
                         </div>
                         <div class="input-group quadratic-equations-input">
                             <label for="quadratic-equations-x2-input">x₂ =</label>
-                            <input type="text" id="quadratic-equations-x2-input" placeholder="" inputmode="decimal">
+                            <input type="number" id="quadratic-equations-x2-input" placeholder="" >
                         </div>
                     </div>
 

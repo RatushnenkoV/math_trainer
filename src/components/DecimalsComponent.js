@@ -39,7 +39,7 @@ class DecimalsComponent extends BaseTrainerComponent {
 
                     <div class="answer-input">
                         <div class="input-group decimal-input">
-                            <input type="text" id="decimal-answer-input" placeholder="0.0" inputmode="decimal">
+                            <input type="number" id="decimal-answer-input" placeholder="0.0">
                         </div>
                     </div>
 

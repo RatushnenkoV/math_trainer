@@ -57,7 +57,7 @@ class LinearInequalitiesComponent extends BaseTrainerComponent {
 
                             <!-- Поле ввода под точкой -->
                             <foreignObject x="250" y="80" width="100" height="80">
-                                <input type="text" id="point-value-input" placeholder="?" inputmode="decimal"
+                                <input type="number" id="point-value-input" placeholder="?"
                                        xmlns="http://www.w3.org/1999/xhtml"
                                        style="width: 100%; height: 100%; padding: 0; font-size: 32px; text-align: center;
                                               border: 3px solid #007bff; border-radius: 12px; background: white; box-sizing: border-box;"/>

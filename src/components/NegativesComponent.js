@@ -39,7 +39,7 @@ class NegativesComponent extends BaseTrainerComponent {
 
                     <div class="answer-input">
                         <div class="input-group negative-input">
-                            <input type="number" id="negative-answer-input" placeholder="0" inputmode="numeric">
+                            <input type="number" id="negative-answer-input" placeholder="0">
                         </div>
                     </div>
 

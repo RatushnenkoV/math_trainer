@@ -38,7 +38,7 @@ class LinearEquationsComponent extends BaseTrainerComponent {
                     <div class="answer-input">
                         <div class="input-group linear-equations-input">
                             <label for="linear-equations-answer-input">x =</label>
-                            <input type="text" id="linear-equations-answer-input" placeholder="" inputmode="decimal">
+                            <input type="number" id="linear-equations-answer-input" placeholder="">
                         </div>
                     </div>
 
