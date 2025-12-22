@@ -88,11 +88,6 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
 
     // Управление Telegram BackButton
     updateTelegramBackButton(screenId);
-
-    document.querySelectorAll('input[data-decimal]').forEach(input => {
-    if (Telegram.WebApp.platform != 'android') {
-        input.removeAttribute('inputmode');
-    });
 }
 
 // Инициализация главного меню
