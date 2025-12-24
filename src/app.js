@@ -3,8 +3,124 @@
 // Реестр тренажёров
 const trainers = {};
 
+// Реестр загруженных тренажёров (для lazy loading)
+const loadedTrainers = new Set();
+
 // Telegram WebApp API
 let tg = null;
+
+// Функция для динамической загрузки скриптов
+function loadScript(src) {
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = resolve;
+        script.onerror = reject;
+        document.body.appendChild(script);
+    });
+}
+
+// Функция для динамической загрузки тренажёра
+async function loadTrainer(trainerName) {
+    // Если тренажёр уже загружен, просто возвращаем true
+    if (loadedTrainers.has(trainerName)) {
+        return true;
+    }
+
+    const trainerScripts = {
+        'multiplicationTable': [
+            'src/utils/generators/MultiplicationTableGenerator.js',
+            'src/trainers/MultiplicationTableTrainer.js',
+            'src/components/MultiplicationTableComponent.js'
+        ],
+        'squareRoots': [
+            'src/utils/generators/SquareRootsGenerator.js',
+            'src/trainers/SquareRootsTrainer.js',
+            'src/components/SquareRootsComponent.js'
+        ],
+        'fractions': [
+            'src/utils/generators/FractionsGenerator.js',
+            'src/trainers/FractionsTrainer.js',
+            'src/components/FractionsComponent.js'
+        ],
+        'decimals': [
+            'src/utils/generators/DecimalsGenerator.js',
+            'src/trainers/DecimalsTrainer.js',
+            'src/components/DecimalsComponent.js'
+        ],
+        'negatives': [
+            'src/utils/generators/NegativesGenerator.js',
+            'src/trainers/NegativesTrainer.js',
+            'src/components/NegativesComponent.js'
+        ],
+        'divisibility': [
+            'src/utils/generators/DivisibilityGenerator.js',
+            'src/trainers/DivisibilityTrainer.js',
+            'src/components/DivisibilityComponent.js'
+        ],
+        'linearEquations': [
+            'src/utils/generators/LinearEquationsGenerator.js',
+            'src/trainers/LinearEquationsTrainer.js',
+            'src/components/LinearEquationsComponent.js'
+        ],
+        'linearInequalities': [
+            'src/utils/generators/LinearInequalitiesGenerator.js',
+            'src/trainers/LinearInequalitiesTrainer.js',
+            'src/components/LinearInequalitiesComponent.js'
+        ],
+        'quadraticEquations': [
+            'src/utils/generators/QuadraticEquationsGenerator.js',
+            'src/trainers/QuadraticEquationsTrainer.js',
+            'src/components/QuadraticEquationsComponent.js'
+        ],
+        'quadraticInequalities': [
+            'src/utils/generators/QuadraticInequalitiesGenerator.js',
+            'src/trainers/QuadraticInequalitiesTrainer.js',
+            'src/components/QuadraticInequalitiesComponent.js'
+        ],
+        'trigonometry': [
+            'src/utils/generators/TrigonometryGenerator.js',
+            'src/trainers/TrigonometryTrainer.js',
+            'src/components/TrigonometryComponent.js'
+        ],
+        'percentages': [
+            'src/utils/generators/PercentagesGenerator.js',
+            'src/trainers/PercentagesTrainer.js',
+            'src/components/PercentagesComponent.js'
+        ],
+        'systemOfEquations': [
+            'src/utils/generators/SystemOfEquationsGenerator.js',
+            'src/trainers/SystemOfEquationsTrainer.js',
+            'src/components/SystemOfEquationsComponent.js'
+        ],
+        'systemOfInequalities': [
+            'src/utils/generators/SystemOfInequalitiesGenerator.js',
+            'src/trainers/SystemOfInequalitiesTrainer.js',
+            'src/components/SystemOfInequalitiesComponent.js'
+        ]
+    };
+
+    const scripts = trainerScripts[trainerName];
+    if (!scripts) {
+        console.error(`Unknown trainer: ${trainerName}`);
+        return false;
+    }
+
+    try {
+        // Загружаем скрипты последовательно
+        for (const scriptPath of scripts) {
+            await loadScript(scriptPath);
+        }
+
+        // Отмечаем тренажёр как загруженный
+        loadedTrainers.add(trainerName);
+
+        return true;
+    } catch (error) {
+        console.error(`Failed to load trainer ${trainerName}:`, error);
+        return false;
+    }
+}
 
 // Инициализация Telegram WebApp
 if (window.Telegram && window.Telegram.WebApp) {
@@ -19,21 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initApp() {
-    // Все тренажёры теперь используют компоненты и инициализируются автоматически
-    trainers.multiplicationTable = document.querySelector('multiplication-table-trainer')?.trainer;
-    trainers.squareRoots = document.querySelector('square-roots-trainer')?.trainer;
-    trainers.fractions = document.querySelector('fractions-trainer')?.trainer;
-    trainers.decimals = document.querySelector('decimals-trainer')?.trainer;
-    trainers.negatives = document.querySelector('negatives-trainer')?.trainer;
-    trainers.divisibility = document.querySelector('divisibility-trainer')?.trainer;
-    trainers.linearEquations = document.querySelector('linear-equations-trainer')?.trainer;
-    trainers.linearInequalities = document.querySelector('linear-inequalities-trainer')?.trainer;
-    trainers.quadraticEquations = document.querySelector('quadratic-equations-trainer')?.trainer;
-    trainers.quadraticInequalities = document.querySelector('quadratic-inequalities-trainer')?.trainer;
-    trainers.trigonometry = document.querySelector('trigonometry-trainer')?.trainer;
-    trainers.percentages = document.querySelector('percentages-trainer')?.trainer;
-    trainers.systemOfEquations = document.querySelector('system-of-equations-trainer')?.trainer;
-    trainers.systemOfInequalities = document.querySelector('system-of-inequalities-trainer')?.trainer;
+    // Все тренажёры теперь загружаются динамически при клике на соответствующую кнопку
 
     // Инициализация главного меню
     initMainMenu();
@@ -111,14 +213,30 @@ function initMainMenu() {
 
     trainerButtons.forEach(({ id, screen, trainer }) => {
         const button = document.getElementById(id);
-        button.addEventListener('click', () => {
+        button.addEventListener('click', async () => {
             // Добавляем тренажёр в список недавних
             addToRecentTrainers(id);
+
+            // Загружаем тренажёр динамически
+            const loaded = await loadTrainer(trainer);
+            if (!loaded) {
+                console.error('Failed to load trainer');
+                return;
+            }
+
+            // После загрузки скриптов нужно создать custom element
+            const componentTag = screen.replace('-screen', '-trainer');
+            let trainerElement = document.querySelector(componentTag);
+
+            // Если элемент не существует, создаём его
+            if (!trainerElement) {
+                trainerElement = document.createElement(componentTag);
+                document.getElementById('app').appendChild(trainerElement);
+            }
 
             showScreen(screen);
             // Получаем trainer из компонента, если ещё не получили
             if (!trainers[trainer]) {
-                const componentTag = screen.replace('-screen', '-trainer');
                 trainers[trainer] = document.querySelector(componentTag)?.trainer;
             }
             trainers[trainer]?.startTest();
