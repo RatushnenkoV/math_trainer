@@ -519,7 +519,7 @@ function updateRecentTrainers() {
         'quadratic-equations-btn': 'Квадратные уравнения',
         'quadratic-inequalities-btn': 'Квадратные неравенства',
         'system-of-inequalities-btn': 'Системы неравенств',
-        'trigonometry-btn': 'Тригонометрия'
+        'trigonometry-btn': 'Табличные значения'
     };
 
     // Берём только последние 3 тренажёра
