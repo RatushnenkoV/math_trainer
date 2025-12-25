@@ -1773,44 +1773,51 @@ body.keyboard-open .fraction-display-large {
     gap: 2px;
 }
 
+/* При открытой клавиатуре все круги размещаются в одну строчку */
 body.keyboard-open .shapes-container {
     gap: 6px;
     padding: 3px 5px;
     max-height: calc(100vh - 350px);
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr)) !important;
+    justify-content: center;
 }
 
-/* Уменьшаем размеры фигур при открытой клавиатуре */
+/* Уменьшаем размеры фигур при открытой клавиатуре - одна строчка для всех */
+body.keyboard-open .shapes-container .shape,
+body.keyboard-open .shapes-container .add-shape-placeholder {
+    width: min(80px, 22vw);
+    height: min(80px, 22vw);
+}
+
+/* Если всего 1 круг - размещаем по центру */
+body.keyboard-open .shapes-container.shapes-1 {
+    grid-template-columns: 1fr !important;
+    justify-items: center;
+}
+
 body.keyboard-open .shapes-container.shapes-1 .shape,
 body.keyboard-open .shapes-container.shapes-1 .add-shape-placeholder {
-    width: min(200px, 70vw);
-    height: min(200px, 70vw);
+    width: min(100px, 25vw);
+    height: min(100px, 25vw);
 }
 
-body.keyboard-open .shapes-container.shapes-1-plus .shape,
-body.keyboard-open .shapes-container.shapes-1-plus .add-shape-placeholder {
-    width: min(140px, 35vw);
-    height: min(140px, 35vw);
+/* Если 2 круга - слева и справа */
+body.keyboard-open .shapes-container.shapes-1-plus,
+body.keyboard-open .shapes-container.shapes-2,
+body.keyboard-open .shapes-container.shapes-2-plus {
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr)) !important;
 }
 
-body.keyboard-open .shapes-container.shapes-2 .shape,
-body.keyboard-open .shapes-container.shapes-2 .add-shape-placeholder {
-    width: min(140px, 35vw);
-    height: min(140px, 35vw);
+/* Если 3+ кругов - все в одну строчку */
+body.keyboard-open .shapes-container.shapes-3,
+body.keyboard-open .shapes-container.shapes-3-plus,
+body.keyboard-open .shapes-container.shapes-4 {
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr)) !important;
 }
 
-body.keyboard-open .shapes-container.shapes-2-plus .shape,
-body.keyboard-open .shapes-container.shapes-2-plus .add-shape-placeholder {
-    width: min(120px, 33vw);
-    height: min(120px, 33vw);
-}
-
-body.keyboard-open .shapes-container.shapes-3 .shape,
-body.keyboard-open .shapes-container.shapes-3-plus .shape,
-body.keyboard-open .shapes-container.shapes-4 .shape,
-body.keyboard-open .shapes-container.shapes-3 .add-shape-placeholder,
-body.keyboard-open .shapes-container.shapes-3-plus .add-shape-placeholder {
-    width: min(120px, 33vw);
-    height: min(120px, 33vw);
+/* Скрываем кнопки под фигурами при открытой клавиатуре для экономии места */
+body.keyboard-open .shape-buttons {
+    display: none;
 }
 
 body.keyboard-open .fraction-input-container {
@@ -1822,8 +1829,9 @@ body.keyboard-open .fraction-input-visual {
 }
 
 body.keyboard-open .fraction-input-visual input {
-    width: 50px;
+    width: 80px;
     font-size: 28px;
+    padding: 10px;
 }
 
 body.keyboard-open #fraction-visual-screen .check-button {

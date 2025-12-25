@@ -629,9 +629,6 @@ class FractionVisualTrainer extends BaseTrainer {
         if (this.elements.denominatorInput) {
             this.elements.denominatorInput.value = '';
         }
-        if (this.elements.numeratorInput && this.currentProblem.taskType === 'fractionByDrawing') {
-            this.elements.numeratorInput.focus();
-        }
     }
 
     // Проверка ответа
