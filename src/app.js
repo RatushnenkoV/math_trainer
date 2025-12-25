@@ -6,6 +6,85 @@ const trainers = {};
 // Реестр загруженных тренажёров (для lazy loading)
 const loadedTrainers = new Set();
 
+// Конфигурация тренажёров - единый источник информации
+const trainerConfig = {
+    'multiplication-table-btn': {
+        name: 'Таблица умножения',
+        screen: 'multiplication-table-screen',
+        trainer: 'multiplicationTable'
+    },
+    'divisibility-btn': {
+        name: 'Делимость',
+        screen: 'divisibility-screen',
+        trainer: 'divisibility'
+    },
+    'square-roots-btn': {
+        name: 'Квадратные корни',
+        screen: 'square-roots-screen',
+        trainer: 'squareRoots'
+    },
+    'percentages-btn': {
+        name: 'Проценты',
+        screen: 'percentages-screen',
+        trainer: 'percentages'
+    },
+    'negatives-btn': {
+        name: 'Отрицательные числа',
+        screen: 'negatives-screen',
+        trainer: 'negatives'
+    },
+    'fractions-btn': {
+        name: 'Обыкновенные дроби',
+        screen: 'fractions-screen',
+        trainer: 'fractions'
+    },
+    'fraction-visual-btn': {
+        name: 'Определение дроби',
+        screen: 'fraction-visual-screen',
+        trainer: 'fractionVisual'
+    },
+    'decimals-btn': {
+        name: 'Десятичные дроби',
+        screen: 'decimals-screen',
+        trainer: 'decimals'
+    },
+    'linear-equations-btn': {
+        name: 'Линейные уравнения',
+        screen: 'linear-equations-screen',
+        trainer: 'linearEquations'
+    },
+    'linear-inequalities-btn': {
+        name: 'Линейные неравенства',
+        screen: 'linear-inequalities-screen',
+        trainer: 'linearInequalities'
+    },
+    'quadratic-equations-btn': {
+        name: 'Квадратные уравнения',
+        screen: 'quadratic-equations-screen',
+        trainer: 'quadraticEquations'
+    },
+    'quadratic-inequalities-btn': {
+        name: 'Квадратные неравенства',
+        screen: 'quadratic-inequalities-screen',
+        trainer: 'quadraticInequalities'
+    },
+    'system-of-equations-btn': {
+        name: 'Системы линейных уравнений',
+        screen: 'system-of-equations-screen',
+        trainer: 'systemOfEquations'
+    },
+    'system-of-inequalities-btn': {
+        name: 'Системы неравенств',
+        screen: 'system-of-inequalities-screen',
+        trainer: 'systemOfInequalities'
+    },
+    'trigonometry-btn': {
+        name: 'Табличные значения',
+        screen: 'trigonometry-screen',
+        trainer: 'trigonometry'
+    }
+};
+
 // Telegram WebApp API
 let tg = null;
 
@@ -42,6 +121,11 @@ async function loadTrainer(trainerName) {
             'src/utils/generators/FractionsGenerator.js',
             'src/trainers/FractionsTrainer.js',
             'src/components/FractionsComponent.js'
+        ],
+        'fractionVisual': [
+            'src/utils/generators/FractionVisualGenerator.js',
+            'src/trainers/FractionVisualTrainer.js',
+            'src/components/FractionVisualComponent.js'
         ],
         'decimals': [
             'src/utils/generators/DecimalsGenerator.js',
@@ -167,7 +251,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
     });
 
     // Скрываем все компоненты тренажеров
-    document.querySelectorAll('multiplication-table-trainer, square-roots-trainer, fractions-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer').forEach(trainer => {
+    document.querySelectorAll('multiplication-table-trainer, square-roots-trainer, fractions-trainer, fraction-visual-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer').forEach(trainer => {
         trainer.classList.remove('active');
     });
 
@@ -177,7 +261,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
         targetScreen.classList.add('active');
 
         // Если экран находится внутри компонента тренажера, показываем этот компонент
-        const trainerComponent = targetScreen.closest('multiplication-table-trainer, square-roots-trainer, fractions-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer');
+        const trainerComponent = targetScreen.closest('multiplication-table-trainer, square-roots-trainer, fractions-trainer, fraction-visual-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer');
         if (trainerComponent) {
             trainerComponent.classList.add('active');
         }
@@ -194,38 +278,24 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
 
 // Инициализация главного меню
 function initMainMenu() {
-    const trainerButtons = [
-        { id: 'multiplication-table-btn', screen: 'multiplication-table-screen', trainer: 'multiplicationTable' },
-        { id: 'square-roots-btn', screen: 'square-roots-screen', trainer: 'squareRoots' },
-        { id: 'fractions-btn', screen: 'fractions-screen', trainer: 'fractions' },
-        { id: 'decimals-btn', screen: 'decimals-screen', trainer: 'decimals' },
-        { id: 'negatives-btn', screen: 'negatives-screen', trainer: 'negatives' },
-        { id: 'divisibility-btn', screen: 'divisibility-screen', trainer: 'divisibility' },
-        { id: 'linear-equations-btn', screen: 'linear-equations-screen', trainer: 'linearEquations' },
-        { id: 'linear-inequalities-btn', screen: 'linear-inequalities-screen', trainer: 'linearInequalities' },
-        { id: 'quadratic-equations-btn', screen: 'quadratic-equations-screen', trainer: 'quadraticEquations' },
-        { id: 'quadratic-inequalities-btn', screen: 'quadratic-inequalities-screen', trainer: 'quadraticInequalities' },
-        { id: 'trigonometry-btn', screen: 'trigonometry-screen', trainer: 'trigonometry' },
-        { id: 'percentages-btn', screen: 'percentages-screen', trainer: 'percentages' },
-        { id: 'system-of-equations-btn', screen: 'system-of-equations-screen', trainer: 'systemOfEquations' },
-        { id: 'system-of-inequalities-btn', screen: 'system-of-inequalities-screen', trainer: 'systemOfInequalities' }
-    ];
-
-    trainerButtons.forEach(({ id, screen, trainer }) => {
+    // Используем конфигурацию для инициализации кнопок
+    Object.entries(trainerConfig).forEach(([id, config]) => {
         const button = document.getElementById(id);
+        if (!button) return;
+
         button.addEventListener('click', async () => {
             // Добавляем тренажёр в список недавних
             addToRecentTrainers(id);
 
             // Загружаем тренажёр динамически
-            const loaded = await loadTrainer(trainer);
+            const loaded = await loadTrainer(config.trainer);
             if (!loaded) {
                 console.error('Failed to load trainer');
                 return;
             }
 
             // После загрузки скриптов нужно создать custom element
-            const componentTag = screen.replace('-screen', '-trainer');
+            const componentTag = config.screen.replace('-screen', '-trainer');
             let trainerElement = document.querySelector(componentTag);
 
             // Если элемент не существует, создаём его
@@ -234,12 +304,12 @@ function initMainMenu() {
                 document.getElementById('app').appendChild(trainerElement);
             }
 
-            showScreen(screen);
+            showScreen(config.screen);
             // Получаем trainer из компонента, если ещё не получили
-            if (!trainers[trainer]) {
-                trainers[trainer] = document.querySelector(componentTag)?.trainer;
+            if (!trainers[config.trainer]) {
+                trainers[config.trainer] = document.querySelector(componentTag)?.trainer;
             }
-            trainers[trainer]?.startTest();
+            trainers[config.trainer]?.startTest();
         });
     });
 }
@@ -504,29 +574,14 @@ function updateRecentTrainers() {
     // Очищаем контейнер
     recentContainer.innerHTML = '';
 
-    // Словарь названий тренажёров
-    const trainerNames = {
-        'multiplication-table-btn': 'Таблица умножения',
-        'divisibility-btn': 'Делимость',
-        'fractions-btn': 'Обыкновенные дроби',
-        'decimals-btn': 'Десятичные дроби',
-        'percentages-btn': 'Проценты',
-        'negatives-btn': 'Отрицательные числа',
-        'square-roots-btn': 'Квадратные корни',
-        'linear-equations-btn': 'Линейные уравнения',
-        'linear-inequalities-btn': 'Линейные неравенства',
-        'system-of-equations-btn': 'Системы линейных уравнений',
-        'quadratic-equations-btn': 'Квадратные уравнения',
-        'quadratic-inequalities-btn': 'Квадратные неравенства',
-        'system-of-inequalities-btn': 'Системы неравенств',
-        'trigonometry-btn': 'Табличные значения'
-    };
-
     // Берём только последние 3 тренажёра
     const displayTrainers = recentTrainers.slice(0, 3);
 
     displayTrainers.forEach(trainerId => {
-        const name = trainerNames[trainerId] || trainerId;
+        // Используем конфигурацию для получения названия
+        const config = trainerConfig[trainerId];
+        const name = config ? config.name : trainerId;
+
         const button = document.createElement('button');
         button.id = trainerId;
         button.className = 'menu-button';

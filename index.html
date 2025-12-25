@@ -17,7 +17,7 @@
             <div class="menu-container">
                 <!-- Недавнее -->
                 <div id="recent-section" class="menu-section" style="display: none;">
-                    <div class="section-header">
+                    <div class="section-header">Дава
                         <h2>📌 Недавнее</h2>
                     </div>
                     <div class="section-content">
@@ -35,11 +35,24 @@
                         <div class="menu-buttons-container">
                             <button id="multiplication-table-btn" class="menu-button">Таблица умножения</button>
                             <button id="divisibility-btn" class="menu-button">Делимость</button>
-                            <button id="fractions-btn" class="menu-button">Обыкновенные дроби</button>
-                            <button id="decimals-btn" class="menu-button">Десятичные дроби</button>
                             <button id="percentages-btn" class="menu-button">Проценты</button>
                             <button id="negatives-btn" class="menu-button">Отрицательные числа</button>
                             <button id="square-roots-btn" class="menu-button">Квадратные корни</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Дроби -->
+                <div class="menu-section">
+                    <div class="section-header" data-section="fractions">
+                        <h2>🍕 Дроби</h2>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content" data-section="fractions">
+                        <div class="menu-buttons-container">
+                            <button id="fractions-btn" class="menu-button">Обыкновенные дроби</button>
+                            <button id="fraction-visual-btn" class="menu-button">Определение дроби</button>
+                            <button id="decimals-btn" class="menu-button">Десятичные дроби</button>
                         </div>
                     </div>
                 </div>
@@ -140,7 +153,20 @@
 
     <!-- Компоненты -->
     <script src="src/components/BaseTrainerComponent.js"></script>
-    <!-- Все компоненты тренажёров загружаются динамически -->
+    <!-- MultiplicationTableComponent.js загружается динамически -->
+    <script src="src/components/SquareRootsComponent.js"></script>
+    <script src="src/components/FractionsComponent.js"></script>
+    <script src="src/components/DecimalsComponent.js"></script>
+    <script src="src/components/NegativesComponent.js"></script>
+    <script src="src/components/DivisibilityComponent.js"></script>
+    <script src="src/components/LinearEquationsComponent.js"></script>
+    <script src="src/components/LinearInequalitiesComponent.js"></script>
+    <script src="src/components/QuadraticEquationsComponent.js"></script>
+    <script src="src/components/QuadraticInequalitiesComponent.js"></script>
+    <script src="src/components/TrigonometryComponent.js"></script>
+    <script src="src/components/PercentagesComponent.js"></script>
+    <script src="src/components/SystemOfEquationsComponent.js"></script>
+    <script src="src/components/SystemOfInequalitiesComponent.js"></script>
 
     <!-- Главное приложение -->
     <script src="src/app.js"></script>
