@@ -71,32 +71,14 @@ class FractionVisualTrainer extends BaseTrainer {
 
     // Инициализация обработчиков для полей ввода
     initInputHandlers() {
-        // Сохраняем начальную позицию скролла
-        let initialScrollTop = 0;
-
-        const handleFocus = (e) => {
-            // Сохраняем текущую позицию скролла
-            initialScrollTop = window.scrollY || document.documentElement.scrollTop;
-
-            // Небольшая задержка, чтобы дать браузеру время отобразить клавиатуру
-            setTimeout(() => {
-                // Прокручиваем к элементу, но не слишком далеко
-                e.target.scrollIntoView({
-                    behavior: 'auto',
-                    block: 'center',
-                    inline: 'nearest'
-                });
-            }, 100);
+        const handleFocus = () => {
+            // Добавляем класс к body, чтобы активировать стили для открытой клавиатуры
+            document.body.classList.add('keyboard-open');
         };
 
         const handleBlur = () => {
-            // При закрытии клавиатуры возвращаем скролл на исходную позицию
-            setTimeout(() => {
-                window.scrollTo({
-                    top: initialScrollTop,
-                    behavior: 'smooth'
-                });
-            }, 100);
+            // Убираем класс при закрытии клавиатуры
+            document.body.classList.remove('keyboard-open');
         };
 
         if (this.elements.numeratorInput) {

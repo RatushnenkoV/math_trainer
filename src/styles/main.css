@@ -1750,3 +1750,82 @@ fraction-visual-trainer.active {
     flex-direction: column;
     gap: 12px;
 }
+
+/* Адаптация при открытой клавиатуре */
+body.keyboard-open #fraction-visual-screen .header {
+    padding: 8px;
+}
+
+body.keyboard-open #fraction-visual-screen .content {
+    gap: 4px;
+    padding: 5px;
+}
+
+body.keyboard-open .fraction-visual-problem-display {
+    min-height: 35px;
+    padding: 3px 15px;
+}
+
+body.keyboard-open .fraction-display-large {
+    font-size: 28px;
+    gap: 2px;
+}
+
+body.keyboard-open .shapes-container {
+    gap: 6px;
+    padding: 3px 5px;
+    max-height: calc(100vh - 350px);
+}
+
+/* Уменьшаем размеры фигур при открытой клавиатуре */
+body.keyboard-open .shapes-container.shapes-1 .shape,
+body.keyboard-open .shapes-container.shapes-1 .add-shape-placeholder {
+    width: min(200px, 70vw);
+    height: min(200px, 70vw);
+}
+
+body.keyboard-open .shapes-container.shapes-1-plus .shape,
+body.keyboard-open .shapes-container.shapes-1-plus .add-shape-placeholder {
+    width: min(140px, 35vw);
+    height: min(140px, 35vw);
+}
+
+body.keyboard-open .shapes-container.shapes-2 .shape,
+body.keyboard-open .shapes-container.shapes-2 .add-shape-placeholder {
+    width: min(140px, 35vw);
+    height: min(140px, 35vw);
+}
+
+body.keyboard-open .shapes-container.shapes-2-plus .shape,
+body.keyboard-open .shapes-container.shapes-2-plus .add-shape-placeholder {
+    width: min(120px, 33vw);
+    height: min(120px, 33vw);
+}
+
+body.keyboard-open .shapes-container.shapes-3 .shape,
+body.keyboard-open .shapes-container.shapes-3-plus .shape,
+body.keyboard-open .shapes-container.shapes-4 .shape,
+body.keyboard-open .shapes-container.shapes-3 .add-shape-placeholder,
+body.keyboard-open .shapes-container.shapes-3-plus .add-shape-placeholder {
+    width: min(120px, 33vw);
+    height: min(120px, 33vw);
+}
+
+body.keyboard-open .fraction-input-container {
+    margin-top: 4px;
+}
+
+body.keyboard-open .fraction-input-visual {
+    font-size: 32px;
+}
+
+body.keyboard-open .fraction-input-visual input {
+    width: 50px;
+    font-size: 28px;
+}
+
+body.keyboard-open #fraction-visual-screen .check-button {
+    margin-top: 4px;
+    padding: 10px 20px;
+    font-size: 15px;
+}
