@@ -336,6 +336,7 @@ function handleBackButton() {
         case 'multiplication-table-screen':
         case 'square-roots-screen':
         case 'fractions-screen':
+        case 'fraction-visual-screen':
         case 'decimals-screen':
         case 'negatives-screen':
         case 'divisibility-screen':
@@ -367,6 +368,12 @@ function handleBackButton() {
             // Из настроек дробей возвращаемся к тренажёру дробей
             showScreen('fractions-screen');
             trainers.fractions.generateNewProblem();
+            break;
+
+        case 'fraction-visual-settings-screen':
+            // Из настроек визуализации дробей возвращаемся к тренажёру визуализации дробей
+            showScreen('fraction-visual-screen');
+            trainers.fractionVisual.generateNewProblem();
             break;
 
         case 'decimals-settings-screen':

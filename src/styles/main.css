@@ -1429,13 +1429,13 @@ fraction-visual-trainer.active {
     gap: 10px;
     padding: 5px 10px;
     justify-items: center;
-    align-items: start;
+    align-content: start;
     max-width: 100%;
     margin: 0 auto;
     width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-    max-height: calc(100vh - 280px);
+    max-height: calc(100vh - 260px);
 }
 
 /* Адаптивные размеры в зависимости от количества фигур */
@@ -1735,6 +1735,14 @@ fraction-visual-trainer.active {
 /* Уменьшаем отступы для кнопки проверить в визуализации дробей */
 #fraction-visual-screen .check-button {
     margin-top: 8px;
+}
+
+/* Специальные стили для content в визуализации дробей */
+#fraction-visual-screen .content {
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 10px;
+    overflow-y: auto;
 }
 
 .error-content {
