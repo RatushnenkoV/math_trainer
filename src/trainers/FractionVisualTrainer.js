@@ -71,12 +71,42 @@ class FractionVisualTrainer extends BaseTrainer {
 
     // Инициализация обработчиков для полей ввода
     initInputHandlers() {
+        // Сохраняем начальную позицию скролла
+        let initialScrollTop = 0;
+
+        const handleFocus = (e) => {
+            // Сохраняем текущую позицию скролла
+            initialScrollTop = window.scrollY || document.documentElement.scrollTop;
+
+            // Небольшая задержка, чтобы дать браузеру время отобразить клавиатуру
+            setTimeout(() => {
+                // Прокручиваем к элементу, но не слишком далеко
+                e.target.scrollIntoView({
+                    behavior: 'auto',
+                    block: 'center',
+                    inline: 'nearest'
+                });
+            }, 100);
+        };
+
+        const handleBlur = () => {
+            // При закрытии клавиатуры возвращаем скролл на исходную позицию
+            setTimeout(() => {
+                window.scrollTo({
+                    top: initialScrollTop,
+                    behavior: 'smooth'
+                });
+            }, 100);
+        };
+
         if (this.elements.numeratorInput) {
             this.elements.numeratorInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
                     this.checkAnswer();
                 }
             });
+            this.elements.numeratorInput.addEventListener('focus', handleFocus);
+            this.elements.numeratorInput.addEventListener('blur', handleBlur);
         }
 
         if (this.elements.denominatorInput) {
@@ -85,6 +115,8 @@ class FractionVisualTrainer extends BaseTrainer {
                     this.checkAnswer();
                 }
             });
+            this.elements.denominatorInput.addEventListener('focus', handleFocus);
+            this.elements.denominatorInput.addEventListener('blur', handleBlur);
         }
     }
 
