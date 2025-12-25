@@ -33,15 +33,15 @@ const trainerConfig = {
         screen: 'negatives-screen',
         trainer: 'negatives'
     },
-    'fractions-btn': {
-        name: 'Обыкновенные дроби',
-        screen: 'fractions-screen',
-        trainer: 'fractions'
-    },
     'fraction-visual-btn': {
         name: 'Определение дроби',
         screen: 'fraction-visual-screen',
         trainer: 'fractionVisual'
+    },
+    'fractions-btn': {
+        name: 'Обыкновенные дроби',
+        screen: 'fractions-screen',
+        trainer: 'fractions'
     },
     'decimals-btn': {
         name: 'Десятичные дроби',
