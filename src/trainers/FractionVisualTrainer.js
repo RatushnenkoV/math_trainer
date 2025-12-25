@@ -180,6 +180,9 @@ class FractionVisualTrainer extends BaseTrainer {
         // Показываем контейнер для фигур
         this.elements.shapesContainer.style.display = 'grid';
 
+        // Убираем класс view-only, если он был
+        this.elements.shapesContainer.classList.remove('view-only');
+
         // Если включены несокращенные дроби, показываем сокращённую дробь
         let displayNumerator = problem.numerator;
         let displayDenominator = problem.denominator;
