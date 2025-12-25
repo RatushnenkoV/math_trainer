@@ -38,6 +38,11 @@ const trainerConfig = {
         screen: 'fraction-visual-screen',
         trainer: 'fractionVisual'
     },
+    'fraction-sense-btn': {
+        name: 'Чувство дроби',
+        screen: 'fraction-sense-screen',
+        trainer: 'fractionSense'
+    },
     'fractions-btn': {
         name: 'Обыкновенные дроби',
         screen: 'fractions-screen',
@@ -126,6 +131,11 @@ async function loadTrainer(trainerName) {
             'src/utils/generators/FractionVisualGenerator.js',
             'src/trainers/FractionVisualTrainer.js',
             'src/components/FractionVisualComponent.js'
+        ],
+        'fractionSense': [
+            'src/utils/generators/FractionSenseGenerator.js',
+            'src/trainers/FractionSenseTrainer.js',
+            'src/components/FractionSenseComponent.js'
         ],
         'decimals': [
             'src/utils/generators/DecimalsGenerator.js',
@@ -251,7 +261,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
     });
 
     // Скрываем все компоненты тренажеров
-    document.querySelectorAll('multiplication-table-trainer, square-roots-trainer, fractions-trainer, fraction-visual-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer').forEach(trainer => {
+    document.querySelectorAll('multiplication-table-trainer, square-roots-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer').forEach(trainer => {
         trainer.classList.remove('active');
     });
 
@@ -261,7 +271,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
         targetScreen.classList.add('active');
 
         // Если экран находится внутри компонента тренажера, показываем этот компонент
-        const trainerComponent = targetScreen.closest('multiplication-table-trainer, square-roots-trainer, fractions-trainer, fraction-visual-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer');
+        const trainerComponent = targetScreen.closest('multiplication-table-trainer, square-roots-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer');
         if (trainerComponent) {
             trainerComponent.classList.add('active');
         }
@@ -337,6 +347,7 @@ function handleBackButton() {
         case 'square-roots-screen':
         case 'fractions-screen':
         case 'fraction-visual-screen':
+        case 'fraction-sense-screen':
         case 'decimals-screen':
         case 'negatives-screen':
         case 'divisibility-screen':
@@ -374,6 +385,12 @@ function handleBackButton() {
             // Из настроек визуализации дробей возвращаемся к тренажёру визуализации дробей
             showScreen('fraction-visual-screen');
             trainers.fractionVisual.generateNewProblem();
+            break;
+
+        case 'fraction-sense-settings-screen':
+            // Из настроек чувства дроби возвращаемся к тренажёру чувства дроби
+            showScreen('fraction-sense-screen');
+            trainers.fractionSense.generateNewProblem();
             break;
 
         case 'decimals-settings-screen':
@@ -476,6 +493,8 @@ function initHistoryNavigation() {
                 trainers.squareRoots.generateNewProblem();
             } else if (screenId === 'fractions-screen') {
                 trainers.fractions.generateNewProblem();
+            } else if (screenId === 'fraction-sense-screen') {
+                trainers.fractionSense.generateNewProblem();
             } else if (screenId === 'decimals-screen') {
                 trainers.decimals.generateNewProblem();
             } else if (screenId === 'negatives-screen') {
