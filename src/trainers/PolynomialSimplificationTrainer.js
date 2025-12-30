@@ -22,6 +22,12 @@ class PolynomialSimplificationTrainer extends BaseTrainer {
         this.combinedPairs = [];     // Пары уже приведённых одночленов
         this.draggedElement = null;
         this.modalData = null;
+
+        // Для touch events
+        this.touchStartX = 0;
+        this.touchStartY = 0;
+        this.touchElement = null;
+        this.clone = null;
     }
 
     initDOM() {
@@ -139,6 +145,11 @@ class PolynomialSimplificationTrainer extends BaseTrainer {
             monomialDiv.addEventListener('dragover', (e) => this.handleDragOver(e));
             monomialDiv.addEventListener('drop', (e) => this.handleDrop(e));
             monomialDiv.addEventListener('dragend', (e) => this.handleDragEnd(e));
+
+            // Обработчики touch events для мобильных устройств
+            monomialDiv.addEventListener('touchstart', (e) => this.handleTouchStart(e), { passive: false });
+            monomialDiv.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false });
+            monomialDiv.addEventListener('touchend', (e) => this.handleTouchEnd(e), { passive: false });
 
             this.elements.problemDisplay.appendChild(monomialDiv);
         });
@@ -317,11 +328,122 @@ class PolynomialSimplificationTrainer extends BaseTrainer {
 
     disableInputs() {
         super.disableInputs();
-        // Можно отключить drag-n-drop, если нужно
+        // Очищаем touch состояние, если оно было активно
+        if (this.clone) {
+            this.clone.remove();
+            this.clone = null;
+        }
+        if (this.touchElement) {
+            this.touchElement.classList.remove('polynomial-dragging');
+            this.touchElement = null;
+        }
+        document.querySelectorAll('.polynomial-monomial').forEach(el => {
+            el.classList.remove('polynomial-drag-over');
+        });
     }
 
     enableInputs() {
         super.enableInputs();
+    }
+
+    // Touch events для мобильных устройств
+    handleTouchStart(e) {
+        e.preventDefault();
+
+        this.touchElement = e.target.closest('.polynomial-monomial');
+        if (!this.touchElement) return;
+
+        const touch = e.touches[0];
+        this.touchStartX = touch.clientX;
+        this.touchStartY = touch.clientY;
+
+        // Создаём клон элемента для визуального перетаскивания
+        this.clone = this.touchElement.cloneNode(true);
+        this.clone.classList.add('polynomial-dragging-clone');
+        this.clone.style.position = 'fixed';
+        this.clone.style.zIndex = '1000';
+        this.clone.style.pointerEvents = 'none';
+        this.clone.style.left = touch.clientX + 'px';
+        this.clone.style.top = touch.clientY + 'px';
+        this.clone.style.transform = 'translate(-50%, -50%)';
+        document.body.appendChild(this.clone);
+
+        // Добавляем класс к оригинальному элементу
+        this.touchElement.classList.add('polynomial-dragging');
+    }
+
+    handleTouchMove(e) {
+        if (!this.touchElement || !this.clone) return;
+        e.preventDefault();
+
+        const touch = e.touches[0];
+
+        // Перемещаем клон
+        this.clone.style.left = touch.clientX + 'px';
+        this.clone.style.top = touch.clientY + 'px';
+
+        // Находим элемент под пальцем
+        this.clone.style.display = 'none';
+        const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+        this.clone.style.display = '';
+
+        // Убираем подсветку со всех элементов
+        document.querySelectorAll('.polynomial-monomial').forEach(el => {
+            el.classList.remove('polynomial-drag-over');
+        });
+
+        // Добавляем подсветку целевому элементу
+        const targetElement = elementBelow?.closest('.polynomial-monomial');
+        if (targetElement && targetElement !== this.touchElement) {
+            targetElement.classList.add('polynomial-drag-over');
+        }
+    }
+
+    handleTouchEnd(e) {
+        if (!this.touchElement) return;
+        e.preventDefault();
+
+        const touch = e.changedTouches[0];
+
+        // Находим элемент под пальцем
+        if (this.clone) {
+            this.clone.style.display = 'none';
+        }
+        const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+
+        // Удаляем клон
+        if (this.clone) {
+            this.clone.remove();
+            this.clone = null;
+        }
+
+        // Убираем классы
+        this.touchElement.classList.remove('polynomial-dragging');
+        document.querySelectorAll('.polynomial-monomial').forEach(el => {
+            el.classList.remove('polynomial-drag-over');
+        });
+
+        // Обрабатываем drop
+        const targetElement = elementBelow?.closest('.polynomial-monomial');
+        if (targetElement && targetElement !== this.touchElement) {
+            const draggedId = parseInt(this.touchElement.dataset.id);
+            const targetId = parseInt(targetElement.dataset.id);
+
+            const draggedData = this.currentMonomials.find(m => m.id === draggedId);
+            const targetData = this.currentMonomials.find(m => m.id === targetId);
+
+            // Проверяем, подобные ли одночлены
+            if (draggedData.literalKey === targetData.literalKey) {
+                // Подобные - показываем модальное окно
+                this.showModal(draggedData, targetData);
+            } else {
+                // Не подобные - показываем сообщение об ошибке
+                this.showResultMessage(false);
+                this.showEmoji(false);
+            }
+        }
+
+        this.touchElement = null;
     }
 
     showSettingsScreen() {

@@ -2093,6 +2093,18 @@ body.keyboard-open #fraction-visual-screen .check-button {
     transform: scale(1.05);
 }
 
+.polynomial-monomial.polynomial-dragging-clone {
+    opacity: 0.8;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    transform: rotate(5deg) scale(1.1);
+    background: var(--tg-theme-button-color, #3390ec);
+    color: var(--tg-theme-button-text-color, #ffffff);
+}
+
+.polynomial-monomial.polynomial-dragging-clone .katex {
+    color: var(--tg-theme-button-text-color, #ffffff);
+}
+
 /* Modal Styles */
 .polynomial-modal {
     display: none;
