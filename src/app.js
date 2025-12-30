@@ -88,6 +88,11 @@ const trainerConfig = {
         screen: 'trigonometry-screen',
         trainer: 'trigonometry'
     },
+    'trig-equations-btn': {
+        name: 'Простейшие уравнения',
+        screen: 'trig-equations-screen',
+        trainer: 'trigEquations'
+    },
     'powers-btn': {
         name: 'Свойства степеней',
         screen: 'powers-screen',
@@ -187,6 +192,11 @@ async function loadTrainer(trainerName) {
             'src/trainers/TrigonometryTrainer.js',
             'src/components/TrigonometryComponent.js'
         ],
+        'trigEquations': [
+            'src/utils/generators/TrigEquationsGenerator.js',
+            'src/trainers/TrigEquationsTrainer.js',
+            'src/components/TrigEquationsComponent.js'
+        ],
         'percentages': [
             'src/utils/generators/PercentagesGenerator.js',
             'src/trainers/PercentagesTrainer.js',
@@ -283,7 +293,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
     });
 
     // Скрываем все компоненты тренажеров
-    document.querySelectorAll('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer, polynomial-simplification-trainer').forEach(trainer => {
+    document.querySelectorAll('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, trig-equations-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer, polynomial-simplification-trainer').forEach(trainer => {
         trainer.classList.remove('active');
     });
 
@@ -293,7 +303,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
         targetScreen.classList.add('active');
 
         // Если экран находится внутри компонента тренажера, показываем этот компонент
-        const trainerComponent = targetScreen.closest('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer, polynomial-simplification-trainer');
+        const trainerComponent = targetScreen.closest('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, trig-equations-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer, polynomial-simplification-trainer');
         if (trainerComponent) {
             trainerComponent.classList.add('active');
         }
@@ -379,6 +389,7 @@ function handleBackButton() {
         case 'quadratic-equations-screen':
         case 'quadratic-inequalities-screen':
         case 'trigonometry-screen':
+        case 'trig-equations-screen':
         case 'percentages-screen':
         case 'system-of-equations-screen':
         case 'system-of-inequalities-screen':
@@ -470,6 +481,12 @@ function handleBackButton() {
             trainers.trigonometry.generateNewProblem();
             break;
 
+        case 'trig-equations-settings-screen':
+            // Из настроек простейших тригонометрических уравнений возвращаемся к тренажёру
+            showScreen('trig-equations-screen');
+            trainers.trigEquations.generateNewProblem();
+            break;
+
         case 'percentages-settings-screen':
             // Из настроек процентов возвращаемся к тренажёру процентов
             showScreen('percentages-screen');
@@ -540,6 +557,8 @@ function initHistoryNavigation() {
                 trainers.quadraticInequalities.generateNewProblem();
             } else if (screenId === 'trigonometry-screen') {
                 trainers.trigonometry.generateNewProblem();
+            } else if (screenId === 'trig-equations-screen') {
+                trainers.trigEquations.generateNewProblem();
             } else if (screenId === 'percentages-screen') {
                 trainers.percentages.generateNewProblem();
             } else if (screenId === 'system-of-equations-screen') {

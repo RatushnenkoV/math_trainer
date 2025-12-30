@@ -2245,3 +2245,209 @@ polynomial-simplification-trainer.active {
     display: block;
     z-index: 10;
 }
+
+/* Trig Equations Trainer */
+.trig-equations-equation-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    overflow: hidden;
+    padding: 20px;
+}
+
+.trig-equations-equation {
+    font-size: clamp(20px, 5vw, 32px);
+    font-weight: 500;
+    text-align: center;
+    line-height: 1.6;
+    color: var(--tg-theme-text-color, #000000);
+    max-width: 100%;
+}
+
+/* Answer Constructor */
+.answer-constructor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+}
+
+.answer-constructor-parts {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 24px;
+}
+
+.constructor-label {
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--tg-theme-text-color, #000000);
+    white-space: nowrap;
+}
+
+.constructor-select {
+    padding: 8px 12px;
+    font-size: 20px;
+    border: 2px solid var(--tg-theme-button-color, #3390ec);
+    border-radius: 8px;
+    background: var(--tg-theme-bg-color, #ffffff);
+    color: var(--tg-theme-text-color, #000000);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.constructor-select:focus {
+    outline: none;
+    border-color: var(--tg-theme-button-color, #3390ec);
+    box-shadow: 0 0 0 3px rgba(51, 144, 236, 0.1);
+}
+
+.constructor-select:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f0f0f0;
+}
+
+.constructor-input {
+    padding: 8px 12px;
+    font-size: 20px;
+    text-align: center;
+    border: 2px solid var(--tg-theme-button-color, #3390ec);
+    border-radius: 8px;
+    background: var(--tg-theme-bg-color, #ffffff);
+    color: var(--tg-theme-text-color, #000000);
+    min-width: 80px;
+    max-width: 150px;
+}
+
+.constructor-input:focus {
+    outline: none;
+    border-color: var(--tg-theme-button-color, #3390ec);
+    box-shadow: 0 0 0 3px rgba(51, 144, 236, 0.1);
+}
+
+.constructor-input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f0f0f0;
+}
+
+.angle-input {
+    width: 100px;
+}
+
+.period-input {
+    width: 80px;
+}
+
+.multiplier-input {
+    width: 60px;
+}
+
+.angle-display,
+.period-display {
+    min-width: 60px;
+    padding: 8px 12px;
+    font-size: 20px;
+    text-align: center;
+    border: 2px solid var(--tg-theme-button-color, #3390ec);
+    border-radius: 8px;
+    background: var(--tg-theme-bg-color, #ffffff);
+    color: var(--tg-theme-text-color, #000000);
+    display: inline-block;
+}
+
+.angle-display .katex,
+.period-display .katex {
+    font-size: 20px;
+}
+
+/* Quick Select Buttons for Angles */
+.quick-select-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.quick-select-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--tg-theme-hint-color, #666);
+}
+
+.quick-select-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    align-items: center;
+}
+
+.quick-select-btn {
+    padding: 8px 14px;
+    font-size: 16px;
+    background: var(--tg-theme-secondary-bg-color, #f0f0f0);
+    color: var(--tg-theme-text-color, #000000);
+    border: 2px solid var(--tg-theme-button-color, #3390ec);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quick-select-btn:hover {
+    background: var(--tg-theme-button-color, #3390ec);
+    color: var(--tg-theme-button-text-color, #ffffff);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(51, 144, 236, 0.3);
+}
+
+.quick-select-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 4px rgba(51, 144, 236, 0.2);
+}
+
+.quick-select-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f0f0f0;
+}
+
+.quick-select-btn .katex {
+    font-size: 16px;
+}
+
+.quick-select-btn.selected {
+    background: var(--tg-theme-button-color, #3390ec);
+    color: var(--tg-theme-button-text-color, #ffffff);
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(51, 144, 236, 0.4);
+}
+
+/* Add trig-equations-trainer to component styles */
+trig-equations-trainer {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+trig-equations-trainer.active {
+    display: block;
+    z-index: 10;
+}
