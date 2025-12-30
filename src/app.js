@@ -198,6 +198,8 @@ async function loadTrainer(trainerName) {
             'src/components/SystemOfEquationsComponent.js'
         ],
         'systemOfInequalities': [
+            'src/utils/generators/LinearInequalitiesGenerator.js',
+            'src/utils/generators/QuadraticInequalitiesGenerator.js',
             'src/utils/generators/SystemOfInequalitiesGenerator.js',
             'src/trainers/SystemOfInequalitiesTrainer.js',
             'src/components/SystemOfInequalitiesComponent.js'
