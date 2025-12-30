@@ -2157,6 +2157,7 @@ body.keyboard-open #fraction-visual-screen .check-button {
 }
 
 .polynomial-modal-input-container input {
+    width: 200px;
     flex: 0 0 100px;
     padding: 14px;
     font-size: 22px;
