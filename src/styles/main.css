@@ -2048,3 +2048,187 @@ body.keyboard-open #fraction-visual-screen .check-button {
     color: var(--tg-theme-hint-color, #999);
     line-height: 1.3;
 }
+
+/* Polynomial Simplification Trainer Styles */
+.polynomial-problem-display {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0px;
+    padding: 20px;
+    min-height: 200px;
+}
+
+.polynomial-monomial {
+    /*background: var(--tg-theme-secondary-bg-color, #f0f0f0);*/
+    padding: 16px 0px;
+    border-radius: 12px;
+    cursor: move;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(0, 0, 0, 0);
+    user-select: none;
+    font-size: 28px;
+}
+
+.polynomial-monomial .katex {
+    font-size: 28px;
+}
+
+.polynomial-monomial:hover {
+    background: var(--tg-theme-button-color, #3390ec);
+    color: var(--tg-theme-button-text-color, #ffffff);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.polynomial-monomial.polynomial-dragging {
+    opacity: 0.5;
+    transform: rotate(3deg);
+}
+
+.polynomial-monomial.polynomial-drag-over {
+    border-color: var(--tg-theme-button-color, #3390ec);
+    background: rgba(51, 144, 236, 0.1);
+    transform: scale(1.05);
+}
+
+/* Modal Styles */
+.polynomial-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.polynomial-modal-content {
+    background: var(--tg-theme-bg-color, #ffffff);
+    border-radius: 16px;
+    padding: 24px;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.polynomial-modal-content h3 {
+    margin: 0 0 20px 0;
+    text-align: center;
+    color: var(--tg-theme-text-color, #000000);
+    font-size: 20px;
+}
+
+.polynomial-modal-monomials {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding: 16px;
+    background: var(--tg-theme-secondary-bg-color, #f0f0f0);
+    border-radius: 12px;
+}
+
+.polynomial-modal-monomials > div {
+    font-size: 24px;
+}
+
+.polynomial-modal-monomials .katex {
+    font-size: 24px;
+}
+
+.polynomial-modal-plus {
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--tg-theme-hint-color, #999);
+}
+
+.polynomial-modal-input-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.polynomial-modal-input-container input {
+    flex: 0 0 100px;
+    padding: 14px;
+    font-size: 22px;
+    border: 2px solid var(--tg-theme-button-color, #3390ec);
+    border-radius: 8px;
+    text-align: center;
+    background: var(--tg-theme-bg-color, #ffffff);
+    color: var(--tg-theme-text-color, #000000);
+}
+
+.polynomial-modal-input-container input:focus {
+    outline: none;
+    border-color: var(--tg-theme-button-color, #3390ec);
+    box-shadow: 0 0 0 3px rgba(51, 144, 236, 0.2);
+}
+
+.polynomial-modal-input-container span {
+    flex: 1;
+    font-size: 22px;
+}
+
+.polynomial-modal-input-container .katex {
+    font-size: 22px;
+}
+
+.polynomial-modal-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.polynomial-modal-buttons button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.polynomial-modal-cancel {
+    background: var(--tg-theme-secondary-bg-color, #f0f0f0);
+    color: var(--tg-theme-text-color, #000000);
+}
+
+.polynomial-modal-cancel:active {
+    transform: scale(0.95);
+    opacity: 0.8;
+}
+
+.polynomial-modal-ok {
+    background: var(--tg-theme-button-color, #3390ec);
+    color: var(--tg-theme-button-text-color, #ffffff);
+}
+
+.polynomial-modal-ok:active {
+    transform: scale(0.95);
+    opacity: 0.8;
+}
+
+/* Add polynomial-simplification-trainer to component styles */
+polynomial-simplification-trainer {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+polynomial-simplification-trainer.active {
+    display: block;
+    z-index: 10;
+}

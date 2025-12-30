@@ -18,8 +18,11 @@ class Power extends Expression {
         let b = (this.base.tex) ? this.base.tex() : this.base;
         let e = (this.exponent.tex) ? this.exponent.tex() : this.exponent;
         if (typeof this.base === 'object') b = `\\left(${b}\\right)`;
-        let res = `${b}^{${e}}`;
-        return this.coefficient === 1 ? res : `${this.coefficient} \\cdot ${res}`;
+
+        // Не показываем степень, если показатель равен 1
+        let res = (e === 1 || e === '1') ? `${b}` : `${b}^{${e}}`;
+
+        return this.coefficient === 1 ? res : `${this.coefficient}${res}`;
     }
 
     isEqual(other) {

@@ -92,6 +92,11 @@ const trainerConfig = {
         name: 'Свойства степеней',
         screen: 'powers-screen',
         trainer: 'powers'
+    },
+    'polynomial-simplification-btn': {
+        name: 'Приведение подобных',
+        screen: 'polynomial-simplification-screen',
+        trainer: 'polynomialSimplification'
     }
 };
 
@@ -201,6 +206,11 @@ async function loadTrainer(trainerName) {
             'src/utils/generators/PowersGenerator.js',
             'src/trainers/PowersTrainer.js',
             'src/components/PowersComponent.js'
+        ],
+        'polynomialSimplification': [
+            'src/utils/generators/PolynomialSimplificationGenerator.js',
+            'src/trainers/PolynomialSimplificationTrainer.js',
+            'src/components/PolynomialSimplificationComponent.js'
         ]
     };
 
@@ -271,7 +281,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
     });
 
     // Скрываем все компоненты тренажеров
-    document.querySelectorAll('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer').forEach(trainer => {
+    document.querySelectorAll('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer, polynomial-simplification-trainer').forEach(trainer => {
         trainer.classList.remove('active');
     });
 
@@ -281,7 +291,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
         targetScreen.classList.add('active');
 
         // Если экран находится внутри компонента тренажера, показываем этот компонент
-        const trainerComponent = targetScreen.closest('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer');
+        const trainerComponent = targetScreen.closest('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer, polynomial-simplification-trainer');
         if (trainerComponent) {
             trainerComponent.classList.add('active');
         }

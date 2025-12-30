@@ -8,8 +8,16 @@ class Polynomial extends Expression {
         if (this.monomials.length === 0) return "0";
         return this.monomials.map((m, i) => {
             let t = m.tex();
-            return (i > 0 && !t.startsWith('-')) ? `+ ${t}` : t;
-        }).join(' ');
+            // Для первого одночлена знак "+" не нужен
+            if (i === 0) {
+                return t;
+            }
+            // Для остальных добавляем "+" если число положительное
+            if (!t.startsWith('-')) {
+                return '+' + t;
+            }
+            return t;
+        }).join('');
     }
 
     simplify() {

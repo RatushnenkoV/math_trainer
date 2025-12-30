@@ -8,12 +8,32 @@ class Monomial extends Expression {
 
     tex() {
         if (this.coefficient === 0) return "0";
-        let parts = [];
-        if (this.coefficient !== 1 || this.powers.length === 0) {
-            parts.push(this.coefficient);
+
+        let result = '';
+
+        // Обрабатываем коэффициент
+        if (this.powers.length === 0) {
+            // Если нет буквенной части, просто возвращаем число
+            result = String(this.coefficient);
+        } else {
+            // Если есть буквенная часть
+            if (this.coefficient === 1) {
+                // Коэффициент 1 не пишем
+                result = '';
+            } else if (this.coefficient === -1) {
+                // Коэффициент -1 пишем как минус
+                result = '-';
+            } else {
+                // Любой другой коэффициент
+                result = String(this.coefficient);
+            }
         }
-        this.powers.forEach(p => parts.push(p.tex()));
-        return parts.join(' \\cdot ');
+
+        // Добавляем буквенную часть (без знаков умножения)
+        const literalPart = this.powers.map(p => p.tex()).join('');
+        result += literalPart;
+
+        return result;
     }
 
     simplify() {
