@@ -87,6 +87,11 @@ const trainerConfig = {
         name: 'Табличные значения',
         screen: 'trigonometry-screen',
         trainer: 'trigonometry'
+    },
+    'powers-btn': {
+        name: 'Свойства степеней',
+        screen: 'powers-screen',
+        trainer: 'powers'
     }
 };
 
@@ -191,6 +196,11 @@ async function loadTrainer(trainerName) {
             'src/utils/generators/SystemOfInequalitiesGenerator.js',
             'src/trainers/SystemOfInequalitiesTrainer.js',
             'src/components/SystemOfInequalitiesComponent.js'
+        ],
+        'powers': [
+            'src/utils/generators/PowersGenerator.js',
+            'src/trainers/PowersTrainer.js',
+            'src/components/PowersComponent.js'
         ]
     };
 
@@ -261,7 +271,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
     });
 
     // Скрываем все компоненты тренажеров
-    document.querySelectorAll('multiplication-table-trainer, square-roots-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer').forEach(trainer => {
+    document.querySelectorAll('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer').forEach(trainer => {
         trainer.classList.remove('active');
     });
 
@@ -271,7 +281,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
         targetScreen.classList.add('active');
 
         // Если экран находится внутри компонента тренажера, показываем этот компонент
-        const trainerComponent = targetScreen.closest('multiplication-table-trainer, square-roots-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer');
+        const trainerComponent = targetScreen.closest('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer');
         if (trainerComponent) {
             trainerComponent.classList.add('active');
         }
@@ -345,6 +355,7 @@ function handleBackButton() {
     switch (screenId) {
         case 'multiplication-table-screen':
         case 'square-roots-screen':
+        case 'powers-screen':
         case 'fractions-screen':
         case 'fraction-visual-screen':
         case 'fraction-sense-screen':
@@ -373,6 +384,12 @@ function handleBackButton() {
             // Из настроек корней возвращаемся к тренажёру корней
             showScreen('square-roots-screen');
             trainers.squareRoots.generateNewProblem();
+            break;
+
+        case 'powers-settings-screen':
+            // Из настроек степеней возвращаемся к тренажёру степеней
+            showScreen('powers-screen');
+            trainers.powers.generateNewProblem();
             break;
 
         case 'settings-screen':

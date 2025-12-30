@@ -276,6 +276,22 @@ system-of-equations-trainer.active {
     font-weight: 500;
     flex-wrap: wrap;
     justify-content: center;
+    width: 100%;
+    max-width: 100%;
+}
+
+.expression-display {
+    display: inline-block;
+    max-width: 100%;
+}
+
+/* Автоматическое масштабирование KaTeX формул */
+.expression-display .katex {
+    font-size: clamp(1rem, 4vw, 2.5rem);
+}
+
+.expression-display .katex-html {
+    white-space: nowrap;
 }
 
 .fraction-display {
@@ -379,6 +395,10 @@ system-of-equations-trainer.active {
     background: var(--tg-theme-bg-color, #ffffff);
     color: var(--tg-theme-text-color, #000000);
     -moz-appearance: textfield;
+}
+
+.input-group input[type="text"] {
+    width: 150px;
 }
 
 .input-group input::-webkit-outer-spin-button,
