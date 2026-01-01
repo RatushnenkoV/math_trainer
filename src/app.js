@@ -1,5 +1,10 @@
 // Главный файл приложения
 
+// Флаг для переключения режима загрузки
+// true - ленивая загрузка (lazy loading) - модули загружаются при клике
+// false - загрузка всех модулей при запуске приложения
+const LAZY_LOADING = true;
+
 // Реестр тренажёров
 const trainers = {};
 
@@ -108,6 +113,27 @@ const trainerConfig = {
 // Telegram WebApp API
 let tg = null;
 
+// Управление индикатором загрузки
+const LoadingIndicator = {
+    overlay: null,
+
+    init() {
+        this.overlay = document.getElementById('loading-overlay');
+    },
+
+    show() {
+        if (this.overlay) {
+            this.overlay.classList.add('visible');
+        }
+    },
+
+    hide() {
+        if (this.overlay) {
+            this.overlay.classList.remove('visible');
+        }
+    }
+};
+
 // Функция для динамической загрузки скриптов
 function loadScript(src) {
     return new Promise((resolve, reject) => {
@@ -120,10 +146,15 @@ function loadScript(src) {
 }
 
 // Функция для динамической загрузки тренажёра
-async function loadTrainer(trainerName) {
+async function loadTrainer(trainerName, showLoader = true) {
     // Если тренажёр уже загружен, просто возвращаем true
     if (loadedTrainers.has(trainerName)) {
         return true;
+    }
+
+    // Показываем индикатор загрузки при ленивой загрузке
+    if (showLoader && LAZY_LOADING) {
+        LoadingIndicator.show();
     }
 
     const trainerScripts = {
@@ -245,6 +276,32 @@ async function loadTrainer(trainerName) {
     } catch (error) {
         console.error(`Failed to load trainer ${trainerName}:`, error);
         return false;
+    } finally {
+        // Скрываем индикатор загрузки при ленивой загрузке
+        if (showLoader && LAZY_LOADING) {
+            LoadingIndicator.hide();
+        }
+    }
+}
+
+// Функция для загрузки всех тренажёров при запуске
+async function loadAllTrainers() {
+    LoadingIndicator.show();
+
+    try {
+        // Получаем список всех уникальных тренажёров
+        const allTrainers = [...new Set(Object.values(trainerConfig).map(config => config.trainer))];
+
+        // Загружаем все тренажёры последовательно
+        for (const trainerName of allTrainers) {
+            await loadTrainer(trainerName, false);
+        }
+
+        console.log('All trainers loaded successfully');
+    } catch (error) {
+        console.error('Failed to load all trainers:', error);
+    } finally {
+        LoadingIndicator.hide();
     }
 }
 
@@ -260,8 +317,14 @@ document.addEventListener('DOMContentLoaded', () => {
     initApp();
 });
 
-function initApp() {
-    // Все тренажёры теперь загружаются динамически при клике на соответствующую кнопку
+async function initApp() {
+    // Инициализация индикатора загрузки
+    LoadingIndicator.init();
+
+    // Если отключена ленивая загрузка, загружаем все тренажёры сразу
+    if (!LAZY_LOADING) {
+        await loadAllTrainers();
+    }
 
     // Инициализация главного меню
     initMainMenu();

@@ -137,32 +137,53 @@ class TrigEquationsProblemGenerator {
         // Базовый угол в градусах
         let baseDegrees;
 
-        // Специальные случаи
+        // Специальные случаи - определяем базовый угол для каждой функции
         if (Math.abs(value) < 0.0001) {
+            // Значение = 0
             baseDegrees = 0;
         } else if (Math.abs(value - 1) < 0.0001) {
-            baseDegrees = (func === 'sin' || func === 'tg') ? 90 : 0;
+            // Значение = 1
+            if (func === 'sin') baseDegrees = 90;
+            else if (func === 'cos') baseDegrees = 0;
+            else if (func === 'tg') baseDegrees = 45;
+            else if (func === 'ctg') baseDegrees = 45;
+            else baseDegrees = 0;
         } else if (Math.abs(value + 1) < 0.0001) {
-            baseDegrees = (func === 'sin') ? -90 : 180;
+            // Значение = -1
+            if (func === 'sin') baseDegrees = -90;
+            else if (func === 'cos') baseDegrees = 180;
+            else if (func === 'tg') baseDegrees = -45;
+            else if (func === 'ctg') baseDegrees = -45;
+            else baseDegrees = 180;
         } else if (Math.abs(value - 0.5) < 0.0001) {
+            // Значение = 1/2
             baseDegrees = (func === 'sin') ? 30 : 60;
         } else if (Math.abs(value + 0.5) < 0.0001) {
+            // Значение = -1/2
             baseDegrees = (func === 'sin') ? -30 : 120;
         } else if (Math.abs(value - Math.sqrt(2) / 2) < 0.0001) {
+            // Значение = √2/2
             baseDegrees = 45;
         } else if (Math.abs(value + Math.sqrt(2) / 2) < 0.0001) {
+            // Значение = -√2/2
             baseDegrees = (func === 'sin') ? -45 : 135;
         } else if (Math.abs(value - Math.sqrt(3) / 2) < 0.0001) {
+            // Значение = √3/2
             baseDegrees = (func === 'sin') ? 60 : 30;
         } else if (Math.abs(value + Math.sqrt(3) / 2) < 0.0001) {
+            // Значение = -√3/2
             baseDegrees = (func === 'sin') ? -60 : 150;
         } else if (Math.abs(value - Math.sqrt(3)) < 0.0001) {
-            baseDegrees = (func === 'tg') ? 60 : 30;
+            // Значение = √3
+            baseDegrees = (func === 'tg') ? 60 : 60;
         } else if (Math.abs(value + Math.sqrt(3)) < 0.0001) {
-            baseDegrees = (func === 'tg') ? -60 : 150;
+            // Значение = -√3
+            baseDegrees = (func === 'tg') ? -60 : 120;
         } else if (Math.abs(value - Math.sqrt(3) / 3) < 0.0001) {
+            // Значение = √3/3
             baseDegrees = (func === 'tg') ? 30 : 60;
         } else if (Math.abs(value + Math.sqrt(3) / 3) < 0.0001) {
+            // Значение = -√3/3
             baseDegrees = (func === 'tg') ? -30 : 120;
         } else {
             baseDegrees = 0;

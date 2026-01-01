@@ -51,7 +51,7 @@ class PolynomialSimplificationComponent extends BaseTrainerComponent {
                             <div id="polynomial-modal-monomial2"></div>
                         </div>
                         <div class="polynomial-modal-input-container">
-                            <input type="number" id="polynomial-modal-coefficient-input" placeholder="Коэффициент">
+                            <input type="numbergit" id="polynomial-modal-coefficient-input" placeholder="Коэффициент">
                             <span id="polynomial-modal-literal-part"></span>
                         </div>
                         <div class="polynomial-modal-buttons">

@@ -8,7 +8,9 @@
       "Bash(ipconfig:*)",
       "Bash(findstr:*)",
       "Bash(git checkout:*)",
-      "Bash(git stash:*)"
+      "Bash(git stash:*)",
+      "Bash(dir:*)",
+      "Bash(where:*)"
     ]
   }
 }
