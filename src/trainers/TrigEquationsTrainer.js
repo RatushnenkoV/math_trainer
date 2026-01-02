@@ -254,6 +254,7 @@ class TrigEquationsTrainer extends BaseTrainer {
         let selectedIndex = 0;
         let touchStartY = 0;
         let scrollerStartY = 0;
+        let currentScrollY = 0; // Текущая позиция скроллера
         let lastWheelTime = 0;
         const wheelThrottle = 150; // Задержка между прокрутками колесом мыши
 
@@ -298,9 +299,11 @@ class TrigEquationsTrainer extends BaseTrainer {
 
         // Прокрутка к индексу
         const scrollToIndex = (index) => {
-            selectedIndex = Math.max(0, Math.min(options.length - 1, index));
+            const newIndex = Math.max(0, Math.min(options.length - 1, index));
+            selectedIndex = newIndex;
             // Исправленная формула: центр контейнера минус половина элемента минус смещение для индекса
             const y = HEIGHT / 2 - ITEM_HEIGHT / 2 - selectedIndex * ITEM_HEIGHT;
+            currentScrollY = y; // Сохраняем текущую позицию
             scroller.style.transform = `translate3d(0, ${y}px, 0)`;
             updateSelection();
         };
@@ -308,26 +311,25 @@ class TrigEquationsTrainer extends BaseTrainer {
         // Touch обработчики
         const handleTouchStart = (clientY) => {
             touchStartY = clientY;
-            const transform = scroller.style.transform;
-            const match = transform.match(/translate3d\(0,\s*([-\d.]+)px,\s*0\)/);
-            // Если transform не найден, вычисляем позицию на основе текущего индекса
-            scrollerStartY = match ? parseFloat(match[1]) : (HEIGHT / 2 - ITEM_HEIGHT / 2 - selectedIndex * ITEM_HEIGHT);
+            // Используем сохраненную позицию вместо парсинга transform
+            scrollerStartY = currentScrollY;
             scroller.style.transition = 'none';
         };
 
         const handleTouchMove = (clientY) => {
             const deltaY = clientY - touchStartY;
             const y = scrollerStartY + deltaY;
+            currentScrollY = y; // Обновляем текущую позицию
             scroller.style.transform = `translate3d(0, ${y}px, 0)`;
         };
 
         const handleTouchEnd = () => {
-            const transform = scroller.style.transform;
-            const match = transform.match(/translate3d\(0,\s*([-\d.]+)px,\s*0\)/);
-            const currentY = match ? parseFloat(match[1]) : 0;
+            // Используем сохраненную позицию вместо парсинга transform
+            const finalY = currentScrollY;
 
             // Обратная формула: из currentY вычисляем индекс
-            const index = Math.round((HEIGHT / 2 - ITEM_HEIGHT / 2 - currentY) / ITEM_HEIGHT);
+            const rawIndex = (HEIGHT / 2 - ITEM_HEIGHT / 2 - finalY) / ITEM_HEIGHT;
+            const index = Math.round(rawIndex);
             const clampedIndex = Math.max(0, Math.min(options.length - 1, index));
 
             scroller.style.transition = '300ms';
