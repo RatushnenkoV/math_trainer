@@ -140,7 +140,8 @@ class TrigEquationsProblemGenerator {
         // Специальные случаи - определяем базовый угол для каждой функции
         if (Math.abs(value) < 0.0001) {
             // Значение = 0
-            baseDegrees = 0;
+            if (func === 'cos') baseDegrees = 90; // cos(x) = 0 => x = π/2 + πn
+            else baseDegrees = 0;
         } else if (Math.abs(value - 1) < 0.0001) {
             // Значение = 1
             if (func === 'sin') baseDegrees = 90;
@@ -175,16 +176,16 @@ class TrigEquationsProblemGenerator {
             baseDegrees = (func === 'sin') ? -60 : 150;
         } else if (Math.abs(value - Math.sqrt(3)) < 0.0001) {
             // Значение = √3
-            baseDegrees = (func === 'tg') ? 60 : 60;
+            baseDegrees = (func === 'tg') ? 60 : 30; // tg(60°) = √3, ctg(30°) = √3
         } else if (Math.abs(value + Math.sqrt(3)) < 0.0001) {
             // Значение = -√3
-            baseDegrees = (func === 'tg') ? -60 : 120;
+            baseDegrees = (func === 'tg') ? -60 : 150; // tg(-60°) = -√3, ctg(150°) = -√3
         } else if (Math.abs(value - Math.sqrt(3) / 3) < 0.0001) {
             // Значение = √3/3
-            baseDegrees = (func === 'tg') ? 30 : 60;
+            baseDegrees = (func === 'tg') ? 30 : 60; // tg(30°) = √3/3, ctg(60°) = √3/3
         } else if (Math.abs(value + Math.sqrt(3) / 3) < 0.0001) {
             // Значение = -√3/3
-            baseDegrees = (func === 'tg') ? -30 : 120;
+            baseDegrees = (func === 'tg') ? -30 : 120; // tg(-30°) = -√3/3, ctg(120°) = -√3/3
         } else {
             baseDegrees = 0;
         }
@@ -193,8 +194,13 @@ class TrigEquationsProblemGenerator {
         let coefficient, baseAngle, period;
 
         if (func === 'sin') {
-            // Особые случаи для sin(x) = ±1
-            if (Math.abs(Math.abs(value) - 1) < 0.0001) {
+            // Особый случай для sin(x) = 0
+            if (Math.abs(value) < 0.0001) {
+                // sin(x) = 0: x = πn
+                coefficient = [1]; // нет коэффициента
+                baseAngle = baseDegrees;
+                period = 180; // πn или 180°n
+            } else if (Math.abs(Math.abs(value) - 1) < 0.0001) {
                 // sin(x) = 1: x = π/2 + 2πn
                 // sin(x) = -1: x = -π/2 + 2πn
                 coefficient = [1]; // нет коэффициента
@@ -207,8 +213,13 @@ class TrigEquationsProblemGenerator {
                 period = 180; // πn или 180°n
             }
         } else if (func === 'cos') {
-            // Особые случаи для cos(x) = ±1
-            if (Math.abs(Math.abs(value) - 1) < 0.0001) {
+            // Особый случай для cos(x) = 0
+            if (Math.abs(value) < 0.0001) {
+                // cos(x) = 0: x = π/2 + πn
+                coefficient = [1]; // нет коэффициента
+                baseAngle = baseDegrees;
+                period = 180; // πn или 180°n
+            } else if (Math.abs(Math.abs(value) - 1) < 0.0001) {
                 // cos(x) = 1: x = 2πn
                 // cos(x) = -1: x = π + 2πn
                 coefficient = [1]; // нет коэффициента

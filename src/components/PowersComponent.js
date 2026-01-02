@@ -35,7 +35,7 @@ class PowersComponent extends BaseTrainerComponent {
 
                     <div class="answer-input">
                         <div class="input-group">
-                            <input type="text" id="powers-answer-input">
+                            <input type="number" id="powers-answer-input">
                         </div>
                     </div>
 
