@@ -178,7 +178,18 @@ class TrigEquationsTrainer extends BaseTrainer {
     createLabel(text) {
         const span = document.createElement('span');
         span.className = 'constructor-label';
-        span.textContent = text;
+
+        // Рендерим через KaTeX для красивого отображения
+        if (typeof katex !== 'undefined') {
+            try {
+                katex.render(text, span, { displayMode: false, throwOnError: false });
+            } catch (e) {
+                span.textContent = text;
+            }
+        } else {
+            span.textContent = text;
+        }
+
         return span;
     }
 
