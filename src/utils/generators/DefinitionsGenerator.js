@@ -3,6 +3,9 @@ class DefinitionsGenerator {
     constructor(settings = {}) {
         this.settings = {
             selectedSections: [], // Выбранные разделы для тренировки
+            termByDefinition: true, // Режим: термин по определению
+            definitionByTerm: false, // Режим: определение по термину
+            matching: false, // Режим: сопоставление терминов и определений
             ...settings
         };
         this.definitions = [];
@@ -154,28 +157,106 @@ class DefinitionsGenerator {
             return null;
         }
 
+        // Определяем доступные режимы
+        const availableModes = [];
+        if (this.settings.termByDefinition) availableModes.push('termByDefinition');
+        if (this.settings.definitionByTerm) availableModes.push('definitionByTerm');
+        if (this.settings.matching) availableModes.push('matching');
+
+        if (availableModes.length === 0) {
+            return null; // Ни один режим не выбран
+        }
+
+        // Выбираем случайный режим из доступных
+        const mode = availableModes[Math.floor(Math.random() * availableModes.length)];
+
+        if (mode === 'matching') {
+            // Режим сопоставления: выбираем термины из одного раздела
+            // Группируем термины по разделам
+            const termsBySection = {};
+            terms.forEach(term => {
+                const key = `${term.class}_${term.section}`;
+                if (!termsBySection[key]) {
+                    termsBySection[key] = [];
+                }
+                termsBySection[key].push(term);
+            });
+
+            // Находим разделы с достаточным количеством терминов
+            const suitableSections = Object.entries(termsBySection).filter(([_, sectionTerms]) => sectionTerms.length >= 2);
+
+            if (suitableSections.length === 0) {
+                return null; // Нет подходящих разделов
+            }
+
+            // Выбираем случайный раздел
+            const [_, sectionTerms] = suitableSections[Math.floor(Math.random() * suitableSections.length)];
+
+            // Берём до 4 терминов из этого раздела
+            const shuffledSectionTerms = this.shuffle([...sectionTerms]);
+            const selectedTerms = shuffledSectionTerms.slice(0, Math.min(4, sectionTerms.length));
+
+            // Перемешиваем термины и определения отдельно
+            const shuffledTermsList = this.shuffle(selectedTerms.map(t => ({
+                id: t.term,
+                text: t.term
+            })));
+            const shuffledDefinitionsList = this.shuffle(selectedTerms.map(t => ({
+                id: t.term,
+                text: t.definition
+            })));
+
+            return {
+                mode: 'matching',
+                terms: shuffledTermsList,
+                definitions: shuffledDefinitionsList,
+                pairs: selectedTerms.map(t => ({ term: t.term, definition: t.definition })),
+                count: selectedTerms.length
+            };
+        }
+
         // Выбираем случайный термин
         const correctTerm = terms[Math.floor(Math.random() * terms.length)];
 
-        // Генерируем неправильные варианты ответов
-        const wrongAnswers = this.getAdditionalTerms(correctTerm, 3);
+        if (mode === 'termByDefinition') {
+            // Режим: дано определение, нужно выбрать термин
+            const wrongAnswers = this.getAdditionalTerms(correctTerm, 3);
 
-        // Формируем все варианты ответов
-        const allAnswers = [
-            { term: correctTerm.term, isCorrect: true },
-            ...wrongAnswers.map(t => ({ term: t.term, isCorrect: false }))
-        ];
+            const allAnswers = [
+                { text: correctTerm.term, isCorrect: true },
+                ...wrongAnswers.map(t => ({ text: t.term, isCorrect: false }))
+            ];
 
-        // Перемешиваем варианты ответов
-        const shuffledAnswers = this.shuffle(allAnswers);
+            const shuffledAnswers = this.shuffle(allAnswers);
 
-        return {
-            definition: correctTerm.definition,
-            correctTerm: correctTerm.term,
-            answers: shuffledAnswers,
-            section: correctTerm.section,
-            class: correctTerm.class
-        };
+            return {
+                mode: 'termByDefinition',
+                question: correctTerm.definition,
+                correctAnswer: correctTerm.term,
+                answers: shuffledAnswers,
+                section: correctTerm.section,
+                class: correctTerm.class
+            };
+        } else {
+            // Режим: дан термин, нужно выбрать определение
+            const wrongAnswers = this.getAdditionalTerms(correctTerm, 3);
+
+            const allAnswers = [
+                { text: correctTerm.definition, isCorrect: true },
+                ...wrongAnswers.map(t => ({ text: t.definition, isCorrect: false }))
+            ];
+
+            const shuffledAnswers = this.shuffle(allAnswers);
+
+            return {
+                mode: 'definitionByTerm',
+                question: correctTerm.term,
+                correctAnswer: correctTerm.definition,
+                answers: shuffledAnswers,
+                section: correctTerm.section,
+                class: correctTerm.class
+            };
+        }
     }
 
     // Перемешивание массива (алгоритм Фишера-Йетса)
@@ -190,6 +271,6 @@ class DefinitionsGenerator {
 
     // Проверка ответа
     checkAnswer(userAnswer, problem) {
-        return userAnswer === problem.correctTerm;
+        return userAnswer === problem.correctAnswer;
     }
 }

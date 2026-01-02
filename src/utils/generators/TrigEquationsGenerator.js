@@ -132,109 +132,79 @@ class TrigEquationsProblemGenerator {
         };
     }
 
-    // Получение решения уравнения
-    getSolution(func, value) {
-        // Базовый угол в градусах
-        let baseDegrees;
+    // Вычисление значения тригонометрической функции
+    evaluateTrigFunction(func, degrees) {
+        const radians = degrees * Math.PI / 180;
+        switch(func) {
+            case 'sin':
+                return Math.sin(radians);
+            case 'cos':
+                return Math.cos(radians);
+            case 'tg':
+                return Math.tan(radians);
+            case 'ctg':
+                return 1 / Math.tan(radians);
+            default:
+                return 0;
+        }
+    }
 
-        // Специальные случаи - определяем базовый угол для каждой функции
-        if (Math.abs(value) < 0.0001) {
-            // Значение = 0
-            if (func === 'cos') baseDegrees = 90; // cos(x) = 0 => x = π/2 + πn
-            else baseDegrees = 0;
-        } else if (Math.abs(value - 1) < 0.0001) {
-            // Значение = 1
-            if (func === 'sin') baseDegrees = 90;
-            else if (func === 'cos') baseDegrees = 0;
-            else if (func === 'tg') baseDegrees = 45;
-            else if (func === 'ctg') baseDegrees = 45;
-            else baseDegrees = 0;
-        } else if (Math.abs(value + 1) < 0.0001) {
-            // Значение = -1
-            if (func === 'sin') baseDegrees = -90;
-            else if (func === 'cos') baseDegrees = 180;
-            else if (func === 'tg') baseDegrees = -45;
-            else if (func === 'ctg') baseDegrees = -45;
-            else baseDegrees = 180;
-        } else if (Math.abs(value - 0.5) < 0.0001) {
-            // Значение = 1/2
-            baseDegrees = (func === 'sin') ? 30 : 60;
-        } else if (Math.abs(value + 0.5) < 0.0001) {
-            // Значение = -1/2
-            baseDegrees = (func === 'sin') ? -30 : 120;
-        } else if (Math.abs(value - Math.sqrt(2) / 2) < 0.0001) {
-            // Значение = √2/2
-            baseDegrees = 45;
-        } else if (Math.abs(value + Math.sqrt(2) / 2) < 0.0001) {
-            // Значение = -√2/2
-            baseDegrees = (func === 'sin') ? -45 : 135;
-        } else if (Math.abs(value - Math.sqrt(3) / 2) < 0.0001) {
-            // Значение = √3/2
-            baseDegrees = (func === 'sin') ? 60 : 30;
-        } else if (Math.abs(value + Math.sqrt(3) / 2) < 0.0001) {
-            // Значение = -√3/2
-            baseDegrees = (func === 'sin') ? -60 : 150;
-        } else if (Math.abs(value - Math.sqrt(3)) < 0.0001) {
-            // Значение = √3
-            baseDegrees = (func === 'tg') ? 60 : 30; // tg(60°) = √3, ctg(30°) = √3
-        } else if (Math.abs(value + Math.sqrt(3)) < 0.0001) {
-            // Значение = -√3
-            baseDegrees = (func === 'tg') ? -60 : 150; // tg(-60°) = -√3, ctg(150°) = -√3
-        } else if (Math.abs(value - Math.sqrt(3) / 3) < 0.0001) {
-            // Значение = √3/3
-            baseDegrees = (func === 'tg') ? 30 : 60; // tg(30°) = √3/3, ctg(60°) = √3/3
-        } else if (Math.abs(value + Math.sqrt(3) / 3) < 0.0001) {
-            // Значение = -√3/3
-            baseDegrees = (func === 'tg') ? -30 : 120; // tg(-30°) = -√3/3, ctg(120°) = -√3/3
-        } else {
-            baseDegrees = 0;
+    // Поиск базового угла в диапазоне [0, 360), который удовлетворяет уравнению
+    findBaseAngle(func, value) {
+        // Табличные углы для проверки
+        const testAngles = [0, 30, 45, 60, 90, 120, 135, 150, 180, 210, 225, 240, 270, 300, 315, 330];
+
+        for (let angle of testAngles) {
+            const funcValue = this.evaluateTrigFunction(func, angle);
+            if (Math.abs(funcValue - value) < 0.0001) {
+                return angle;
+            }
         }
 
-        // Формула решения зависит от функции
-        let coefficient, baseAngle, period;
+        // Если не нашли в табличных углах, возвращаем 0
+        return 0;
+    }
+
+    // Получение решения уравнения
+    getSolution(func, value) {
+        // Находим один угол, который удовлетворяет уравнению
+        const baseAngle = this.findBaseAngle(func, value);
+
+        // Определяем тип коэффициента и период на основе функции
+        let coefficient, period;
 
         if (func === 'sin') {
-            // Особый случай для sin(x) = 0
             if (Math.abs(value) < 0.0001) {
                 // sin(x) = 0: x = πn
-                coefficient = [1]; // нет коэффициента
-                baseAngle = baseDegrees;
-                period = 180; // πn или 180°n
+                coefficient = [1];
+                period = 180;
             } else if (Math.abs(Math.abs(value) - 1) < 0.0001) {
-                // sin(x) = 1: x = π/2 + 2πn
-                // sin(x) = -1: x = -π/2 + 2πn
-                coefficient = [1]; // нет коэффициента
-                baseAngle = baseDegrees;
-                period = 360; // 2πn или 360°n
+                // sin(x) = ±1: x = baseAngle + 2πn
+                coefficient = [1];
+                period = 360;
             } else {
                 // Общий случай: x = (-1)^n · arcsin(a) + πn
-                coefficient = [-1, 1]; // (-1)^n
-                baseAngle = baseDegrees;
-                period = 180; // πn или 180°n
+                coefficient = [-1, 1];
+                period = 180;
             }
         } else if (func === 'cos') {
-            // Особый случай для cos(x) = 0
             if (Math.abs(value) < 0.0001) {
                 // cos(x) = 0: x = π/2 + πn
-                coefficient = [1]; // нет коэффициента
-                baseAngle = baseDegrees;
-                period = 180; // πn или 180°n
+                coefficient = [1];
+                period = 180;
             } else if (Math.abs(Math.abs(value) - 1) < 0.0001) {
-                // cos(x) = 1: x = 2πn
-                // cos(x) = -1: x = π + 2πn
-                coefficient = [1]; // нет коэффициента
-                baseAngle = baseDegrees;
-                period = 360; // 2πn или 360°n
+                // cos(x) = ±1: x = baseAngle + 2πn
+                coefficient = [1];
+                period = 360;
             } else {
                 // Общий случай: x = ± arccos(a) + 2πn
-                coefficient = [1, -1]; // ±
-                baseAngle = baseDegrees;
-                period = 360; // 2πn или 360°n
+                coefficient = [1, -1];
+                period = 360;
             }
-        } else if (func === 'tg' || func === 'ctg') {
-            coefficient = [1]; // нет коэффициента
-            baseAngle = baseDegrees;
-            period = 180; // πn или 180°n
+        } else {
+            // tg и ctg: x = baseAngle + πn
+            coefficient = [1];
+            period = 180;
         }
 
         return {

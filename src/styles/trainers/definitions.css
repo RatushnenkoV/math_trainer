@@ -47,6 +47,72 @@
     scrollbar-color: var(--tg-theme-button-color, #3390ec) rgba(0, 0, 0, 0.1);
 }
 
+/* Адаптивная сетка: переключаемся на 1 столбец, если кнопки слишком большие */
+.definitions-answers-container.single-column {
+    grid-template-columns: 1fr;
+}
+
+/* Режим сопоставления */
+.definitions-answers-container.matching-mode {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 12px;
+}
+
+.matching-column {
+    display: grid;
+    gap: 12px;
+    grid-auto-rows: auto;
+}
+
+.matching-column.terms-column {
+    grid-auto-rows: 1fr;
+}
+
+.matching-button {
+    padding: 12px 10px;
+    font-size: 15px;
+    font-weight: 400;
+    background: var(--tg-theme-secondary-bg-color, #f0f0f0);
+    color: var(--tg-theme-text-color, #000000);
+    border: 2px solid transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+    line-height: 1.4;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.matching-button:active {
+    transform: scale(0.98);
+}
+
+.matching-button.selected {
+    background: var(--tg-theme-button-color, #3390ec);
+    color: var(--tg-theme-button-text-color, #ffffff);
+    border-color: var(--tg-theme-button-color, #3390ec);
+}
+
+.matching-button.matched {
+    background: #4caf50;
+    color: #ffffff;
+    border-color: #4caf50;
+    opacity: 0.7;
+}
+
+.matching-button.wrong {
+    background: #f44336;
+    color: #ffffff;
+    border-color: #f44336;
+}
+
+.matching-button:disabled {
+    cursor: not-allowed;
+}
+
 .definitions-answers-container::-webkit-scrollbar {
     width: 6px;
 }

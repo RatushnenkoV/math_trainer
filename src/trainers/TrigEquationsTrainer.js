@@ -520,84 +520,128 @@ class TrigEquationsTrainer extends BaseTrainer {
         }, 1000);
     }
 
-    // Сравнение ответов
-    compareAnswers(userAnswer, correctSolution) {
-        const func = correctSolution.function;
+    // Генерация значений x по формуле для заданного диапазона n
+    generateSolutionValues(answer, nMin, nMax) {
+        const values = new Set();
 
-        // Проверяем коэффициент - определяем правильный коэффициент на основе решения
-        const expectedCoefficient = correctSolution.coefficient;
-        let correctCoefficient;
+        // Получаем параметры из ответа
+        const multiplier = answer.multiplier === null ? 1 : answer.multiplier;
+        const baseAngle = answer.baseAngleDegrees;
+        const period = answer.periodDegrees;
 
-        // Определяем правильный коэффициент на основе массива coefficient из решения
-        if (expectedCoefficient.length === 1 && expectedCoefficient[0] === 1) {
-            // Нет коэффициента (для tg, ctg и особых случаев sin/cos = ±1)
-            correctCoefficient = 'none';
-        } else if (expectedCoefficient.length === 2 && expectedCoefficient[0] === -1 && expectedCoefficient[1] === 1) {
-            // (-1)^n для общих случаев sin
-            correctCoefficient = 'alternating';
-        } else if (expectedCoefficient.length === 2 && expectedCoefficient[0] === 1 && expectedCoefficient[1] === -1) {
-            // ± для общих случаев cos
-            correctCoefficient = 'plusminus';
-        } else {
-            // Для других случаев используем старую логику
-            if (func === 'sin') {
-                correctCoefficient = 'alternating';
-            } else if (func === 'cos') {
-                correctCoefficient = 'plusminus';
-            } else {
-                correctCoefficient = 'none';
+        if (baseAngle === null || period === null) {
+            return values;
+        }
+
+        // Определяем коэффициенты на основе типа
+        let coefficients = [1]; // по умолчанию
+        if (answer.coefficient === 'alternating') {
+            coefficients = [-1, 1]; // (-1)^n
+        } else if (answer.coefficient === 'plusminus') {
+            coefficients = [1, -1]; // ±
+        }
+
+        // Генерируем значения для каждого n
+        for (let n = nMin; n <= nMax; n++) {
+            for (let coeff of coefficients) {
+                // Для alternating: коэффициент меняется в зависимости от четности n
+                let actualCoeff = coeff;
+                if (answer.coefficient === 'alternating') {
+                    actualCoeff = (n % 2 === 0) ? 1 : -1;
+                }
+
+                // x = coeff * multiplier * baseAngle + period * n
+                const x = actualCoeff * multiplier * baseAngle + period * n;
+
+                // Нормализуем угол к диапазону [0, 360)
+                let normalized = x % 360;
+                if (normalized < 0) normalized += 360;
+
+                // Округляем до 2 знаков для избежания проблем с точностью
+                values.add(Math.round(normalized * 100) / 100);
             }
         }
 
-        // Проверяем, что пользователь выбрал правильный коэффициент
-        if (userAnswer.coefficient !== correctCoefficient) {
+        return values;
+    }
+
+    // Проверка, удовлетворяет ли значение x уравнению
+    checkValueSatisfiesEquation(x, func, expectedValue) {
+        const radians = x * Math.PI / 180;
+        let actualValue;
+
+        // Вычисляем значение функции
+        switch(func) {
+            case 'sin':
+                actualValue = Math.sin(radians);
+                break;
+            case 'cos':
+                actualValue = Math.cos(radians);
+                break;
+            case 'tg':
+                actualValue = Math.tan(radians);
+                break;
+            case 'ctg':
+                actualValue = 1 / Math.tan(radians);
+                break;
+            default:
+                return false;
+        }
+
+        // Сравниваем с ожидаемым значением (с небольшой погрешностью)
+        return Math.abs(actualValue - expectedValue) < 0.0001;
+    }
+
+    // Сравнение ответов
+    compareAnswers(userAnswer, correctSolution) {
+        const func = correctSolution.function;
+        const expectedValue = this.currentProblem.rightSideValue;
+
+        // Генерируем множества значений для обоих ответов
+        const userValues = this.generateSolutionValues(userAnswer, -4, 4);
+        const correctValues = this.generateSolutionValues({
+            coefficient: this.getCoefficientType(correctSolution.coefficient),
+            multiplier: 1,
+            baseAngleDegrees: correctSolution.baseAngleDegrees,
+            periodDegrees: correctSolution.periodDegrees
+        }, -4, 4);
+
+        // Проверяем, что пользователь ввел хоть что-то
+        if (userValues.size === 0) {
             return false;
         }
 
-        // Проверяем множитель
-        const multiplier = userAnswer.multiplier === null ? 1 : userAnswer.multiplier;
+        // Проверяем, что все значения пользователя удовлетворяют уравнению
+        for (let x of userValues) {
+            if (!this.checkValueSatisfiesEquation(x, func, expectedValue)) {
+                return false;
+            }
+        }
 
-        // Проверяем базовый угол с учётом множителя
-        const expectedAngleDegrees = correctSolution.baseAngleDegrees;
-        const userAngleDegrees = userAnswer.baseAngleDegrees;
-
-        if (userAngleDegrees === null) {
+        // Проверяем, что множества совпадают (одинаковые решения)
+        if (userValues.size !== correctValues.size) {
             return false;
         }
 
-        // Итоговый угол с учётом множителя
-        const totalUserAngleDegrees = multiplier * userAngleDegrees;
-        const period = correctSolution.periodDegrees;
-
-        // Нормализуем углы к диапазону [0, period)
-        const normalizeAngle = (angle, per) => {
-            let normalized = angle % per;
-            if (normalized < 0) normalized += per;
-            return normalized;
-        };
-
-        const normalizedUserAngle = normalizeAngle(totalUserAngleDegrees, period);
-        const normalizedExpectedAngle = normalizeAngle(expectedAngleDegrees, period);
-
-        // Сравниваем нормализованные углы
-        const angleDiff = Math.abs(normalizedUserAngle - normalizedExpectedAngle);
-
-        // Углы считаются равными, если разница меньше 0.1° или близка к периоду
-        const isAngleCorrect = angleDiff < 0.1 || Math.abs(angleDiff - period) < 0.1;
-
-        if (!isAngleCorrect) {
-            return false;
-        }
-
-        // Проверяем период
-        const expectedPeriodDegrees = correctSolution.periodDegrees;
-        const userPeriodDegrees = userAnswer.periodDegrees;
-
-        if (userPeriodDegrees === null || Math.abs(userPeriodDegrees - expectedPeriodDegrees) > 0.1) {
-            return false;
+        for (let x of userValues) {
+            if (!correctValues.has(x)) {
+                return false;
+            }
         }
 
         return true;
+    }
+
+    // Преобразование массива коэффициентов в тип
+    getCoefficientType(coefficientArray) {
+        if (coefficientArray.length === 1 && coefficientArray[0] === 1) {
+            return 'none';
+        } else if (coefficientArray.length === 2 && coefficientArray[0] === -1 && coefficientArray[1] === 1) {
+            return 'alternating';
+        } else if (coefficientArray.length === 2 && coefficientArray[0] === 1 && coefficientArray[1] === -1) {
+            return 'plusminus';
+        }
+        return 'none';
     }
 
 

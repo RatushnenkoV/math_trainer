@@ -14,7 +14,10 @@ class DefinitionsTrainer extends BaseTrainer {
                     { class: 7, sectionName: "Базовые геометрические понятия" },
                     { class: 7, sectionName: "Углы" },
                     { class: 7, sectionName: "Многоугольники" }
-                ]
+                ],
+                termByDefinition: true,
+                definitionByTerm: false,
+                matching: false
             };
         }
 
@@ -29,6 +32,11 @@ class DefinitionsTrainer extends BaseTrainer {
         this.isAnswering = false; // Флаг для предотвращения множественных кликов
         this.allSections = []; // Все доступные разделы
         this.definitionsLoaded = false; // Флаг загрузки определений
+
+        // Для режима сопоставления
+        this.selectedTerm = null;
+        this.selectedDefinition = null;
+        this.matchedPairs = new Set();
     }
 
     // Инициализация DOM элементов
@@ -115,9 +123,93 @@ class DefinitionsTrainer extends BaseTrainer {
         }
     }
 
+    // Рендеринг настроек режимов
+    renderModeSettings() {
+        const modeGroup = document.createElement('div');
+        modeGroup.className = 'settings-group';
+
+        const modeTitle = document.createElement('h3');
+        modeTitle.textContent = 'Режимы тренировки';
+        modeGroup.appendChild(modeTitle);
+
+        // Режим: термин по определению
+        const termByDefLabel = document.createElement('label');
+        termByDefLabel.className = 'switch-label';
+
+        const termByDefCheckbox = document.createElement('input');
+        termByDefCheckbox.type = 'checkbox';
+        termByDefCheckbox.checked = this.settings.termByDefinition;
+        termByDefCheckbox.addEventListener('change', (e) => {
+            this.settings.termByDefinition = e.target.checked;
+            this.saveSettings();
+            this.updateGeneratorSettings();
+        });
+
+        const termByDefSpan = document.createElement('span');
+        termByDefSpan.textContent = 'Термин по определению';
+
+        termByDefLabel.appendChild(termByDefCheckbox);
+        termByDefLabel.appendChild(termByDefSpan);
+        modeGroup.appendChild(termByDefLabel);
+
+        // Режим: определение по термину
+        const defByTermLabel = document.createElement('label');
+        defByTermLabel.className = 'switch-label';
+
+        const defByTermCheckbox = document.createElement('input');
+        defByTermCheckbox.type = 'checkbox';
+        defByTermCheckbox.checked = this.settings.definitionByTerm;
+        defByTermCheckbox.addEventListener('change', (e) => {
+            this.settings.definitionByTerm = e.target.checked;
+            this.saveSettings();
+            this.updateGeneratorSettings();
+        });
+
+        const defByTermSpan = document.createElement('span');
+        defByTermSpan.textContent = 'Определение по термину';
+
+        defByTermLabel.appendChild(defByTermCheckbox);
+        defByTermLabel.appendChild(defByTermSpan);
+        modeGroup.appendChild(defByTermLabel);
+
+        // Режим: сопоставление
+        const matchingLabel = document.createElement('label');
+        matchingLabel.className = 'switch-label';
+
+        const matchingCheckbox = document.createElement('input');
+        matchingCheckbox.type = 'checkbox';
+        matchingCheckbox.checked = this.settings.matching;
+        matchingCheckbox.addEventListener('change', (e) => {
+            this.settings.matching = e.target.checked;
+            this.saveSettings();
+            this.updateGeneratorSettings();
+        });
+
+        const matchingSpan = document.createElement('span');
+        matchingSpan.textContent = 'Сопоставление';
+
+        matchingLabel.appendChild(matchingCheckbox);
+        matchingLabel.appendChild(matchingSpan);
+        modeGroup.appendChild(matchingLabel);
+
+        this.elements.sectionsContainer.appendChild(modeGroup);
+    }
+
     // Рендеринг UI для выбора разделов
     renderSectionsUI(sectionsByClass) {
         this.elements.sectionsContainer.innerHTML = '';
+
+        // Добавляем выбор режимов работы
+        this.renderModeSettings();
+
+        // Добавляем заголовок для разделов
+        const sectionsHeader = document.createElement('div');
+        sectionsHeader.className = 'settings-group';
+        const sectionsTitle = document.createElement('h3');
+        sectionsTitle.textContent = 'Разделы';
+        sectionsTitle.style.marginBottom = '16px';
+        sectionsHeader.appendChild(sectionsTitle);
+        this.elements.sectionsContainer.appendChild(sectionsHeader);
 
         // Сортируем классы
         const classes = Object.keys(sectionsByClass).sort((a, b) => parseInt(a) - parseInt(b));
@@ -243,22 +335,169 @@ class DefinitionsTrainer extends BaseTrainer {
             return;
         }
 
-        // Отображаем определение
-        this.elements.definitionElem.textContent = problem.definition;
+        // Сбрасываем состояние режима сопоставления
+        this.selectedTerm = null;
+        this.selectedDefinition = null;
+        this.matchedPairs = new Set();
 
-        // Создаём кнопки с вариантами ответов
-        this.createAnswerButtons(problem.answers);
+        if (problem.mode === 'matching') {
+            // Режим сопоставления
+            this.displayMatchingProblem(problem);
+        } else {
+            // Обычные режимы (выбор из 4 вариантов)
+            this.elements.definitionElem.textContent = problem.question;
+            this.createAnswerButtons(problem.answers);
+        }
+
         this.isAnswering = false;
+    }
+
+    // Отображение режима сопоставления
+    displayMatchingProblem(problem) {
+        // Скрываем обычный вопрос и показываем два столбца
+        this.elements.definitionElem.textContent = 'Сопоставьте термины и определения';
+
+        // Очищаем контейнер и меняем его структуру
+        this.elements.answersContainer.innerHTML = '';
+        this.elements.answersContainer.classList.remove('single-column');
+        this.elements.answersContainer.classList.add('matching-mode');
+
+        // Создаем два столбца
+        const termsColumn = document.createElement('div');
+        termsColumn.className = 'matching-column terms-column';
+
+        const definitionsColumn = document.createElement('div');
+        definitionsColumn.className = 'matching-column definitions-column';
+
+        // Создаем кнопки для терминов
+        problem.terms.forEach(term => {
+            const button = document.createElement('button');
+            button.className = 'matching-button matching-term';
+            button.textContent = term.text;
+            button.dataset.id = term.id;
+
+            button.addEventListener('click', () => {
+                this.selectTerm(button, term.id);
+            });
+
+            termsColumn.appendChild(button);
+        });
+
+        // Создаем кнопки для определений
+        problem.definitions.forEach(def => {
+            const button = document.createElement('button');
+            button.className = 'matching-button matching-definition';
+            button.textContent = def.text;
+            button.dataset.id = def.id;
+
+            button.addEventListener('click', () => {
+                this.selectDefinition(button, def.id);
+            });
+
+            definitionsColumn.appendChild(button);
+        });
+
+        this.elements.answersContainer.appendChild(termsColumn);
+        this.elements.answersContainer.appendChild(definitionsColumn);
+    }
+
+    // Выбор термина
+    selectTerm(button, termId) {
+        // Если уже сопоставлен, игнорируем
+        if (this.matchedPairs.has(termId)) return;
+
+        // Снимаем выделение с предыдущего термина
+        const prevSelected = this.elements.answersContainer.querySelector('.matching-term.selected');
+        if (prevSelected) {
+            prevSelected.classList.remove('selected');
+        }
+
+        // Выделяем текущий
+        button.classList.add('selected');
+        this.selectedTerm = termId;
+
+        // Проверяем пару, если уже выбрано определение
+        if (this.selectedDefinition) {
+            this.checkPair();
+        }
+    }
+
+    // Выбор определения
+    selectDefinition(button, defId) {
+        // Если уже сопоставлено, игнорируем
+        if (this.matchedPairs.has(defId)) return;
+
+        // Снимаем выделение с предыдущего определения
+        const prevSelected = this.elements.answersContainer.querySelector('.matching-definition.selected');
+        if (prevSelected) {
+            prevSelected.classList.remove('selected');
+        }
+
+        // Выделяем текущее
+        button.classList.add('selected');
+        this.selectedDefinition = defId;
+
+        // Проверяем пару, если уже выбран термин
+        if (this.selectedTerm) {
+            this.checkPair();
+        }
+    }
+
+    // Проверка пары
+    checkPair() {
+        const isCorrect = this.selectedTerm === this.selectedDefinition;
+
+        if (isCorrect) {
+            // Правильно - отмечаем как сопоставленные
+            this.matchedPairs.add(this.selectedTerm);
+
+            const termButton = this.elements.answersContainer.querySelector(`.matching-term[data-id="${this.selectedTerm}"]`);
+            const defButton = this.elements.answersContainer.querySelector(`.matching-definition[data-id="${this.selectedDefinition}"]`);
+
+            termButton.classList.remove('selected');
+            termButton.classList.add('matched');
+            termButton.disabled = true;
+
+            defButton.classList.remove('selected');
+            defButton.classList.add('matched');
+            defButton.disabled = true;
+
+            // Проверяем, все ли пары сопоставлены
+            if (this.matchedPairs.size === this.currentProblem.count) {
+                this.handleCorrectAnswer();
+            }
+        } else {
+            // Неправильно - показываем ошибку
+            const termButton = this.elements.answersContainer.querySelector(`.matching-term[data-id="${this.selectedTerm}"]`);
+            const defButton = this.elements.answersContainer.querySelector(`.matching-definition[data-id="${this.selectedDefinition}"]`);
+
+            termButton.classList.add('wrong');
+            defButton.classList.add('wrong');
+
+            this.progressTracker.wrongAnswer();
+            this.showResultMessage(false);
+
+            setTimeout(() => {
+                termButton.classList.remove('wrong', 'selected');
+                defButton.classList.remove('wrong', 'selected');
+                this.updateProgressDisplay();
+            }, 1000);
+        }
+
+        // Сбрасываем выбор
+        this.selectedTerm = null;
+        this.selectedDefinition = null;
     }
 
     // Создание кнопок с вариантами ответов
     createAnswerButtons(answers) {
         this.elements.answersContainer.innerHTML = '';
+        this.elements.answersContainer.classList.remove('matching-mode');
 
         answers.forEach((answer) => {
             const button = document.createElement('button');
             button.className = 'answer-button';
-            button.textContent = answer.term;
+            button.textContent = answer.text;
 
             // При клике сразу проверяем ответ
             button.addEventListener('click', () => {
@@ -268,6 +507,33 @@ class DefinitionsTrainer extends BaseTrainer {
             });
 
             this.elements.answersContainer.appendChild(button);
+        });
+
+        // Определяем, нужно ли переключиться на одноколоночную сетку
+        this.adjustButtonLayout();
+    }
+
+    // Автоматическое определение макета кнопок
+    adjustButtonLayout() {
+        // Ждем следующий кадр, чтобы DOM обновился
+        requestAnimationFrame(() => {
+            const buttons = this.elements.answersContainer.querySelectorAll('.answer-button');
+            let maxHeight = 0;
+
+            // Находим максимальную высоту кнопки
+            buttons.forEach(button => {
+                const height = button.offsetHeight;
+                if (height > maxHeight) {
+                    maxHeight = height;
+                }
+            });
+
+            // Если кнопки слишком высокие (больше 80px), переключаемся на одноколоночный режим
+            if (maxHeight > 80) {
+                this.elements.answersContainer.classList.add('single-column');
+            } else {
+                this.elements.answersContainer.classList.remove('single-column');
+            }
         });
     }
 
@@ -346,6 +612,7 @@ class DefinitionsTrainer extends BaseTrainer {
     showNoOperationsMessage() {
         this.elements.problemDisplay.innerHTML = '<div class="no-operations-message">Не выбран ни один раздел в настройках 😢</div>';
         this.elements.answersContainer.innerHTML = '';
+        this.elements.answersContainer.classList.remove('matching-mode', 'single-column');
     }
 
     // Отключить поля ввода
