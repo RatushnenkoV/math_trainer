@@ -299,7 +299,8 @@ class TrigEquationsTrainer extends BaseTrainer {
             touchStartY = clientY;
             const transform = scroller.style.transform;
             const match = transform.match(/translate3d\(0,\s*([-\d.]+)px,\s*0\)/);
-            scrollerStartY = match ? parseFloat(match[1]) : 0;
+            // Если transform не найден, вычисляем позицию на основе текущего индекса
+            scrollerStartY = match ? parseFloat(match[1]) : (HEIGHT / 2 - ITEM_HEIGHT / 2 - selectedIndex * ITEM_HEIGHT);
             scroller.style.transition = 'none';
         };
 

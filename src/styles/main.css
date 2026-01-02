@@ -2339,7 +2339,7 @@ polynomial-simplification-trainer.active {
     position: relative;
     padding: 0 4px;
     white-space: nowrap;
-    color: #999999;
+    color: var(--tg-theme-hint-color, #999999);
     overflow: visible;
     height: 36px;
     line-height: 36px;
@@ -2347,7 +2347,7 @@ polynomial-simplification-trainer.active {
 }
 
 .picker-item.picker-item-selected {
-    color: #222;
+    color: var(--tg-theme-text-color, #222);
 }
 
 .picker-item .katex {
