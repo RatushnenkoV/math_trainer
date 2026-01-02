@@ -1,0 +1,13 @@
+/* Negatives Trainer */
+
+.input-group.negative-input input {
+    width: 110px;
+    padding: 14px;
+    font-size: 28px;
+    font-weight: 500;
+}
+
+.negative-display {
+    font-size: 36px;
+    font-weight: 500;
+}

@@ -1,0 +1,317 @@
+/* Trig Equations Trainer */
+
+.trig-equations-equation-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    overflow: hidden;
+    padding: 20px;
+}
+
+.trig-equations-equation {
+    font-size: clamp(20px, 5vw, 32px);
+    font-weight: 500;
+    text-align: center;
+    line-height: 1.6;
+    color: var(--tg-theme-text-color, #000000);
+    max-width: 100%;
+}
+
+/* Wheel Picker Styles (точная копия react-mobile-picker-scroll) */
+.picker-container {
+    z-index: 1;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    width: auto;
+    flex-shrink: 0;
+    display: inline-block;
+    margin: 0 2px;
+}
+
+/* Широкий picker для коэффициента */
+.picker-container.picker-wide {
+    min-width: 90px;
+    max-width: 140px;
+}
+
+/* Узкий picker для углов и периода */
+.picker-container.picker-narrow {
+    min-width: 60px;
+    max-width: 80px;
+}
+
+.picker-container,
+.picker-container *,
+.picker-container *:before,
+.picker-container *:after {
+    box-sizing: border-box;
+}
+
+.picker-inner {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    height: 216px; /* Стандартная высота picker */
+    padding: 0 5px;
+    font-size: 1.1em;
+    -webkit-mask-box-image: linear-gradient(to top, transparent, transparent 5%, white 20%, white 80%, transparent 95%, transparent);
+}
+
+.picker-column {
+    flex: 1 1;
+    position: relative;
+    max-height: 100%;
+    overflow: hidden;
+    text-align: center;
+}
+
+.picker-scroller {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    transition: 300ms;
+    transition-timing-function: ease-out;
+}
+
+.picker-item {
+    position: relative;
+    padding: 0 4px;
+    white-space: nowrap;
+    color: var(--tg-theme-hint-color, #999999);
+    overflow: visible;
+    height: 36px;
+    line-height: 36px;
+    cursor: pointer;
+}
+
+.picker-item.picker-item-selected {
+    color: var(--tg-theme-text-color, #222);
+}
+
+.picker-item .katex {
+    font-size: inherit;
+    color: inherit;
+}
+
+.picker-highlight {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 36px; /* Высота элемента */
+    margin-top: -18px; /* Половина высоты для центрирования */
+    pointer-events: none;
+}
+
+.picker-highlight:before,
+.picker-highlight:after {
+    content: ' ';
+    position: absolute;
+    left: 0;
+    right: 0;
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: #d9d9d9;
+}
+
+.picker-highlight:before {
+    top: 0;
+}
+
+.picker-highlight:after {
+    bottom: 0;
+}
+
+/* Answer Constructor */
+.answer-constructor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+}
+
+.answer-constructor-parts {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-size: 24px;
+    overflow-x: auto;
+}
+
+.constructor-label {
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--tg-theme-text-color, #000000);
+    white-space: nowrap;
+    line-height: 36px;
+}
+
+.constructor-select {
+    padding: 8px 12px;
+    font-size: 20px;
+    border: 2px solid var(--tg-theme-button-color, #3390ec);
+    border-radius: 8px;
+    background: var(--tg-theme-bg-color, #ffffff);
+    color: var(--tg-theme-text-color, #000000);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.constructor-select:focus {
+    outline: none;
+    border-color: var(--tg-theme-button-color, #3390ec);
+    box-shadow: 0 0 0 3px rgba(51, 144, 236, 0.1);
+}
+
+.constructor-select:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f0f0f0;
+}
+
+.constructor-input {
+    padding: 8px 12px;
+    font-size: 20px;
+    text-align: center;
+    border: 2px solid var(--tg-theme-button-color, #3390ec);
+    border-radius: 8px;
+    background: var(--tg-theme-bg-color, #ffffff);
+    color: var(--tg-theme-text-color, #000000);
+    min-width: 80px;
+    max-width: 150px;
+}
+
+.constructor-input:focus {
+    outline: none;
+    border-color: var(--tg-theme-button-color, #3390ec);
+    box-shadow: 0 0 0 3px rgba(51, 144, 236, 0.1);
+}
+
+.constructor-input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f0f0f0;
+}
+
+.angle-input {
+    width: 100px;
+}
+
+.period-input {
+    width: 80px;
+}
+
+.multiplier-input {
+    width: 50px;
+    min-width: 50px;
+    max-width: 50px;
+    padding: 8px 4px;
+}
+
+/* Убираем стрелочки у number input */
+.multiplier-input::-webkit-outer-spin-button,
+.multiplier-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.multiplier-input[type=number] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.angle-display,
+.period-display {
+    min-width: 60px;
+    padding: 8px 12px;
+    font-size: 20px;
+    text-align: center;
+    border: 2px solid var(--tg-theme-button-color, #3390ec);
+    border-radius: 8px;
+    background: var(--tg-theme-bg-color, #ffffff);
+    color: var(--tg-theme-text-color, #000000);
+    display: inline-block;
+}
+
+.angle-display .katex,
+.period-display .katex {
+    font-size: 20px;
+}
+
+/* Quick Select Buttons for Angles */
+.quick-select-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.quick-select-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--tg-theme-hint-color, #666);
+}
+
+.quick-select-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    align-items: center;
+}
+
+.quick-select-btn {
+    padding: 8px 14px;
+    font-size: 16px;
+    background: var(--tg-theme-secondary-bg-color, #f0f0f0);
+    color: var(--tg-theme-text-color, #000000);
+    border: 2px solid var(--tg-theme-button-color, #3390ec);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quick-select-btn:hover {
+    background: var(--tg-theme-button-color, #3390ec);
+    color: var(--tg-theme-button-text-color, #ffffff);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(51, 144, 236, 0.3);
+}
+
+.quick-select-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 4px rgba(51, 144, 236, 0.2);
+}
+
+.quick-select-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f0f0f0;
+}
+
+.quick-select-btn .katex {
+    font-size: 16px;
+}
+
+.quick-select-btn.selected {
+    background: var(--tg-theme-button-color, #3390ec);
+    color: var(--tg-theme-button-text-color, #ffffff);
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(51, 144, 236, 0.4);
+}

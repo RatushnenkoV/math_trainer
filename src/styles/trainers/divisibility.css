@@ -1,0 +1,61 @@
+/* Divisibility Trainer */
+
+.divisibility-question {
+    font-size: 24px;
+    text-align: center;
+    line-height: 1.5;
+    max-width: 600px;
+}
+
+.divisibility-number {
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--tg-theme-button-color, #3390ec);
+    display: inline-block;
+    padding: 4px 8px;
+}
+
+.divisibility-divisor {
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--tg-theme-button-color, #3390ec);
+    display: inline-block;
+    padding: 4px 8px;
+}
+
+.divisibility-buttons {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.divisibility-btn {
+    padding: 20px 60px;
+    font-size: 24px;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.2s, opacity 0.2s;
+    min-width: 140px;
+}
+
+.divisibility-btn:active {
+    transform: scale(0.95);
+    opacity: 0.8;
+}
+
+.divisibility-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.divisibility-btn.yes-btn {
+    background: #4caf50;
+    color: #ffffff;
+}
+
+.divisibility-btn.no-btn {
+    background: #f44336;
+    color: #ffffff;
+}

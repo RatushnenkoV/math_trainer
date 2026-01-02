@@ -11,6 +11,9 @@ const trainers = {};
 // Реестр загруженных тренажёров (для lazy loading)
 const loadedTrainers = new Set();
 
+// Реестр загруженных CSS файлов
+const loadedStyles = new Set();
+
 // Конфигурация тренажёров - единый источник информации
 const trainerConfig = {
     'multiplication-table-btn': {
@@ -107,6 +110,11 @@ const trainerConfig = {
         name: 'Приведение подобных',
         screen: 'polynomial-simplification-screen',
         trainer: 'polynomialSimplification'
+    },
+    'definitions-btn': {
+        name: 'Определения',
+        screen: 'definitions-screen',
+        trainer: 'definitions'
     }
 };
 
@@ -145,6 +153,26 @@ function loadScript(src) {
     });
 }
 
+// Функция для динамической загрузки CSS
+function loadCSS(href) {
+    // Если CSS уже загружен, просто возвращаем resolved promise
+    if (loadedStyles.has(href)) {
+        return Promise.resolve();
+    }
+
+    return new Promise((resolve, reject) => {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = href;
+        link.onload = () => {
+            loadedStyles.add(href);
+            resolve();
+        };
+        link.onerror = reject;
+        document.head.appendChild(link);
+    });
+}
+
 // Функция для динамической загрузки тренажёра
 async function loadTrainer(trainerName, showLoader = true) {
     // Если тренажёр уже загружен, просто возвращаем true
@@ -156,6 +184,30 @@ async function loadTrainer(trainerName, showLoader = true) {
     if (showLoader && LAZY_LOADING) {
         LoadingIndicator.show();
     }
+
+    // Маппинг CSS файлов для тренажеров
+    const trainerStyles = {
+        'multiplicationTable': 'src/styles/trainers/multiplication-table.css',
+        'squareRoots': null, // использует только общие стили
+        'fractions': null, // использует только общие стили
+        'fractionVisual': 'src/styles/trainers/fraction-visual.css',
+        'fractionSense': 'src/styles/trainers/fraction-sense.css',
+        'decimals': 'src/styles/trainers/decimals.css',
+        'negatives': 'src/styles/trainers/negatives.css',
+        'divisibility': 'src/styles/trainers/divisibility.css',
+        'linearEquations': 'src/styles/trainers/linear-equations.css',
+        'linearInequalities': 'src/styles/trainers/linear-inequalities.css',
+        'quadraticEquations': 'src/styles/trainers/quadratic-equations.css',
+        'quadraticInequalities': 'src/styles/trainers/quadratic-inequalities.css',
+        'trigonometry': 'src/styles/trainers/trigonometry.css',
+        'trigEquations': 'src/styles/trainers/trig-equations.css',
+        'percentages': null, // использует только общие стили
+        'systemOfEquations': 'src/styles/trainers/system-of-equations.css',
+        'systemOfInequalities': 'src/styles/trainers/system-of-inequalities.css',
+        'powers': null, // использует только общие стили
+        'polynomialSimplification': 'src/styles/trainers/polynomial-simplification.css',
+        'definitions': 'src/styles/trainers/definitions.css'
+    };
 
     const trainerScripts = {
         'multiplicationTable': [
@@ -254,6 +306,12 @@ async function loadTrainer(trainerName, showLoader = true) {
             'src/utils/generators/PolynomialSimplificationGenerator.js',
             'src/trainers/PolynomialSimplificationTrainer.js',
             'src/components/PolynomialSimplificationComponent.js'
+        ],
+        'definitions': [
+            'src/utils/data/definitionsData.js',
+            'src/utils/generators/DefinitionsGenerator.js',
+            'src/trainers/DefinitionsTrainer.js',
+            'src/components/DefinitionsComponent.js'
         ]
     };
 
@@ -264,6 +322,12 @@ async function loadTrainer(trainerName, showLoader = true) {
     }
 
     try {
+        // Загружаем CSS стили для тренажера (если есть)
+        const styleFile = trainerStyles[trainerName];
+        if (styleFile) {
+            await loadCSS(styleFile);
+        }
+
         // Загружаем скрипты последовательно
         for (const scriptPath of scripts) {
             await loadScript(scriptPath);
@@ -356,7 +420,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
     });
 
     // Скрываем все компоненты тренажеров
-    document.querySelectorAll('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, trig-equations-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer, polynomial-simplification-trainer').forEach(trainer => {
+    document.querySelectorAll('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, trig-equations-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer, polynomial-simplification-trainer, definitions-trainer').forEach(trainer => {
         trainer.classList.remove('active');
     });
 
@@ -366,7 +430,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
         targetScreen.classList.add('active');
 
         // Если экран находится внутри компонента тренажера, показываем этот компонент
-        const trainerComponent = targetScreen.closest('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, trig-equations-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer, polynomial-simplification-trainer');
+        const trainerComponent = targetScreen.closest('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, trig-equations-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer, polynomial-simplification-trainer, definitions-trainer');
         if (trainerComponent) {
             trainerComponent.classList.add('active');
         }
@@ -456,6 +520,7 @@ function handleBackButton() {
         case 'percentages-screen':
         case 'system-of-equations-screen':
         case 'system-of-inequalities-screen':
+        case 'definitions-screen':
             // Из экрана тренажёра возвращаемся в главное меню
             showScreen('main-menu');
             break;
@@ -562,6 +627,12 @@ function handleBackButton() {
             trainers.systemOfEquations.generateNewProblem();
             break;
 
+        case 'definitions-settings-screen':
+            // Из настроек определений возвращаемся к тренажёру определений
+            showScreen('definitions-screen');
+            trainers.definitions.generateNewProblem();
+            break;
+
         case 'main-menu':
             // Из главного меню закрываем приложение
             if (tg) {
@@ -628,6 +699,8 @@ function initHistoryNavigation() {
                 trainers.systemOfEquations.generateNewProblem();
             } else if (screenId === 'system-of-inequalities-screen') {
                 trainers.systemOfInequalities.generateNewProblem();
+            } else if (screenId === 'definitions-screen') {
+                trainers.definitions.generateNewProblem();
             }
         } else {
             // Если нет состояния, возвращаемся в главное меню

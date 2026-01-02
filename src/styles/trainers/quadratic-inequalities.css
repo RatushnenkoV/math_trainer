@@ -1,0 +1,58 @@
+/* Quadratic Inequalities Trainer */
+
+/* Number line with point controls */
+.number-line-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+
+.point-control-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid #007bff;
+    background: white;
+    color: #007bff;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    padding: 0;
+    line-height: 1;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.point-control-btn:hover:not(:disabled) {
+    background: #007bff;
+    color: white;
+    transform: scale(1.05);
+}
+
+.point-control-btn:active:not(:disabled) {
+    transform: scale(0.95);
+}
+
+.point-control-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    border-color: #ccc;
+    color: #ccc;
+}
+
+/* Position buttons at the top of the line */
+#remove-point-btn {
+    align-self: flex-start;
+    margin-top: 20px;
+}
+
+#add-point-btn {
+    align-self: flex-start;
+    margin-top: 20px;
+}

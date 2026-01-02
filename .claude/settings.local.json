@@ -11,7 +11,12 @@
       "Bash(git stash:*)",
       "Bash(dir:*)",
       "Bash(where:*)",
-      "Bash(start index.html)"
+      "Bash(start index.html)",
+      "Bash(mkdir:*)",
+      "Bash(python:*)",
+      "Bash(timeout 2 bash:*)",
+      "Bash(curl:*)",
+      "Bash(netstat:*)"
     ]
   }
 }

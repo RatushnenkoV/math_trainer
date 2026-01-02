@@ -1,0 +1,404 @@
+/* Fraction Visual Trainer */
+
+.fraction-visual-problem-display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 20px;
+    min-height: 50px;
+}
+
+.fraction-display-large {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 40px;
+    font-weight: 500;
+    gap: 4px;
+}
+
+.fraction-display-large .numerator {
+    padding: 2px 16px;
+}
+
+.fraction-display-large .fraction-line {
+    width: 100%;
+    height: 3px;
+    background: var(--tg-theme-text-color, #000000);
+    border-radius: 2px;
+}
+
+.fraction-display-large .denominator {
+    padding: 2px 16px;
+}
+
+/* Shapes container */
+.shapes-container {
+    display: grid;
+    gap: 10px;
+    padding: 5px 10px;
+    justify-items: center;
+    align-content: start;
+    max-width: 100%;
+    margin: 0 auto;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: calc(100vh - 260px);
+}
+
+/* Адаптивные размеры в зависимости от количества фигур */
+.shapes-container.shapes-1 {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.shapes-container.shapes-1-plus {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.shapes-container.shapes-2,
+.shapes-container.shapes-2-plus {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.shapes-container.shapes-3,
+.shapes-container.shapes-3-plus {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.shapes-container.shapes-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* Уменьшаем размер фигур при их большом количестве */
+.shapes-container.shapes-3 .shape,
+.shapes-container.shapes-3-plus .shape,
+.shapes-container.shapes-4 .shape,
+.shapes-container.shapes-3 .add-shape-placeholder,
+.shapes-container.shapes-3-plus .add-shape-placeholder {
+    width: min(180px, 42vw);
+    height: min(180px, 42vw);
+}
+
+.shapes-container.shapes-1 .shape,
+.shapes-container.shapes-1 .add-shape-placeholder {
+    width: min(300px, 90vw);
+    height: min(300px, 90vw);
+}
+
+.shapes-container.shapes-1-plus .shape,
+.shapes-container.shapes-1-plus .add-shape-placeholder {
+    width: min(220px, 42vw);
+    height: min(220px, 42vw);
+}
+
+.shapes-container.shapes-2 .shape,
+.shapes-container.shapes-2 .add-shape-placeholder {
+    width: min(220px, 42vw);
+    height: min(220px, 42vw);
+}
+
+.shapes-container.shapes-2-plus .shape,
+.shapes-container.shapes-2-plus .add-shape-placeholder {
+    width: min(180px, 40vw);
+    height: min(180px, 40vw);
+}
+
+.shapes-container.view-only {
+    pointer-events: none;
+}
+
+.shapes-container.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+/* Обёртка для фигуры с кнопками */
+.shape-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.shape {
+    width: min(300px, 90vw);
+    height: min(300px, 90vw);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Кнопки под фигурой */
+.shape-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+}
+
+.shape-fill-all-btn,
+.shape-delete-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid var(--tg-theme-button-color, #3390ec);
+    background: var(--tg-theme-bg-color, #ffffff);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--tg-theme-text-color, #000000);
+}
+
+.shape-fill-all-btn:hover,
+.shape-delete-btn:hover {
+    transform: scale(1.1);
+}
+
+.shape-fill-all-btn:active,
+.shape-delete-btn:active {
+    transform: scale(0.95);
+}
+
+.blue-circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--tg-theme-button-color, #3390ec);
+    display: block;
+}
+
+/* Заглушка для кнопки добавления фигуры */
+.add-shape-placeholder {
+    width: min(300px, 90vw);
+    height: min(300px, 90vw);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 3px dashed var(--tg-theme-button-color, #3390ec);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: rgba(51, 144, 236, 0.05);
+}
+
+.add-shape-placeholder:hover {
+    background: rgba(51, 144, 236, 0.15);
+    transform: scale(1.02);
+}
+
+.add-shape-placeholder:active {
+    transform: scale(0.98);
+}
+
+.add-shape-placeholder .plus-icon-large {
+    font-size: 80px;
+    font-weight: 200;
+    color: var(--tg-theme-button-color, #3390ec);
+    line-height: 1;
+}
+
+/* Circle shape */
+.shape.circle {
+    position: relative;
+}
+
+.circle-svg {
+    width: 100%;
+    height: 100%;
+}
+
+.circle-segment {
+    fill: var(--tg-theme-secondary-bg-color, #f0f0f0);
+    stroke: var(--tg-theme-text-color, #000000);
+    stroke-width: 0.02;
+    cursor: pointer;
+    transition: fill 0.2s;
+}
+
+.circle-segment:hover {
+    fill: rgba(51, 144, 236, 0.3);
+}
+
+.circle-segment.filled {
+    fill: var(--tg-theme-button-color, #3390ec);
+}
+
+/* Rectangle shape */
+.shape.rectangle {
+    display: grid;
+    gap: 2px;
+    width: 100%;
+    height: 100%;
+}
+
+.rectangle-segment {
+    background: var(--tg-theme-secondary-bg-color, #f0f0f0);
+    border: 1px solid var(--tg-theme-text-color, #000000);
+    cursor: pointer;
+    transition: background 0.2s;
+    border-radius: 4px;
+    min-height: 60px;
+    min-width: 30px;
+}
+
+.rectangle-segment:hover {
+    background: rgba(51, 144, 236, 0.3);
+}
+
+.rectangle-segment.filled {
+    background: var(--tg-theme-button-color, #3390ec);
+}
+
+/* Fraction input container */
+.fraction-input-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.fraction-input-visual {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.fraction-input-visual .input-group {
+    width: 100%;
+}
+
+.fraction-input-visual input {
+    width: 100px;
+    padding: 12px;
+    font-size: 28px;
+    text-align: center;
+    border: 2px solid var(--tg-theme-button-color, #3390ec);
+    border-radius: 8px;
+    background: var(--tg-theme-bg-color, #ffffff);
+    color: var(--tg-theme-text-color, #000000);
+}
+
+.fraction-input-visual input:focus {
+    outline: none;
+    border-color: var(--tg-theme-button-color, #3390ec);
+    box-shadow: 0 0 0 3px rgba(51, 144, 236, 0.1);
+}
+
+.fraction-input-visual input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f0f0f0;
+}
+
+.fraction-input-visual .fraction-line {
+    width: 100%;
+    height: 2px;
+    background: var(--tg-theme-text-color, #000000);
+    border-radius: 1px;
+}
+
+/* Уменьшаем отступы для кнопки проверить в визуализации дробей */
+#fraction-visual-screen .check-button {
+    margin-top: 8px;
+}
+
+/* Специальные стили для content в визуализации дробей */
+#fraction-visual-screen .content {
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+/* Адаптация при открытой клавиатуре */
+body.keyboard-open #fraction-visual-screen .header {
+    padding: 8px;
+}
+
+body.keyboard-open #fraction-visual-screen .content {
+    gap: 4px;
+    padding: 5px;
+}
+
+body.keyboard-open .fraction-visual-problem-display {
+    min-height: 35px;
+    padding: 3px 15px;
+}
+
+body.keyboard-open .fraction-display-large {
+    font-size: 28px;
+    gap: 2px;
+}
+
+/* При открытой клавиатуре все круги размещаются в одну строчку */
+body.keyboard-open .shapes-container {
+    gap: 6px;
+    padding: 3px 5px;
+    max-height: calc(100vh - 350px);
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr)) !important;
+    justify-content: center;
+}
+
+/* Уменьшаем размеры фигур при открытой клавиатуре - одна строчка для всех */
+body.keyboard-open .shapes-container .shape,
+body.keyboard-open .shapes-container .add-shape-placeholder {
+    width: min(80px, 22vw);
+    height: min(80px, 22vw);
+}
+
+/* Если всего 1 круг - размещаем по центру */
+body.keyboard-open .shapes-container.shapes-1 {
+    grid-template-columns: 1fr !important;
+    justify-items: center;
+}
+
+body.keyboard-open .shapes-container.shapes-1 .shape,
+body.keyboard-open .shapes-container.shapes-1 .add-shape-placeholder {
+    width: min(100px, 25vw);
+    height: min(100px, 25vw);
+}
+
+/* Если 2 круга - слева и справа */
+body.keyboard-open .shapes-container.shapes-1-plus,
+body.keyboard-open .shapes-container.shapes-2,
+body.keyboard-open .shapes-container.shapes-2-plus {
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr)) !important;
+}
+
+/* Если 3+ кругов - все в одну строчку */
+body.keyboard-open .shapes-container.shapes-3,
+body.keyboard-open .shapes-container.shapes-3-plus,
+body.keyboard-open .shapes-container.shapes-4 {
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr)) !important;
+}
+
+/* Скрываем кнопки под фигурами при открытой клавиатуре для экономии места */
+body.keyboard-open .shape-buttons {
+    display: none;
+}
+
+body.keyboard-open .fraction-input-container {
+    margin-top: 4px;
+}
+
+body.keyboard-open .fraction-input-visual {
+    font-size: 32px;
+}
+
+body.keyboard-open .fraction-input-visual input {
+    width: 80px;
+    font-size: 28px;
+    padding: 10px;
+}
+
+body.keyboard-open #fraction-visual-screen .check-button {
+    margin-top: 4px;
+    padding: 10px 20px;
+    font-size: 15px;
+}

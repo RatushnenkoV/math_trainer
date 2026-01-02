@@ -1,0 +1,42 @@
+/* Quadratic Equations Trainer */
+
+.quadratic-equations-equation-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    overflow: hidden;
+}
+
+.quadratic-equations-equation {
+    font-size: clamp(16px, 4vw, 28px);
+    font-weight: 500;
+    text-align: center;
+    line-height: 1.6;
+    padding: 20px;
+    white-space: nowrap;
+    color: var(--tg-theme-text-color, #000000);
+    max-width: 100%;
+}
+
+.quadratic-equations-input {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.quadratic-equations-input label {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--tg-theme-text-color, #000000);
+    flex-shrink: 0;
+}
+
+.quadratic-equations-input input {
+    flex: 1;
+    font-size: 22px;
+    min-width: 0;
+}

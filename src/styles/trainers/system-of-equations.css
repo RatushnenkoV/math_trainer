@@ -1,0 +1,30 @@
+/* System of Equations Trainer */
+
+.system-of-equations-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 20px;
+}
+
+.system-bracket {
+    font-size: 80px;
+    font-weight: 200;
+    color: var(--tg-theme-text-color, #000000);
+    line-height: 1;
+    margin-top: -10px;
+}
+
+.system-equations {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.system-equation {
+    font-size: 24px;
+    min-height: 30px;
+    display: flex;
+    align-items: center;
+}

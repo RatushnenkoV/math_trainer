@@ -1,0 +1,102 @@
+/* Linear Inequalities Trainer */
+
+.linear-inequalities-inequality-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    overflow: hidden;
+}
+
+.linear-inequalities-inequality {
+    font-size: clamp(20px, 5vw, 32px);
+    font-weight: 500;
+    text-align: center;
+    line-height: 1.6;
+    padding: 20px;
+    white-space: nowrap;
+    color: var(--tg-theme-text-color, #000000);
+    max-width: 100%;
+}
+
+/* Number Line Container */
+.number-line-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 650px;
+    padding: 10px;
+}
+
+#number-line-svg {
+    width: 100%;
+    max-width: 600px;
+    height: 140px;
+    user-select: none;
+}
+
+#number-line-svg .region {
+    transition: fill 0.2s ease;
+}
+
+#number-line-svg .region:hover {
+    opacity: 0.8;
+}
+
+#number-line-svg #critical-point {
+    transition: fill 0.2s ease;
+}
+
+#number-line-svg #critical-point:hover {
+    stroke-width: 3;
+}
+
+.point-input-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.point-input-container label {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--tg-theme-text-color, #000000);
+    white-space: nowrap;
+}
+
+.point-input-container input {
+    flex: 1;
+    padding: 10px;
+    font-size: 18px;
+    text-align: center;
+    border: 2px solid var(--tg-theme-button-color, #3390ec);
+    border-radius: 8px;
+    background: var(--tg-theme-bg-color, #ffffff);
+    color: var(--tg-theme-text-color, #000000);
+    min-width: 0;
+}
+
+.point-input-container input:focus {
+    outline: none;
+    border-color: var(--tg-theme-button-color, #3390ec);
+    box-shadow: 0 0 0 3px rgba(51, 144, 236, 0.1);
+}
+
+.point-input-container input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f0f0f0;
+}
+
+.instructions {
+    font-size: 14px;
+    color: var(--tg-theme-hint-color, #999999);
+    text-align: center;
+    line-height: 1.5;
+    max-width: 500px;
+}

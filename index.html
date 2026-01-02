@@ -7,7 +7,12 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <!-- Базовые стили -->
     <link rel="stylesheet" href="src/styles/main.css">
+    <!-- Общие компоненты -->
+    <link rel="stylesheet" href="src/styles/common/components.css">
+    <link rel="stylesheet" href="src/styles/common/animations.css">
+    <!-- Стили для отдельных тренажеров загружаются динамически -->
 </head>
 <body>
     <div id="app">
@@ -112,6 +117,19 @@
                         <div class="menu-buttons-container">
                             <button id="trigonometry-btn" class="menu-button">Табличные значения</button>
                             <button id="trig-equations-btn" class="menu-button">Простейшие уравнения (тестируется)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Геометрия -->
+                <div class="menu-section">
+                    <div class="section-header" data-section="geometry">
+                        <h2>📏 Геометрия</h2>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content" data-section="geometry">
+                        <div class="menu-buttons-container">
+                            <button id="definitions-btn" class="menu-button">Определения</button>
                         </div>
                     </div>
                 </div>

@@ -1,0 +1,569 @@
+/* Переиспользуемые компоненты */
+
+/* Header */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: var(--tg-theme-secondary-bg-color, #f0f0f0);
+    gap: 12px;
+}
+
+.icon-button {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: var(--tg-theme-button-color, #3390ec);
+    color: var(--tg-theme-button-text-color, #ffffff);
+    border-radius: 8px;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, opacity 0.2s;
+    flex-shrink: 0;
+}
+
+.icon-button:active {
+    transform: scale(0.9);
+    opacity: 0.8;
+}
+
+/* Progress Bar */
+.progress-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--tg-theme-text-color, #000000);
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--tg-theme-button-color, #3390ec);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+    width: 0%;
+}
+
+/* Content */
+.content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    gap: 40px;
+}
+
+/* Problem Display */
+.problem-display {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 36px;
+    font-weight: 500;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    max-width: 100%;
+}
+
+.expression-display {
+    display: inline-block;
+    max-width: 100%;
+}
+
+/* Автоматическое масштабирование KaTeX формул */
+.expression-display .katex {
+    font-size: clamp(1rem, 4vw, 2.5rem);
+}
+
+.expression-display .katex-html {
+    white-space: nowrap;
+}
+
+/* Fraction Display */
+.fraction-display {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.fraction-display .whole {
+    font-size: 36px;
+    align-self: center;
+}
+
+.fraction-display .frac {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.fraction-display .numerator {
+    font-size: 24px;
+    line-height: 1;
+    padding-bottom: 2px;
+}
+
+.fraction-display .fraction-line {
+    width: 100%;
+    min-width: 40px;
+    height: 2px;
+    background: currentColor;
+}
+
+.fraction-display .denominator {
+    font-size: 24px;
+    line-height: 1;
+    padding-top: 2px;
+}
+
+/* Common operators */
+.operator {
+    font-size: 36px;
+    font-weight: 600;
+}
+
+.equals {
+    font-size: 36px;
+}
+
+.parenthesis {
+    font-size: 36px;
+    font-weight: 400;
+}
+
+.minus {
+    font-size: 36px;
+    font-weight: 400;
+    margin-right: 4px;
+}
+
+.question {
+    font-size: 36px;
+    color: var(--tg-theme-hint-color, #999999);
+}
+
+/* Answer Input */
+.answer-input {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: center;
+}
+
+.input-group label {
+    font-size: 11px;
+    color: var(--tg-theme-hint-color, #999999);
+    font-weight: 500;
+    text-align: center;
+}
+
+.input-group input {
+    width: 70px;
+    padding: 10px;
+    font-size: 20px;
+    text-align: center;
+    border: 2px solid var(--tg-theme-button-color, #3390ec);
+    border-radius: 8px;
+    background: var(--tg-theme-bg-color, #ffffff);
+    color: var(--tg-theme-text-color, #000000);
+    -moz-appearance: textfield;
+}
+
+.input-group input[type="text"] {
+    width: 150px;
+}
+
+.input-group input::-webkit-outer-spin-button,
+.input-group input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--tg-theme-button-color, #3390ec);
+    box-shadow: 0 0 0 3px rgba(51, 144, 236, 0.1);
+}
+
+.input-group input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f0f0f0;
+}
+
+.input-group.whole-input {
+    align-self: center;
+}
+
+.input-group.whole-input input {
+    width: 90px;
+    padding: 14px;
+    font-size: 28px;
+    font-weight: 500;
+}
+
+.fraction-input {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.fraction-input .input-group {
+    width: 100%;
+}
+
+.fraction-input .fraction-line {
+    width: 100%;
+    min-width: 80px;
+    height: 2px;
+    background: var(--tg-theme-text-color, #000000);
+}
+
+/* Check Button */
+.check-button {
+    padding: 16px 48px;
+    font-size: 18px;
+    font-weight: 600;
+    background: var(--tg-theme-button-color, #3390ec);
+    color: var(--tg-theme-button-text-color, #ffffff);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.2s, opacity 0.2s;
+    margin-top: 20px;
+}
+
+.check-button:active {
+    transform: scale(0.95);
+    opacity: 0.8;
+}
+
+.check-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #ccc;
+}
+
+/* Result Message */
+.result-message {
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 16px;
+    min-height: 30px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.result-message.show {
+    opacity: 1;
+}
+
+.result-message.correct {
+    color: #4caf50;
+}
+
+.result-message.wrong {
+    color: #f44336;
+}
+
+/* Settings Screen */
+.settings-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.settings-group {
+    margin-bottom: 32px;
+}
+
+.settings-group h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--tg-theme-text-color, #000000);
+}
+
+/* Settings header */
+#settings-screen .header h2,
+#decimals-settings-screen .header h2,
+#multiplication-table-settings-screen .header h2,
+#divisibility-settings-screen .header h2,
+#linear-equations-settings-screen .header h2,
+#quadratic-equations-settings-screen .header h2,
+#trigonometry-settings-screen .header h2,
+#trig-equations-settings-screen .header h2,
+#linear-inequalities-settings-screen .header h2,
+#quadratic-inequalities-settings-screen .header h2,
+#percentages-settings-screen .header h2,
+#system-of-equations-settings-screen .header h2,
+#fraction-visual-settings-screen .header h2,
+#fraction-sense-settings-screen .header h2,
+#powers-settings-screen .header h2,
+#square-roots-settings-screen .header h2 {
+    flex: 1;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* Switch */
+.switch-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: var(--tg-theme-secondary-bg-color, #f0f0f0);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.switch-label:active {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.switch-label span {
+    font-size: 16px;
+    color: var(--tg-theme-text-color, #000000);
+}
+
+.switch-label input[type="checkbox"] {
+    width: 48px;
+    height: 28px;
+    position: relative;
+    appearance: none;
+    background: #ccc;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.switch-label input[type="checkbox"]:checked {
+    background: var(--tg-theme-button-color, #3390ec);
+}
+
+.switch-label input[type="checkbox"]::before {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: white;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s;
+}
+
+.switch-label input[type="checkbox"]:checked::before {
+    transform: translateX(20px);
+}
+
+/* Radio buttons */
+.radio-label {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    background: var(--tg-theme-secondary-bg-color, #f0f0f0);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.radio-label:active {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.radio-label input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
+    cursor: pointer;
+    accent-color: var(--tg-theme-button-color, #3390ec);
+}
+
+.radio-label span {
+    font-size: 16px;
+    color: var(--tg-theme-text-color, #000000);
+}
+
+/* Unified Slider */
+.slider,
+.custom-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    background: rgba(51, 144, 236, 0.3);
+    outline: none;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.slider::-webkit-slider-thumb,
+.custom-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--tg-theme-button-color, #3390ec);
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.slider::-webkit-slider-thumb:hover,
+.custom-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+    box-shadow: 0 3px 12px rgba(51, 144, 236, 0.4);
+}
+
+.slider::-webkit-slider-thumb:active,
+.custom-slider::-webkit-slider-thumb:active {
+    transform: scale(1.2);
+    box-shadow: 0 4px 16px rgba(51, 144, 236, 0.5);
+}
+
+.slider::-moz-range-thumb,
+.custom-slider::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    border: none;
+    border-radius: 50%;
+    background: var(--tg-theme-button-color, #3390ec);
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.slider::-moz-range-thumb:hover,
+.custom-slider::-moz-range-thumb:hover {
+    transform: scale(1.1);
+    box-shadow: 0 3px 12px rgba(51, 144, 236, 0.4);
+}
+
+.slider::-moz-range-thumb:active,
+.custom-slider::-moz-range-thumb:active {
+    transform: scale(1.2);
+    box-shadow: 0 4px 16px rgba(51, 144, 236, 0.5);
+}
+
+.slider::-moz-range-track,
+.custom-slider::-moz-range-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    height: 8px;
+}
+
+/* Slider Container */
+.slider-container {
+    padding: 16px;
+    background: var(--tg-theme-secondary-bg-color, #f0f0f0);
+    border-radius: 12px;
+    margin-top: 12px;
+}
+
+.slider-label {
+    display: block;
+    margin-bottom: 16px;
+}
+
+.slider-label span {
+    font-size: 16px;
+    color: var(--tg-theme-text-color, #000000);
+}
+
+.slider-label strong {
+    color: var(--tg-theme-button-color, #3390ec);
+    font-size: 20px;
+}
+
+/* Slider Markers/Labels */
+.slider-markers,
+.slider-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    padding: 0 4px;
+}
+
+.slider-markers span,
+.slider-labels span {
+    font-size: 12px;
+    color: var(--tg-theme-hint-color, #999999);
+    font-weight: 500;
+}
+
+/* Answer Buttons (для викторин) */
+.answer-button {
+    padding: 12px 16px;
+    font-size: 18px;
+    font-weight: 500;
+    background: var(--tg-theme-secondary-bg-color, #f0f0f0);
+    color: var(--tg-theme-text-color, #000000);
+    border: 2px solid transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 54px;
+}
+
+.answer-button:hover {
+    background: var(--tg-theme-button-color, #3390ec);
+    color: var(--tg-theme-button-text-color, #ffffff);
+}
+
+.answer-button.selected {
+    background: var(--tg-theme-button-color, #3390ec);
+    color: var(--tg-theme-button-text-color, #ffffff);
+    border-color: var(--tg-theme-button-color, #3390ec);
+}
+
+.answer-button:active {
+    transform: scale(0.98);
+}
+
+.answer-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

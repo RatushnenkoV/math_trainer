@@ -1,0 +1,13 @@
+/* Decimals Trainer */
+
+.input-group.decimal-input input {
+    width: 200px;
+    padding: 14px;
+    font-size: 28px;
+    font-weight: 500;
+}
+
+.decimal-display {
+    font-size: 36px;
+    font-weight: 500;
+}
