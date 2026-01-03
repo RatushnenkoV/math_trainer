@@ -16,6 +16,12 @@ class PolynomialExpandTrainer extends BaseTrainer {
 
         this.monomialInputs = [];
         this.draggedVariable = null;
+
+        // Для touch events
+        this.touchStartX = 0;
+        this.touchStartY = 0;
+        this.touchElement = null;
+        this.clone = null;
     }
 
     initDOM() {
@@ -85,6 +91,7 @@ class PolynomialExpandTrainer extends BaseTrainer {
             varElement.className = 'variable-chip';
             varElement.textContent = variable;
             varElement.draggable = true;
+            varElement.dataset.variable = variable;
 
             varElement.addEventListener('dragstart', (e) => {
                 e.dataTransfer.setData('text/plain', variable);
@@ -102,6 +109,11 @@ class PolynomialExpandTrainer extends BaseTrainer {
                     lastMonomial.addVariable(variable);
                 }
             });
+
+            // Touch events для мобильных устройств
+            varElement.addEventListener('touchstart', (e) => this.handleVariableTouchStart(e, variable), { passive: false });
+            varElement.addEventListener('touchmove', (e) => this.handleVariableTouchMove(e), { passive: false });
+            varElement.addEventListener('touchend', (e) => this.handleVariableTouchEnd(e, variable), { passive: false });
 
             this.elements.variablesPanel.appendChild(varElement);
         });
@@ -291,6 +303,19 @@ class PolynomialExpandTrainer extends BaseTrainer {
         super.disableInputs();
         this.elements.answerContainer.classList.add('disabled');
         this.elements.addMonomialBtn.disabled = true;
+
+        // Очищаем touch состояние, если оно было активно
+        if (this.clone) {
+            this.clone.remove();
+            this.clone = null;
+        }
+        if (this.touchElement) {
+            this.touchElement.style.opacity = '1';
+            this.touchElement = null;
+        }
+        document.querySelectorAll('.monomial-input').forEach(el => {
+            el.classList.remove('drag-over');
+        });
     }
 
     enableInputs() {
@@ -393,5 +418,96 @@ class PolynomialExpandTrainer extends BaseTrainer {
         if (targetScreen) {
             targetScreen.style.display = 'flex';
         }
+    }
+
+    // Touch events для мобильных устройств
+    handleVariableTouchStart(e, variable) {
+        e.preventDefault();
+
+        this.touchElement = e.target;
+        if (!this.touchElement) return;
+
+        const touch = e.touches[0];
+        this.touchStartX = touch.clientX;
+        this.touchStartY = touch.clientY;
+
+        // Создаём клон элемента для визуального перетаскивания
+        this.clone = this.touchElement.cloneNode(true);
+        this.clone.classList.add('variable-chip-dragging-clone');
+        this.clone.style.position = 'fixed';
+        this.clone.style.zIndex = '1000';
+        this.clone.style.pointerEvents = 'none';
+        this.clone.style.left = touch.clientX + 'px';
+        this.clone.style.top = touch.clientY + 'px';
+        this.clone.style.transform = 'translate(-50%, -50%)';
+        document.body.appendChild(this.clone);
+
+        // Добавляем класс к оригинальному элементу
+        this.touchElement.style.opacity = '0.5';
+    }
+
+    handleVariableTouchMove(e) {
+        if (!this.touchElement || !this.clone) return;
+        e.preventDefault();
+
+        const touch = e.touches[0];
+
+        // Перемещаем клон
+        this.clone.style.left = touch.clientX + 'px';
+        this.clone.style.top = touch.clientY + 'px';
+
+        // Находим элемент под пальцем
+        this.clone.style.display = 'none';
+        const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+        this.clone.style.display = '';
+
+        // Убираем подсветку со всех мономов
+        document.querySelectorAll('.monomial-input').forEach(el => {
+            el.classList.remove('drag-over');
+        });
+
+        // Добавляем подсветку целевому элементу
+        const targetElement = elementBelow?.closest('.monomial-input');
+        if (targetElement) {
+            targetElement.classList.add('drag-over');
+        }
+    }
+
+    handleVariableTouchEnd(e, variable) {
+        if (!this.touchElement) return;
+        e.preventDefault();
+
+        const touch = e.changedTouches[0];
+
+        // Находим элемент под пальцем
+        if (this.clone) {
+            this.clone.style.display = 'none';
+        }
+        const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+
+        // Удаляем клон
+        if (this.clone) {
+            this.clone.remove();
+            this.clone = null;
+        }
+
+        // Восстанавливаем оригинальный элемент
+        this.touchElement.style.opacity = '1';
+
+        // Убираем подсветку
+        document.querySelectorAll('.monomial-input').forEach(el => {
+            el.classList.remove('drag-over');
+        });
+
+        // Обрабатываем drop
+        const targetMonomial = elementBelow?.closest('.monomial-input');
+        if (targetMonomial) {
+            const index = parseInt(targetMonomial.dataset.index);
+            if (!isNaN(index) && this.monomialInputs[index]) {
+                this.monomialInputs[index].addVariable(variable);
+            }
+        }
+
+        this.touchElement = null;
     }
 }

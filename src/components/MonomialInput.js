@@ -34,8 +34,11 @@ class MonomialInput {
 
     updateContent(contentElement) {
         if (!contentElement) {
+            if (!this.element) return;
             contentElement = this.element.querySelector('.monomial-content');
         }
+
+        if (!contentElement) return;
 
         contentElement.innerHTML = '';
 
@@ -65,67 +68,179 @@ class MonomialInput {
         const wrapper = document.createElement('div');
         wrapper.className = 'variable-wrapper';
 
-        const upBtn = document.createElement('button');
-        upBtn.className = 'var-button var-up';
-        upBtn.innerHTML = '▲';
-        upBtn.addEventListener('click', () => this.incrementValue(variable));
-
-        const display = document.createElement('div');
-        display.className = 'variable-display';
-
-        if (variable === 'coeff') {
-            display.textContent = value;
-        } else {
-            if (value === 1) {
-                display.textContent = variable;
-            } else {
-                display.innerHTML = `${variable}<sup>${value}</sup>`;
-            }
-        }
-
-        const downBtn = document.createElement('button');
-        downBtn.className = 'var-button var-down';
-        downBtn.innerHTML = '▼';
-        downBtn.addEventListener('click', () => this.decrementValue(variable));
-
-        wrapper.appendChild(upBtn);
-        wrapper.appendChild(display);
-        wrapper.appendChild(downBtn);
+        const wheel = this.createValueWheel(variable, value);
+        wrapper.appendChild(wheel);
 
         return wrapper;
     }
 
-    incrementValue(variable) {
-        if (variable === 'coeff') {
-            this.coefficient++;
-        } else {
-            this.variables[variable] = (this.variables[variable] || 0) + 1;
-        }
-        this.updateContent();
-        this.onUpdate();
-    }
+    createValueWheel(variable, initialValue) {
+        const ITEM_HEIGHT = 36;
+        const HEIGHT = 108;
 
-    decrementValue(variable) {
+        // Генерируем значения для колеса
+        let values;
         if (variable === 'coeff') {
-            this.coefficient--;
-            if (this.coefficient < 0) this.coefficient = 0;
+            values = Array.from({ length: 21 }, (_, i) => i); // 0 до 20
         } else {
-            if (this.variables[variable] > 0) {
-                this.variables[variable]--;
-                if (this.variables[variable] === 0) {
-                    delete this.variables[variable];
+            values = Array.from({ length: 10 }, (_, i) => i); // 0 до 9
+        }
+
+        const container = document.createElement('div');
+        container.className = 'picker-container picker-value';
+
+        const inner = document.createElement('div');
+        inner.className = 'picker-inner';
+
+        const column = document.createElement('div');
+        column.className = 'picker-column';
+
+        const scroller = document.createElement('div');
+        scroller.className = 'picker-scroller';
+
+        let selectedIndex = values.indexOf(initialValue);
+        if (selectedIndex === -1) selectedIndex = variable === 'coeff' ? 1 : 0;
+
+        let touchStartY = 0;
+        let scrollerStartY = 0;
+        let currentScrollY = 0;
+        let lastWheelTime = 0;
+        const wheelThrottle = 150;
+
+        values.forEach((val, index) => {
+            const item = document.createElement('div');
+            item.className = 'picker-item';
+            item.dataset.index = index;
+            item.dataset.value = val;
+
+            if (variable === 'coeff') {
+                item.textContent = val;
+            } else {
+                if (val === 0) {
+                    item.textContent = '';
+                } else if (val === 1) {
+                    item.textContent = variable;
+                } else {
+                    const span = document.createElement('span');
+                    span.innerHTML = `${variable}<sup>${val}</sup>`;
+                    item.appendChild(span);
                 }
             }
-        }
 
-        if (this.coefficient === 0 && Object.keys(this.variables).length === 0) {
-            this.onRemove(this.index);
-            return;
-        }
+            scroller.appendChild(item);
+        });
 
-        this.updateContent();
-        this.onUpdate();
+        const highlight = document.createElement('div');
+        highlight.className = 'picker-highlight';
+
+        const updateSelection = () => {
+            const items = scroller.querySelectorAll('.picker-item');
+            items.forEach((item, i) => {
+                if (i === selectedIndex) {
+                    item.classList.add('picker-item-selected');
+                } else {
+                    item.classList.remove('picker-item-selected');
+                }
+            });
+        };
+
+        const scrollToIndex = (index) => {
+            const newIndex = Math.max(0, Math.min(values.length - 1, index));
+            selectedIndex = newIndex;
+            const y = HEIGHT / 2 - ITEM_HEIGHT / 2 - selectedIndex * ITEM_HEIGHT;
+            currentScrollY = y;
+            scroller.style.transform = `translate3d(0, ${y}px, 0)`;
+            updateSelection();
+
+            const newValue = values[selectedIndex];
+            if (variable === 'coeff') {
+                this.coefficient = newValue;
+            } else {
+                if (newValue === 0) {
+                    delete this.variables[variable];
+                } else {
+                    this.variables[variable] = newValue;
+                }
+            }
+
+            // Проверяем, нужно ли удалить одночлен
+            if (this.coefficient === 0 && Object.keys(this.variables).length === 0) {
+                this.onRemove(this.index);
+                return;
+            }
+
+            this.onUpdate();
+        };
+
+        const handleTouchStart = (clientY) => {
+            touchStartY = clientY;
+            scrollerStartY = currentScrollY;
+            scroller.style.transition = 'none';
+        };
+
+        const handleTouchMove = (clientY) => {
+            const deltaY = clientY - touchStartY;
+            const y = scrollerStartY + deltaY;
+            currentScrollY = y;
+            scroller.style.transform = `translate3d(0, ${y}px, 0)`;
+        };
+
+        const handleTouchEnd = () => {
+            const finalY = currentScrollY;
+            const rawIndex = (HEIGHT / 2 - ITEM_HEIGHT / 2 - finalY) / ITEM_HEIGHT;
+            const index = Math.round(rawIndex);
+            const clampedIndex = Math.max(0, Math.min(values.length - 1, index));
+            scroller.style.transition = '300ms';
+            scrollToIndex(clampedIndex);
+            touchStartY = 0;
+        };
+
+        column.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            handleTouchStart(e.touches[0].clientY);
+        }, { passive: false });
+
+        column.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            handleTouchMove(e.touches[0].clientY);
+        }, { passive: false });
+
+        column.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            handleTouchEnd();
+        }, { passive: false });
+
+        column.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const now = Date.now();
+            if (now - lastWheelTime < wheelThrottle) {
+                return;
+            }
+            lastWheelTime = now;
+            const delta = e.deltaY > 0 ? 1 : -1;
+            scrollToIndex(selectedIndex + delta);
+        }, { passive: false });
+
+        scroller.addEventListener('click', (e) => {
+            const item = e.target.closest('.picker-item');
+            if (item) {
+                const index = parseInt(item.dataset.index);
+                if (!isNaN(index)) {
+                    scrollToIndex(index);
+                }
+            }
+        });
+
+        scrollToIndex(selectedIndex);
+
+        column.appendChild(scroller);
+        column.appendChild(highlight);
+        inner.appendChild(column);
+        container.appendChild(inner);
+
+        return container;
     }
+
 
     handleDragOver(e) {
         e.preventDefault();
