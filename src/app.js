@@ -111,6 +111,11 @@ const trainerConfig = {
         screen: 'polynomial-simplification-screen',
         trainer: 'polynomialSimplification'
     },
+    'polynomial-expand-btn': {
+        name: 'Раскрытие скобок',
+        screen: 'polynomial-expand-screen',
+        trainer: 'polynomialExpand'
+    },
     'definitions-btn': {
         name: 'Определения',
         screen: 'definitions-screen',
@@ -206,6 +211,7 @@ async function loadTrainer(trainerName, showLoader = true) {
         'systemOfInequalities': 'src/styles/trainers/system-of-inequalities.css',
         'powers': null, // использует только общие стили
         'polynomialSimplification': 'src/styles/trainers/polynomial-simplification.css',
+        'polynomialExpand': 'src/styles/trainers/polynomial-expand.css',
         'definitions': 'src/styles/trainers/definitions.css'
     };
 
@@ -306,6 +312,12 @@ async function loadTrainer(trainerName, showLoader = true) {
             'src/utils/generators/PolynomialSimplificationGenerator.js',
             'src/trainers/PolynomialSimplificationTrainer.js',
             'src/components/PolynomialSimplificationComponent.js'
+        ],
+        'polynomialExpand': [
+            'src/components/MonomialInput.js',
+            'src/utils/generators/PolynomialExpandGenerator.js',
+            'src/trainers/PolynomialExpandTrainer.js',
+            'src/components/PolynomialExpandComponent.js'
         ],
         'definitions': [
             'src/utils/data/definitionsData.js',
@@ -420,7 +432,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
     });
 
     // Скрываем все компоненты тренажеров
-    document.querySelectorAll('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, trig-equations-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer, polynomial-simplification-trainer, definitions-trainer').forEach(trainer => {
+    document.querySelectorAll('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, trig-equations-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer, polynomial-simplification-trainer, polynomial-expand-trainer, definitions-trainer').forEach(trainer => {
         trainer.classList.remove('active');
     });
 
@@ -430,7 +442,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
         targetScreen.classList.add('active');
 
         // Если экран находится внутри компонента тренажера, показываем этот компонент
-        const trainerComponent = targetScreen.closest('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, trig-equations-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer, polynomial-simplification-trainer, definitions-trainer');
+        const trainerComponent = targetScreen.closest('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, trig-equations-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer, polynomial-simplification-trainer, polynomial-expand-trainer, definitions-trainer');
         if (trainerComponent) {
             trainerComponent.classList.add('active');
         }
@@ -520,6 +532,7 @@ function handleBackButton() {
         case 'percentages-screen':
         case 'system-of-equations-screen':
         case 'system-of-inequalities-screen':
+        case 'polynomial-expand-screen':
         case 'definitions-screen':
             // Из экрана тренажёра возвращаемся в главное меню
             showScreen('main-menu');
@@ -627,6 +640,12 @@ function handleBackButton() {
             trainers.systemOfEquations.generateNewProblem();
             break;
 
+        case 'polynomial-expand-settings-screen':
+            // Из настроек раскрытия скобок возвращаемся к тренажёру раскрытия скобок
+            showScreen('polynomial-expand-screen');
+            trainers.polynomialExpand.generateNewProblem();
+            break;
+
         case 'definitions-settings-screen':
             // Из настроек определений возвращаемся к тренажёру определений
             showScreen('definitions-screen');
@@ -699,6 +718,8 @@ function initHistoryNavigation() {
                 trainers.systemOfEquations.generateNewProblem();
             } else if (screenId === 'system-of-inequalities-screen') {
                 trainers.systemOfInequalities.generateNewProblem();
+            } else if (screenId === 'polynomial-expand-screen') {
+                trainers.polynomialExpand.generateNewProblem();
             } else if (screenId === 'definitions-screen') {
                 trainers.definitions.generateNewProblem();
             }

@@ -16,7 +16,9 @@
       "Bash(python:*)",
       "Bash(timeout 2 bash:*)",
       "Bash(curl:*)",
-      "Bash(netstat:*)"
+      "Bash(netstat:*)",
+      "Bash(node:*)",
+      "Bash(node -c:*)"
     ]
   }
 }
