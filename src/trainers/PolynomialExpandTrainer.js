@@ -356,6 +356,7 @@ class PolynomialExpandTrainer extends BaseTrainer {
         this.disableInputs();
         this.showEmoji(false);
         this.progressTracker.wrongAnswer();
+        this.updateProgressDisplay();
 
         setTimeout(() => {
             this.enableInputs();
