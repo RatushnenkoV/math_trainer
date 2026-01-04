@@ -413,21 +413,17 @@ class PolynomialExpandTrainer extends BaseTrainer {
     }
 
     showSettingsScreen() {
-        this.showScreen('polynomial-expand-settings-screen');
+        // Скрываем основной экран тренажера
+        this.elements.screen.classList.remove('active');
+        // Показываем экран настроек
+        this.elements.settingsScreen.classList.add('active');
     }
 
     hideSettingsScreen() {
-        this.showScreen('polynomial-expand-screen');
-    }
-
-    showScreen(screenId) {
-        const allScreens = document.querySelectorAll('.screen');
-        allScreens.forEach(screen => screen.style.display = 'none');
-
-        const targetScreen = document.getElementById(screenId);
-        if (targetScreen) {
-            targetScreen.style.display = 'flex';
-        }
+        // Скрываем экран настроек
+        this.elements.settingsScreen.classList.remove('active');
+        // Показываем основной экран тренажера
+        this.elements.screen.classList.add('active');
     }
 
     // Touch events для мобильных устройств
