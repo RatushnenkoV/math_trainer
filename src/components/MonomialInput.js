@@ -261,13 +261,18 @@ class MonomialInput {
         e.preventDefault();
         e.stopPropagation();
         e.dataTransfer.dropEffect = 'copy';
+
+        // Убираем подсветку со всех одночленов
+        document.querySelectorAll('.monomial-input').forEach(el => {
+            el.classList.remove('drag-over');
+        });
+
+        // Добавляем подсветку текущему элементу
         this.element.classList.add('drag-over');
     }
 
     handleDragLeave(e) {
-        if (e.target === this.element.querySelector('.monomial-content')) {
-            this.element.classList.remove('drag-over');
-        }
+        // Этот метод больше не нужен, так как подсветка управляется через dragover
     }
 
     handleDrop(e) {

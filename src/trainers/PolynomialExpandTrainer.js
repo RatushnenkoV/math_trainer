@@ -101,6 +101,10 @@ class PolynomialExpandTrainer extends BaseTrainer {
 
             varElement.addEventListener('dragend', () => {
                 this.draggedVariable = null;
+                // Убираем подсветку со всех одночленов
+                document.querySelectorAll('.monomial-input').forEach(el => {
+                    el.classList.remove('drag-over');
+                });
             });
 
             varElement.addEventListener('click', () => {
@@ -144,6 +148,9 @@ class PolynomialExpandTrainer extends BaseTrainer {
         this.monomialInputs = [];
         this.elements.answerContainer.innerHTML = '';
         this.elements.answerContainer.appendChild(this.elements.addMonomialBtn);
+
+        // Добавляем один одночлен по умолчанию
+        this.addMonomialInput();
     }
 
     addMonomialInput() {
@@ -337,7 +344,9 @@ class PolynomialExpandTrainer extends BaseTrainer {
         }
 
         setTimeout(() => {
+            this.clearInputs();
             this.generateNewProblem();
+            this.enableInputs();
             this.hideResultMessage();
         }, 1500);
     }

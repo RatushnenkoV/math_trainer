@@ -31,10 +31,12 @@
     flex-wrap: nowrap;
     gap: 0;
     margin: 5px 0;
-    padding: 36px 0;
+    padding: 36px 12px;
     background: rgba(255, 255, 255, 0.05);
     border-radius: 8px;
     min-height: 108px;
+    width: 100%;
+    box-sizing: border-box;
     overflow-x: auto;
     overflow-y: hidden;
 }
@@ -164,7 +166,7 @@
     align-items: center;
     gap: 0;
     padding: 4px 0;
-    background: rgba(255, 255, 255, 0.3);
+    background: transparent;
     border-radius: 4px;
     min-height: 40px;
     transition: all 0.2s ease;
