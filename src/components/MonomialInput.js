@@ -119,11 +119,19 @@ class MonomialInput {
                 if (val === 0) {
                     item.textContent = '';
                 } else if (val === 1) {
-                    item.textContent = variable;
+                    if (typeof katex !== 'undefined') {
+                        katex.render(variable, item, { throwOnError: false });
+                    } else {
+                        item.textContent = variable;
+                    }
                 } else {
-                    const span = document.createElement('span');
-                    span.innerHTML = `${variable}<sup>${val}</sup>`;
-                    item.appendChild(span);
+                    if (typeof katex !== 'undefined') {
+                        katex.render(`${variable}^{${val}}`, item, { throwOnError: false });
+                    } else {
+                        const span = document.createElement('span');
+                        span.innerHTML = `${variable}<sup>${val}</sup>`;
+                        item.appendChild(span);
+                    }
                 }
             }
 
