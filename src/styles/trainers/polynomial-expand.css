@@ -1,13 +1,21 @@
 #polynomial-expand-screen {
-    display: flex;
+    display: none;
     flex-direction: column;
     height: 100vh;
+}
+
+#polynomial-expand-screen.active {
+    display: flex;
 }
 
 #polynomial-expand-settings-screen {
     display: none;
     flex-direction: column;
     height: 100vh;
+}
+
+#polynomial-expand-settings-screen.active {
+    display: flex;
 }
 
 .polynomial-expand-problem-display {
