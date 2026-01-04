@@ -71,8 +71,8 @@
     transform: scale(1.02);
 }
 
-/* Picker для знака (копия из trig-equations) */
-.picker-container.picker-sign {
+/* Picker для знака */
+.polynomial-expand-picker-container.polynomial-expand-picker-sign {
     z-index: 1;
     user-select: none;
     -moz-user-select: none;
@@ -83,14 +83,14 @@
     margin: 0;
 }
 
-.picker-container,
-.picker-container *,
-.picker-container *:before,
-.picker-container *:after {
+.polynomial-expand-picker-container,
+.polynomial-expand-picker-container *,
+.polynomial-expand-picker-container *:before,
+.polynomial-expand-picker-container *:after {
     box-sizing: border-box;
 }
 
-.picker-inner {
+.polynomial-expand-picker-inner {
     position: relative;
     display: flex;
     justify-content: center;
@@ -100,7 +100,7 @@
     -webkit-mask-box-image: linear-gradient(to top, transparent, transparent 5%, white 20%, white 80%, transparent 95%, transparent);
 }
 
-.picker-column {
+.polynomial-expand-picker-column {
     flex: 1 1;
     position: relative;
     max-height: 100%;
@@ -109,7 +109,7 @@
     min-width: 30px;
 }
 
-.picker-scroller {
+.polynomial-expand-picker-scroller {
     position: absolute;
     top: 0;
     left: 0;
@@ -118,7 +118,7 @@
     transition-timing-function: ease-out;
 }
 
-.picker-item {
+.polynomial-expand-picker-item {
     position: relative;
     padding: 0;
     white-space: nowrap;
@@ -131,12 +131,12 @@
     font-weight: normal;
 }
 
-.picker-item.picker-item-selected {
+.polynomial-expand-picker-item.polynomial-expand-picker-item-selected {
     color: var(--tg-theme-text-color, #222);
     font-size: 1.8rem;
 }
 
-.picker-highlight {
+.polynomial-expand-picker-highlight {
     position: absolute;
     top: 50%;
     left: 0;
@@ -146,8 +146,8 @@
     pointer-events: none;
 }
 
-.picker-highlight:before,
-.picker-highlight:after {
+.polynomial-expand-picker-highlight:before,
+.polynomial-expand-picker-highlight:after {
     content: ' ';
     position: absolute;
     left: 0;
@@ -158,11 +158,11 @@
     background-color: #d9d9d9;
 }
 
-.picker-highlight:before {
+.polynomial-expand-picker-highlight:before {
     top: 0;
 }
 
-.picker-highlight:after {
+.polynomial-expand-picker-highlight:after {
     bottom: 0;
 }
 
@@ -203,7 +203,7 @@
     flex-shrink: 0;
 }
 
-.picker-container.picker-value {
+.polynomial-expand-picker-container.polynomial-expand-picker-value {
     z-index: 1;
     user-select: none;
     -moz-user-select: none;

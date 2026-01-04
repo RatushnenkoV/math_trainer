@@ -87,16 +87,16 @@ class MonomialInput {
         }
 
         const container = document.createElement('div');
-        container.className = 'picker-container picker-value';
+        container.className = 'polynomial-expand-picker-container polynomial-expand-picker-value';
 
         const inner = document.createElement('div');
-        inner.className = 'picker-inner';
+        inner.className = 'polynomial-expand-picker-inner';
 
         const column = document.createElement('div');
-        column.className = 'picker-column';
+        column.className = 'polynomial-expand-picker-column';
 
         const scroller = document.createElement('div');
-        scroller.className = 'picker-scroller';
+        scroller.className = 'polynomial-expand-picker-scroller';
 
         let selectedIndex = values.indexOf(initialValue);
         if (selectedIndex === -1) selectedIndex = variable === 'coeff' ? 1 : 0;
@@ -109,7 +109,7 @@ class MonomialInput {
 
         values.forEach((val, index) => {
             const item = document.createElement('div');
-            item.className = 'picker-item';
+            item.className = 'polynomial-expand-picker-item';
             item.dataset.index = index;
             item.dataset.value = val;
 
@@ -139,15 +139,15 @@ class MonomialInput {
         });
 
         const highlight = document.createElement('div');
-        highlight.className = 'picker-highlight';
+        highlight.className = 'polynomial-expand-picker-highlight';
 
         const updateSelection = () => {
-            const items = scroller.querySelectorAll('.picker-item');
+            const items = scroller.querySelectorAll('.polynomial-expand-picker-item');
             items.forEach((item, i) => {
                 if (i === selectedIndex) {
-                    item.classList.add('picker-item-selected');
+                    item.classList.add('polynomial-expand-picker-item-selected');
                 } else {
-                    item.classList.remove('picker-item-selected');
+                    item.classList.remove('polynomial-expand-picker-item-selected');
                 }
             });
         };
@@ -237,7 +237,7 @@ class MonomialInput {
         }, { passive: false });
 
         scroller.addEventListener('click', (e) => {
-            const item = e.target.closest('.picker-item');
+            const item = e.target.closest('.polynomial-expand-picker-item');
             if (item) {
                 const index = parseInt(item.dataset.index);
                 if (!isNaN(index)) {
@@ -327,16 +327,16 @@ class MonomialInput {
         ];
 
         const container = document.createElement('div');
-        container.className = 'picker-container picker-sign';
+        container.className = 'polynomial-expand-picker-container polynomial-expand-picker-sign';
 
         const inner = document.createElement('div');
-        inner.className = 'picker-inner';
+        inner.className = 'polynomial-expand-picker-inner';
 
         const column = document.createElement('div');
-        column.className = 'picker-column';
+        column.className = 'polynomial-expand-picker-column';
 
         const scroller = document.createElement('div');
-        scroller.className = 'picker-scroller';
+        scroller.className = 'polynomial-expand-picker-scroller';
 
         let selectedIndex = 0;
         let touchStartY = 0;
@@ -347,7 +347,7 @@ class MonomialInput {
 
         signs.forEach((sign, index) => {
             const item = document.createElement('div');
-            item.className = 'picker-item';
+            item.className = 'polynomial-expand-picker-item';
             item.dataset.index = index;
             item.dataset.value = sign.value;
             item.textContent = sign.display;
@@ -355,15 +355,15 @@ class MonomialInput {
         });
 
         const highlight = document.createElement('div');
-        highlight.className = 'picker-highlight';
+        highlight.className = 'polynomial-expand-picker-highlight';
 
         const updateSelection = () => {
-            const items = scroller.querySelectorAll('.picker-item');
+            const items = scroller.querySelectorAll('.polynomial-expand-picker-item');
             items.forEach((item, i) => {
                 if (i === selectedIndex) {
-                    item.classList.add('picker-item-selected');
+                    item.classList.add('polynomial-expand-picker-item-selected');
                 } else {
-                    item.classList.remove('picker-item-selected');
+                    item.classList.remove('polynomial-expand-picker-item-selected');
                 }
             });
         };
@@ -433,7 +433,7 @@ class MonomialInput {
         }, { passive: false });
 
         scroller.addEventListener('click', (e) => {
-            const item = e.target.closest('.picker-item');
+            const item = e.target.closest('.polynomial-expand-picker-item');
             if (item) {
                 const index = parseInt(item.dataset.index);
                 if (!isNaN(index)) {
@@ -464,9 +464,9 @@ class MonomialInput {
             // Проверяем, есть ли уже элемент коэффициента
             const coeffWrapper = Array.from(contentElement.querySelectorAll('.variable-wrapper'))
                 .find(w => {
-                    const picker = w.querySelector('.picker-container');
+                    const picker = w.querySelector('.polynomial-expand-picker-container');
                     if (!picker) return false;
-                    const selectedItem = picker.querySelector('.picker-item-selected');
+                    const selectedItem = picker.querySelector('.polynomial-expand-picker-item-selected');
                     if (!selectedItem) return false;
                     const text = selectedItem.textContent.trim();
                     return !isNaN(parseInt(text)) && text.length <= 2;
@@ -493,10 +493,10 @@ class MonomialInput {
         const wrappers = contentElement.querySelectorAll('.variable-wrapper');
 
         wrappers.forEach(wrapper => {
-            const picker = wrapper.querySelector('.picker-value');
+            const picker = wrapper.querySelector('.polynomial-expand-picker-value');
             if (!picker) return;
 
-            const items = picker.querySelectorAll('.picker-item-selected');
+            const items = picker.querySelectorAll('.polynomial-expand-picker-item-selected');
             if (items.length === 0) return;
 
             const selectedItem = items[0];
@@ -514,9 +514,9 @@ class MonomialInput {
         // Проверяем коэффициент - отдельно считаем без учета в visibleVarsCount
         const coeffWrapper = Array.from(contentElement.querySelectorAll('.variable-wrapper'))
             .find(w => {
-                const picker = w.querySelector('.picker-container');
+                const picker = w.querySelector('.polynomial-expand-picker-container');
                 if (!picker) return false;
-                const selectedItem = picker.querySelector('.picker-item-selected');
+                const selectedItem = picker.querySelector('.polynomial-expand-picker-item-selected');
                 if (!selectedItem) return false;
                 const text = selectedItem.textContent.trim();
                 return !isNaN(parseInt(text)) && text.length <= 2; // Коэффициент это число до 20
