@@ -160,7 +160,9 @@ class MonomialInput {
             scroller.style.transform = `translate3d(0, ${y}px, 0)`;
             updateSelection();
 
+            const oldValue = variable === 'coeff' ? this.coefficient : this.variables[variable];
             const newValue = values[selectedIndex];
+
             if (variable === 'coeff') {
                 this.coefficient = newValue;
             } else {
@@ -175,6 +177,11 @@ class MonomialInput {
             if (this.coefficient === 0 && Object.keys(this.variables).length === 0) {
                 this.onRemove(this.index);
                 return;
+            }
+
+            // Обновляем отображение только если значение изменилось
+            if (oldValue !== newValue) {
+                this.smartRefreshDisplay();
             }
 
             this.onUpdate();
@@ -363,7 +370,11 @@ class MonomialInput {
             currentScrollY = y;
             scroller.style.transform = `translate3d(0, ${y}px, 0)`;
             updateSelection();
+            const oldSign = this.sign;
             this.sign = signs[selectedIndex].value;
+            if (oldSign !== this.sign) {
+                this.smartRefreshDisplay();
+            }
             this.onUpdate();
         };
 
@@ -434,6 +445,93 @@ class MonomialInput {
         container.appendChild(inner);
 
         return container;
+    }
+
+    smartRefreshDisplay() {
+        // Проверяем, есть ли переменные
+        const hasVars = Object.keys(this.variables).length > 0;
+
+        // Если нет переменных и коэффициент = 1, нужно убедиться что элемент коэффициента существует
+        if (!hasVars && this.coefficient === 1) {
+            const contentElement = this.element.querySelector('.monomial-content');
+            if (!contentElement) return;
+
+            // Проверяем, есть ли уже элемент коэффициента
+            const coeffWrapper = Array.from(contentElement.querySelectorAll('.variable-wrapper'))
+                .find(w => {
+                    const picker = w.querySelector('.picker-container');
+                    if (!picker) return false;
+                    const selectedItem = picker.querySelector('.picker-item-selected');
+                    if (!selectedItem) return false;
+                    const text = selectedItem.textContent.trim();
+                    return !isNaN(parseInt(text)) && text.length <= 2;
+                });
+
+            // Если элемента коэффициента нет, создаем содержимое заново
+            if (!coeffWrapper) {
+                this.updateContent();
+                return;
+            }
+        }
+
+        // Иначе используем обычный refresh
+        this.refreshDisplay();
+    }
+
+    refreshDisplay() {
+        // Обновляем только видимость элементов без пересоздания picker-колес
+        const contentElement = this.element.querySelector('.monomial-content');
+        if (!contentElement) return;
+
+        // Подсчитываем количество видимых переменных (не включая коэффициент)
+        let visibleVarsCount = 0;
+        const wrappers = contentElement.querySelectorAll('.variable-wrapper');
+
+        wrappers.forEach(wrapper => {
+            const picker = wrapper.querySelector('.picker-value');
+            if (!picker) return;
+
+            const items = picker.querySelectorAll('.picker-item-selected');
+            if (items.length === 0) return;
+
+            const selectedItem = items[0];
+            const value = parseInt(selectedItem.dataset.value);
+
+            // Скрываем wrapper если значение = 0
+            if (value === 0 || isNaN(value)) {
+                wrapper.style.display = 'none';
+            } else {
+                wrapper.style.display = 'inline-flex';
+                visibleVarsCount++;
+            }
+        });
+
+        // Проверяем коэффициент - отдельно считаем без учета в visibleVarsCount
+        const coeffWrapper = Array.from(contentElement.querySelectorAll('.variable-wrapper'))
+            .find(w => {
+                const picker = w.querySelector('.picker-container');
+                if (!picker) return false;
+                const selectedItem = picker.querySelector('.picker-item-selected');
+                if (!selectedItem) return false;
+                const text = selectedItem.textContent.trim();
+                return !isNaN(parseInt(text)) && text.length <= 2; // Коэффициент это число до 20
+            });
+
+        if (coeffWrapper) {
+            // Если это коэффициент, уменьшаем счетчик (он был посчитан выше)
+            visibleVarsCount--;
+
+            const hasOtherVars = visibleVarsCount > 0;
+
+            // Показываем коэффициент только если:
+            // 1. Коэффициент != 1, ИЛИ
+            // 2. Коэффициент = 1 И нет других переменных
+            if (this.coefficient === 1 && hasOtherVars) {
+                coeffWrapper.style.display = 'none';
+            } else {
+                coeffWrapper.style.display = 'inline-flex';
+            }
+        }
     }
 
     remove() {

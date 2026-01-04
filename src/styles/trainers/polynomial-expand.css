@@ -211,6 +211,7 @@
     width: 50px;
     height: 108px;
     padding: 0;
+    margin-left: 12px;
     font-size: 2rem;
     font-weight: bold;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(230, 240, 255, 0.9));
