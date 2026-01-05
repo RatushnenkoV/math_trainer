@@ -116,6 +116,11 @@ const trainerConfig = {
         screen: 'polynomial-expand-screen',
         trainer: 'polynomialExpand'
     },
+    'algebraic-identities-btn': {
+        name: 'Формулы сокращённого умножения',
+        screen: 'algebraic-identities-screen',
+        trainer: 'algebraicIdentities'
+    },
     'definitions-btn': {
         name: 'Определения',
         screen: 'definitions-screen',
@@ -212,6 +217,7 @@ async function loadTrainer(trainerName, showLoader = true) {
         'powers': null, // использует только общие стили
         'polynomialSimplification': 'src/styles/trainers/polynomial-simplification.css',
         'polynomialExpand': 'src/styles/trainers/polynomial-expand.css',
+        'algebraicIdentities': 'src/styles/trainers/algebraic-identities.css',
         'definitions': 'src/styles/trainers/definitions.css'
     };
 
@@ -318,6 +324,13 @@ async function loadTrainer(trainerName, showLoader = true) {
             'src/utils/generators/PolynomialExpandGenerator.js',
             'src/trainers/PolynomialExpandTrainer.js',
             'src/components/PolynomialExpandComponent.js'
+        ],
+        'algebraicIdentities': [
+            'src/components/MonomialInput.js',
+            'src/components/FactorInput.js',
+            'src/utils/generators/AlgebraicIdentitiesGenerator.js',
+            'src/trainers/AlgebraicIdentitiesTrainer.js',
+            'src/components/AlgebraicIdentitiesComponent.js'
         ],
         'definitions': [
             'src/utils/data/definitionsData.js',
@@ -432,7 +445,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
     });
 
     // Скрываем все компоненты тренажеров
-    document.querySelectorAll('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, trig-equations-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer, polynomial-simplification-trainer, polynomial-expand-trainer, definitions-trainer').forEach(trainer => {
+    document.querySelectorAll('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, trig-equations-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer, polynomial-simplification-trainer, polynomial-expand-trainer, algebraic-identities-trainer, definitions-trainer').forEach(trainer => {
         trainer.classList.remove('active');
     });
 
@@ -442,7 +455,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
         targetScreen.classList.add('active');
 
         // Если экран находится внутри компонента тренажера, показываем этот компонент
-        const trainerComponent = targetScreen.closest('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, trig-equations-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer, polynomial-simplification-trainer, polynomial-expand-trainer, definitions-trainer');
+        const trainerComponent = targetScreen.closest('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, trig-equations-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer, polynomial-simplification-trainer, polynomial-expand-trainer, algebraic-identities-trainer, definitions-trainer');
         if (trainerComponent) {
             trainerComponent.classList.add('active');
         }
@@ -532,7 +545,9 @@ function handleBackButton() {
         case 'percentages-screen':
         case 'system-of-equations-screen':
         case 'system-of-inequalities-screen':
+        case 'polynomial-simplification-screen':
         case 'polynomial-expand-screen':
+        case 'algebraic-identities-screen':
         case 'definitions-screen':
             // Из экрана тренажёра возвращаемся в главное меню
             showScreen('main-menu');
@@ -640,10 +655,22 @@ function handleBackButton() {
             trainers.systemOfEquations.generateNewProblem();
             break;
 
+        case 'polynomial-simplification-settings-screen':
+            // Из настроек приведения подобных возвращаемся к тренажёру приведения подобных
+            showScreen('polynomial-simplification-screen');
+            trainers.polynomialSimplification.generateNewProblem();
+            break;
+
         case 'polynomial-expand-settings-screen':
             // Из настроек раскрытия скобок возвращаемся к тренажёру раскрытия скобок
             showScreen('polynomial-expand-screen');
             trainers.polynomialExpand.generateNewProblem();
+            break;
+
+        case 'algebraic-identities-settings-screen':
+            // Из настроек ФСУ возвращаемся к тренажёру ФСУ
+            showScreen('algebraic-identities-screen');
+            trainers.algebraicIdentities.generateNewProblem();
             break;
 
         case 'definitions-settings-screen':
@@ -718,8 +745,12 @@ function initHistoryNavigation() {
                 trainers.systemOfEquations.generateNewProblem();
             } else if (screenId === 'system-of-inequalities-screen') {
                 trainers.systemOfInequalities.generateNewProblem();
+            } else if (screenId === 'polynomial-simplification-screen') {
+                trainers.polynomialSimplification.generateNewProblem();
             } else if (screenId === 'polynomial-expand-screen') {
                 trainers.polynomialExpand.generateNewProblem();
+            } else if (screenId === 'algebraic-identities-screen') {
+                trainers.algebraicIdentities.generateNewProblem();
             } else if (screenId === 'definitions-screen') {
                 trainers.definitions.generateNewProblem();
             }
