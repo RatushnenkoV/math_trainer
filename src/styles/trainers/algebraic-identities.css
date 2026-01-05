@@ -320,7 +320,7 @@
     display: none;
     flex-direction: row;
     flex-wrap: nowrap;
-    gap: 12px;
+    gap: 0;
     margin: 5px 0;
     padding: 20px 12px;
     background: rgba(255, 255, 255, 0.05);
@@ -345,7 +345,7 @@
     align-items: stretch;
     gap: 8px;
     padding: 8px 12px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(240, 245, 255, 0.9));
+    background: transparent;
     border: 2px solid rgba(100, 150, 255, 0.4);
     border-radius: 10px;
     transition: all 0.2s ease;
@@ -413,6 +413,7 @@
     flex-direction: row;
     align-items: center;
     gap: 0;
+    padding: 0;
 }
 
 .factor-bracket-left,
@@ -441,7 +442,7 @@
     gap: 0;
     min-width: 60px;
     min-height: 40px;
-    padding: 4px 4px;
+    padding: 0;
     background: transparent;
     border-radius: 6px;
 }

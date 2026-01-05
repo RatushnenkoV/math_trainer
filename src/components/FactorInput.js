@@ -212,6 +212,19 @@ class FactorInput {
         if (this.onUpdate) this.onUpdate();
     }
 
+    addVariable(variable) {
+        // Добавляем переменную в последний моном, или создаем новый если мономов нет
+        if (this.monomials.length === 0) {
+            this.addMonomial();
+        }
+
+        // Добавляем переменную в последний моном
+        const lastMonomial = this.monomials[this.monomials.length - 1];
+        if (lastMonomial) {
+            lastMonomial.addVariable(variable);
+        }
+    }
+
     updateIndex(newIndex) {
         this.index = newIndex;
         this.element.dataset.index = newIndex;

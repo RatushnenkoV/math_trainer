@@ -612,17 +612,42 @@ class AlgebraicIdentitiesTrainer extends BaseTrainer {
             el.classList.remove('drag-over');
         });
 
-        // Обрабатываем drop для expansion mode
-        const targetMonomial = elementBelow?.closest('.monomial-input');
-        if (targetMonomial) {
-            const index = parseInt(targetMonomial.dataset.index);
-            if (!isNaN(index) && this.monomialInputs[index]) {
-                this.monomialInputs[index].addVariable(variable);
+        if (!elementBelow) {
+            this.touchElement = null;
+            return;
+        }
+
+        // Сначала пытаемся найти моном внутри фактора (для factorization mode)
+        const targetMonomialInFactor = elementBelow.closest('.factor-input .monomial-input');
+        if (targetMonomialInFactor) {
+            const factorElement = targetMonomialInFactor.closest('.factor-input');
+            if (factorElement) {
+                const factorIndex = parseInt(factorElement.dataset.index);
+                const monomialIndex = parseInt(targetMonomialInFactor.dataset.index);
+
+                if (!isNaN(factorIndex) && !isNaN(monomialIndex) &&
+                    this.factorInputs[factorIndex] &&
+                    this.factorInputs[factorIndex].monomials[monomialIndex]) {
+                    this.factorInputs[factorIndex].monomials[monomialIndex].addVariable(variable);
+                    this.touchElement = null;
+                    return;
+                }
             }
         }
 
-        // Обрабатываем drop для factorization mode
-        const targetFactor = elementBelow?.closest('.factor-input');
+        // Обрабатываем drop для expansion mode
+        const targetMonomial = elementBelow.closest('.monomial-input');
+        if (targetMonomial && !targetMonomial.closest('.factor-input')) {
+            const index = parseInt(targetMonomial.dataset.index);
+            if (!isNaN(index) && this.monomialInputs[index]) {
+                this.monomialInputs[index].addVariable(variable);
+                this.touchElement = null;
+                return;
+            }
+        }
+
+        // Если не попали в конкретный моном, но попали в фактор - используем метод addVariable фактора
+        const targetFactor = elementBelow.closest('.factor-input');
         if (targetFactor) {
             const index = parseInt(targetFactor.dataset.index);
             if (!isNaN(index) && this.factorInputs[index]) {
