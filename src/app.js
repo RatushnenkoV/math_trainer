@@ -173,7 +173,8 @@ function loadCSS(href) {
     return new Promise((resolve, reject) => {
         const link = document.createElement('link');
         link.rel = 'stylesheet';
-        link.href = href;
+        // Добавляем версию для предотвращения кеширования
+        link.href = href + '?v=' + Date.now();
         link.onload = () => {
             loadedStyles.add(href);
             resolve();
