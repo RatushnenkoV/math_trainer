@@ -659,6 +659,86 @@
     color: #4299e1;
 }
 
+/* Difficulty slider */
+.difficulty-slider-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 8px 0;
+}
+
+#ai-complexity-slider {
+    width: 100%;
+    height: 8px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+}
+
+#ai-complexity-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    background: var(--tg-theme-button-color, #3390ec);
+    border: 3px solid var(--tg-theme-bg-color, #ffffff);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+#ai-complexity-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+}
+
+#ai-complexity-slider::-webkit-slider-thumb:active {
+    transform: scale(0.95);
+}
+
+#ai-complexity-slider::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    background: var(--tg-theme-button-color, #3390ec);
+    border: 3px solid var(--tg-theme-bg-color, #ffffff);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+#ai-complexity-slider::-moz-range-thumb:hover {
+    transform: scale(1.1);
+}
+
+#ai-complexity-slider::-moz-range-thumb:active {
+    transform: scale(0.95);
+}
+
+#ai-complexity-slider::-moz-range-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    height: 8px;
+}
+
+.difficulty-labels {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5px;
+}
+
+.difficulty-labels span {
+    flex: 1;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--tg-theme-hint-color, #999);
+    line-height: 1.3;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .algebraic-identities-problem-display {

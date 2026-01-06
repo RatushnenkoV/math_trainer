@@ -134,19 +134,20 @@ class AlgebraicIdentitiesTrainer extends BaseTrainer {
         });
 
         // Сложность
-        const complexityRadios = document.querySelectorAll('input[name="ai-complexity"]');
-        complexityRadios.forEach(radio => {
-            if (radio.value === this.settings.complexity) {
-                radio.checked = true;
-            }
-            radio.addEventListener('change', (e) => {
-                if (e.target.checked) {
-                    this.settings.complexity = e.target.value;
-                    this.saveSettings();
-                    this.updateGeneratorSettings();
-                }
+        const complexitySlider = document.getElementById('ai-complexity-slider');
+        if (complexitySlider) {
+            // Устанавливаем начальное значение слайдера на основе текущей сложности
+            const complexityMap = { 'simple': 1, 'medium': 2, 'complex': 3 };
+            const reverseMap = { 1: 'simple', 2: 'medium', 3: 'complex' };
+            complexitySlider.value = complexityMap[this.settings.complexity] || 1;
+
+            complexitySlider.addEventListener('input', (e) => {
+                const sliderValue = parseInt(e.target.value);
+                this.settings.complexity = reverseMap[sliderValue];
+                this.saveSettings();
+                this.updateGeneratorSettings();
             });
-        });
+        }
     }
 
     initVariablesPanel() {

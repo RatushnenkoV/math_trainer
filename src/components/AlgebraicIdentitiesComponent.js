@@ -111,18 +111,14 @@ class AlgebraicIdentitiesComponent extends BaseTrainerComponent {
 
                     <div class="settings-group">
                         <h3>Сложность</h3>
-                        <label class="radio-label">
-                            <input type="radio" name="ai-complexity" value="simple" checked>
-                            <span>Простая (a, b, x)</span>
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" name="ai-complexity" value="medium">
-                            <span>Средняя (2a, 3b²)</span>
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" name="ai-complexity" value="complex">
-                            <span>Сложная (2p²+3xy)</span>
-                        </label>
+                        <div class="difficulty-slider-container">
+                            <input type="range" id="ai-complexity-slider" min="1" max="3" step="1" value="1">
+                            <div class="difficulty-labels">
+                                <span>Простая<br>(a, b, x)</span>
+                                <span>Средняя<br>(2a, 3b²)</span>
+                                <span>Сложная<br>(2a²+3xy)</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
