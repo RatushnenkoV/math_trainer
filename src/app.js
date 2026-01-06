@@ -747,7 +747,7 @@ function initHistoryNavigation() {
             } else if (screenId === 'system-of-inequalities-screen') {
                 trainers.systemOfInequalities.generateNewProblem();
             } else if (screenId === 'polynomial-simplification-screen') {
-                trainers.polynomialSimplification.generateNewProblem();
+                trainers.polynomialSimplification?.generateNewProblem();
             } else if (screenId === 'polynomial-expand-screen') {
                 trainers.polynomialExpand.generateNewProblem();
             } else if (screenId === 'algebraic-identities-screen') {

@@ -1,8 +1,7 @@
 // Тренажёр приведения подобных членов многочлена
 class PolynomialSimplificationTrainer extends BaseTrainer {
     constructor() {
-        const savedSettings = localStorage.getItem('mathTrainerPolynomialSimplificationSettings');
-        const settings = savedSettings ? JSON.parse(savedSettings) : {
+        const settings = {
             minMonomials: 4,
             maxMonomials: 6,
             maxCoefficient: 10,
@@ -34,10 +33,7 @@ class PolynomialSimplificationTrainer extends BaseTrainer {
         this.elements = {
             screen: document.getElementById('polynomial-simplification-screen'),
             backBtn: document.getElementById('polynomial-simplification-back-btn'),
-            settingsBtn: document.getElementById('polynomial-simplification-settings-btn'),
             checkBtn: document.getElementById('polynomial-simplification-check-btn'),
-            settingsScreen: document.getElementById('polynomial-simplification-settings-screen'),
-            settingsBackBtn: document.getElementById('polynomial-simplification-settings-back-btn'),
 
             levelText: document.getElementById('polynomial-simplification-level-text'),
             progressText: document.getElementById('polynomial-simplification-progress-text'),
@@ -56,8 +52,19 @@ class PolynomialSimplificationTrainer extends BaseTrainer {
         };
 
         this.initEventHandlers();
-        this.initSettingsHandlers();
         this.initModalHandlers();
+    }
+
+    initEventHandlers() {
+        // Кнопка назад
+        this.elements.backBtn.addEventListener('click', () => {
+            this.showScreen('main-menu');
+        });
+
+        // Кнопка проверки
+        this.elements.checkBtn.addEventListener('click', () => {
+            this.checkAnswer();
+        });
     }
 
     initModalHandlers() {
@@ -66,39 +73,6 @@ class PolynomialSimplificationTrainer extends BaseTrainer {
         this.elements.modalCoefficientInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') this.handleModalOk();
         });
-    }
-
-    initSettingsHandlers() {
-        const minMonomialsInput = document.getElementById('polynomial-min-monomials');
-        const maxMonomialsInput = document.getElementById('polynomial-max-monomials');
-        const negativeCoefficientsCheckbox = document.getElementById('polynomial-negative-coefficients');
-
-        if (minMonomialsInput) {
-            minMonomialsInput.value = this.settings.minMonomials;
-            minMonomialsInput.addEventListener('change', (e) => {
-                this.settings.minMonomials = parseInt(e.target.value);
-                this.saveSettings();
-                this.updateGeneratorSettings();
-            });
-        }
-
-        if (maxMonomialsInput) {
-            maxMonomialsInput.value = this.settings.maxMonomials;
-            maxMonomialsInput.addEventListener('change', (e) => {
-                this.settings.maxMonomials = parseInt(e.target.value);
-                this.saveSettings();
-                this.updateGeneratorSettings();
-            });
-        }
-
-        if (negativeCoefficientsCheckbox) {
-            negativeCoefficientsCheckbox.checked = this.settings.negativeCoefficients;
-            negativeCoefficientsCheckbox.addEventListener('change', (e) => {
-                this.settings.negativeCoefficients = e.target.checked;
-                this.saveSettings();
-                this.updateGeneratorSettings();
-            });
-        }
     }
 
     hasOperationsSelected() {
@@ -444,13 +418,5 @@ class PolynomialSimplificationTrainer extends BaseTrainer {
         }
 
         this.touchElement = null;
-    }
-
-    showSettingsScreen() {
-        this.showScreen('polynomial-simplification-settings-screen');
-    }
-
-    hideSettingsScreen() {
-        this.showScreen('polynomial-simplification-screen');
     }
 }

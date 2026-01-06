@@ -450,7 +450,7 @@ class TrigEquationsTrainer extends BaseTrainer {
 
         // Получаем значение множителя
         const multiplier = multiplierInput ? multiplierInput.value.trim() : '';
-        const multiplierValue = multiplier === '' || multiplier === '1' ? 1 : parseFloat(multiplier);
+        const multiplierValue = multiplier === '' || multiplier === '1' ? 1 : (multiplier === '-' ? -1 : parseFloat(multiplier));
 
         // Получаем выбранный элемент из колёсика углов
         let angleValue = null;

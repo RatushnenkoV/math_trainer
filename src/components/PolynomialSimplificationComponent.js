@@ -7,7 +7,6 @@ class PolynomialSimplificationComponent extends BaseTrainerComponent {
     render() {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
-            ${this.getSettingsTemplate()}
         `;
     }
 
@@ -25,7 +24,7 @@ class PolynomialSimplificationComponent extends BaseTrainerComponent {
                             <div id="polynomial-simplification-progress-fill" class="progress-fill"></div>
                         </div>
                     </div>
-                    <button id="polynomial-simplification-settings-btn" class="icon-button">⚙</button>
+                    <div></div>
                 </div>
 
                 <div class="content">
@@ -58,36 +57,6 @@ class PolynomialSimplificationComponent extends BaseTrainerComponent {
                             <button id="polynomial-modal-cancel-btn" class="polynomial-modal-cancel">Отмена</button>
                             <button id="polynomial-modal-ok-btn" class="polynomial-modal-ok">ОК</button>
                         </div>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-
-    getSettingsTemplate() {
-        return `
-            <div id="polynomial-simplification-settings-screen" class="screen">
-                <div class="header">
-                    <button id="polynomial-simplification-settings-back-btn" class="icon-button">←</button>
-                    <h2>Настройки</h2>
-                    <div></div>
-                </div>
-
-                <div class="settings-content">
-                    <div class="settings-group">
-                        <h3>Сложность</h3>
-                        <label class="switch-label">
-                            <span>Минимум одночленов: </span>
-                            <input type="number" id="polynomial-min-monomials" min="3" max="8" value="4">
-                        </label>
-                        <label class="switch-label">
-                            <span>Максимум одночленов: </span>
-                            <input type="number" id="polynomial-max-monomials" min="4" max="10" value="6">
-                        </label>
-                        <label class="switch-label">
-                            <input type="checkbox" id="polynomial-negative-coefficients" checked>
-                            <span>Отрицательные коэффициенты</span>
-                        </label>
                     </div>
                 </div>
             </div>
