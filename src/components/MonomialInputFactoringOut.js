@@ -16,7 +16,7 @@ class MonomialInputFactoringOut {
 
     createElement() {
         const wrapper = document.createElement('div');
-        wrapper.className = 'monomial-input';
+        wrapper.className = 'monomial-input monomial-input-fo';
         wrapper.dataset.index = this.index;
         wrapper.dataset.type = this.isFactorOutside ? 'factor' : 'bracket';
 
