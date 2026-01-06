@@ -1,0 +1,332 @@
+/* Стили для тренажёра вынесения множителя за скобки */
+
+#factoring-out-screen {
+    display: none;
+    flex-direction: column;
+    height: 100vh;
+}
+
+#factoring-out-screen.active {
+    display: flex;
+}
+
+.factoring-out-problem-display {
+    font-size: 1.8rem;
+    margin: 5px 0;
+    text-align: center;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Контейнер для вынесения за скобки */
+.factoring-out-factorization-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0px;
+    padding: 20px 10px;
+    flex-wrap: wrap;
+}
+
+/* Знак умножения */
+.multiply-sign {
+    font-size: 2rem;
+    color: var(--tg-theme-text-color, #222);
+    padding: 0;
+}
+
+/* Контейнер для скобок */
+.brackets-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+}
+
+/* Спейсер под множителем для выравнивания со скобками */
+.factor-spacer {
+    height: 36px;
+    margin: 5px 0;
+}
+
+/* Внутренний контейнер для скобок с содержимым */
+.brackets-inner {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 20px;
+}
+
+/* Скобки */
+.bracket {
+    font-size: 3rem;
+    font-weight: normal;
+    color: var(--tg-theme-text-color, #222);
+    line-height: 1;
+}
+
+/* Контейнер для мономов внутри скобок */
+.monomials-in-brackets-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0;
+    flex-wrap: nowrap;
+}
+
+/* Стили для MonomialInput (используем те же классы что и в polynomial-expand) */
+.monomial-input {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0;
+    padding: 0;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.monomial-input.drag-over {
+    background: linear-gradient(135deg, rgba(200, 220, 255, 0.95), rgba(180, 200, 255, 0.95));
+    border: 2px dashed #4299e1;
+    transform: scale(1.02);
+    border-radius: 8px;
+}
+
+.monomial-content {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0;
+    padding: 4px 0;
+    background: transparent;
+    border-radius: 4px;
+    min-height: 40px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.monomial-content:empty::before {
+    content: 'перетащите сюда';
+    color: rgba(100, 100, 100, 0.6);
+    font-style: italic;
+}
+
+.empty-monomial {
+    color: rgba(100, 100, 100, 0.6);
+    font-style: italic;
+}
+
+.variable-wrapper {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0;
+    padding: 0;
+    background: transparent;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+/* Общие стили для picker (используем те же классы что и в polynomial-expand) */
+.polynomial-expand-picker-container {
+    z-index: 1;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    width: auto;
+    flex-shrink: 0;
+    display: inline-block;
+    margin: 0;
+}
+
+.polynomial-expand-picker-container,
+.polynomial-expand-picker-container *,
+.polynomial-expand-picker-container *:before,
+.polynomial-expand-picker-container *:after {
+    box-sizing: border-box;
+}
+
+.polynomial-expand-picker-inner {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    height: 108px;
+    padding: 0;
+    font-size: 1.1em;
+    -webkit-mask-box-image: linear-gradient(to top, transparent, transparent 5%, white 20%, white 80%, transparent 95%, transparent);
+}
+
+.polynomial-expand-picker-column {
+    flex: 1 1;
+    position: relative;
+    max-height: 100%;
+    overflow: hidden;
+    text-align: center;
+    min-width: 30px;
+}
+
+.polynomial-expand-picker-scroller {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    transition: 300ms;
+    transition-timing-function: ease-out;
+}
+
+.polynomial-expand-picker-item {
+    position: relative;
+    padding: 0;
+    white-space: nowrap;
+    color: var(--tg-theme-hint-color, #999999);
+    overflow: visible;
+    height: 36px;
+    line-height: 36px;
+    cursor: pointer;
+    font-size: 1.5rem;
+    font-weight: normal;
+}
+
+.polynomial-expand-picker-item.polynomial-expand-picker-item-selected {
+    color: var(--tg-theme-text-color, #222);
+    font-size: 1.8rem;
+}
+
+.polynomial-expand-picker-highlight {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 36px;
+    margin-top: -18px;
+    pointer-events: none;
+}
+
+.polynomial-expand-picker-highlight:before,
+.polynomial-expand-picker-highlight:after {
+    content: ' ';
+    position: absolute;
+    left: 0;
+    right: 0;
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: #d9d9d9;
+}
+
+.polynomial-expand-picker-highlight:before {
+    top: 0;
+}
+
+.polynomial-expand-picker-highlight:after {
+    bottom: 0;
+}
+
+.polynomial-expand-picker-sign {
+    z-index: 1;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    width: auto;
+    flex-shrink: 0;
+    display: inline-block;
+    margin: 0;
+}
+
+.polynomial-expand-picker-value {
+    z-index: 1;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    width: auto;
+    flex-shrink: 0;
+    display: inline-block;
+    margin: 0;
+}
+
+/* Переменные панель */
+.variables-panel {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    padding: 15px;
+    background-color: var(--tg-theme-secondary-bg-color, #f0f0f0);
+    border-radius: 12px;
+    margin: 10px 0;
+}
+
+.variable-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    background-color: var(--tg-theme-button-color, #3390ec);
+    color: var(--tg-theme-button-text-color, #ffffff);
+    border-radius: 8px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    cursor: grab;
+    user-select: none;
+    transition: all 0.2s ease;
+    min-width: 45px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.variable-chip:active {
+    cursor: grabbing;
+    transform: scale(0.95);
+}
+
+.variable-chip:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Клон для перетаскивания */
+.dragging-clone {
+    opacity: 0.8;
+    transform: scale(1.1);
+}
+
+/* Кнопка добавления монома в скобки */
+.add-bracket-monomial-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    margin: 0 5px;
+    padding: 0;
+    background: var(--tg-theme-button-color, #3390ec);
+    color: var(--tg-theme-button-text-color, #ffffff);
+    border: none;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.add-bracket-monomial-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.add-bracket-monomial-button:active {
+    transform: scale(0.95);
+}
+
+.add-bracket-monomial-button .plus-icon {
+    display: inline-block;
+    line-height: 1;
+}

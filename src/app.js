@@ -121,6 +121,11 @@ const trainerConfig = {
         screen: 'algebraic-identities-screen',
         trainer: 'algebraicIdentities'
     },
+    'factoring-out-btn': {
+        name: 'Вынесение множителя за скобки',
+        screen: 'factoring-out-screen',
+        trainer: 'factoringOut'
+    },
     'definitions-btn': {
         name: 'Определения',
         screen: 'definitions-screen',
@@ -219,6 +224,7 @@ async function loadTrainer(trainerName, showLoader = true) {
         'polynomialSimplification': 'src/styles/trainers/polynomial-simplification.css',
         'polynomialExpand': 'src/styles/trainers/polynomial-expand.css',
         'algebraicIdentities': 'src/styles/trainers/algebraic-identities.css',
+        'factoringOut': 'src/styles/trainers/factoring-out.css',
         'definitions': 'src/styles/trainers/definitions.css'
     };
 
@@ -332,6 +338,12 @@ async function loadTrainer(trainerName, showLoader = true) {
             'src/utils/generators/AlgebraicIdentitiesGenerator.js',
             'src/trainers/AlgebraicIdentitiesTrainer.js',
             'src/components/AlgebraicIdentitiesComponent.js'
+        ],
+        'factoringOut': [
+            'src/components/MonomialInputFactoringOut.js',
+            'src/utils/generators/FactoringOutGenerator.js',
+            'src/trainers/FactoringOutTrainer.js',
+            'src/components/FactoringOutComponent.js'
         ],
         'definitions': [
             'src/utils/data/definitionsData.js',
