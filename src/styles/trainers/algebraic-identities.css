@@ -83,7 +83,7 @@
     flex-shrink: 0;
 }
 
-/* Общие стили для picker (используются и в polynomial-expand, и в algebraic-identities) */
+/* Общие стили для picker */
 .polynomial-expand-picker-container {
     z-index: 1;
     user-select: none;
@@ -344,10 +344,10 @@
     flex-direction: column;
     align-items: stretch;
     gap: 8px;
-    padding: 8px 12px;
+    padding: 0;
     background: transparent;
-    border: 2px solid rgba(100, 150, 255, 0.4);
-    border-radius: 10px;
+    border: none;
+    border-radius: 0;
     transition: all 0.2s ease;
     flex-shrink: 0;
     position: relative;
@@ -400,7 +400,7 @@
     align-items: center;
     justify-content: center;
     min-height: 50px;
-    padding: 4px;
+    padding: 0;
 }
 
 .factor-katex-display {
@@ -457,7 +457,7 @@
 .factor-bottom-row {
     display: flex;
     flex-direction: row;
-    gap: 8px;
+    gap: 40px;
     justify-content: center;
     align-items: center;
 }
@@ -559,49 +559,14 @@
     bottom: 0;
 }
 
-/* Кнопка добавления монома внутри скобки */
+/* Кнопка добавления монома */
 .add-monomial-in-factor-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    background: rgba(66, 153, 225, 0.1);
-    border: 1px dashed rgba(66, 153, 225, 0.4);
-    border-radius: 6px;
-    color: #4299e1;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    margin: 0 4px;
-}
-
-.add-monomial-in-factor-btn:hover {
-    background: rgba(66, 153, 225, 0.2);
-    border-color: rgba(66, 153, 225, 0.7);
-    transform: scale(1.1);
-}
-
-.add-monomial-in-factor-btn:active {
-    transform: scale(0.95);
-}
-
-.add-monomial-in-factor-btn .plus-icon {
-    font-size: 1.2rem;
-    line-height: 1;
-}
-
-/* Кнопка добавления монома внутри скобок (встроенная) */
-.add-monomial-in-factor-btn-inline {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 50px;
-    height: 108px;
-    padding: 0;
-    margin-left: 0px;
-    font-size: 2rem;
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
     font-weight: bold;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(230, 240, 255, 0.9));
     border: 2px dashed rgba(100, 150, 255, 0.5);
@@ -610,22 +575,21 @@
     cursor: pointer;
     transition: all 0.2s ease;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    flex-shrink: 0;
 }
 
-.add-monomial-in-factor-btn-inline:hover {
+.add-monomial-in-factor-btn:hover {
     background: linear-gradient(135deg, rgba(255, 255, 255, 1), rgba(220, 235, 255, 1));
     border-color: rgba(66, 153, 225, 0.8);
-    transform: scale(1.1);
+    transform: scale(1.15);
     box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
 }
 
-.add-monomial-in-factor-btn-inline:active {
+.add-monomial-in-factor-btn:active {
     transform: scale(0.95);
 }
 
-.add-monomial-in-factor-btn-inline .plus-icon {
-    font-size: 2rem;
+.add-monomial-in-factor-btn .plus-icon {
+    font-size: 1.5rem;
     line-height: 1;
 }
 
@@ -634,21 +598,24 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
-    font-size: 1.2rem;
+    width: 40px;
+    height: 40px;
+    font-size: 1.4rem;
     font-weight: bold;
-    background: rgba(220, 38, 38, 0.1);
-    border: 1px solid rgba(220, 38, 38, 0.3);
-    border-radius: 6px;
+    background: linear-gradient(135deg, rgba(255, 240, 240, 0.9), rgba(255, 230, 230, 0.9));
+    border: 2px solid rgba(220, 38, 38, 0.4);
+    border-radius: 10px;
     color: #dc2626;
     cursor: pointer;
     transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .remove-factor-btn:hover {
-    background: rgba(220, 38, 38, 0.2);
-    border-color: rgba(220, 38, 38, 0.6);
+    background: linear-gradient(135deg, rgba(255, 230, 230, 1), rgba(255, 210, 210, 1));
+    border-color: rgba(220, 38, 38, 0.8);
+    transform: scale(1.15);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
 }
 
 .remove-factor-btn:active {

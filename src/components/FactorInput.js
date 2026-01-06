@@ -51,9 +51,16 @@ class FactorInput {
         const displayContainer = document.createElement('div');
         displayContainer.className = 'factor-display';
 
-        // Нижний ряд с кнопкой удаления
+        // Нижний ряд с кнопками
         const bottomRow = document.createElement('div');
         bottomRow.className = 'factor-bottom-row';
+
+        // Кнопка добавления монома
+        const addBtn = document.createElement('button');
+        addBtn.className = 'add-monomial-in-factor-btn';
+        addBtn.innerHTML = '<span class="plus-icon">+</span>';
+        addBtn.title = 'Добавить моном';
+        addBtn.addEventListener('click', () => this.addMonomial());
 
         // Кнопка удаления множителя
         const removeBtn = document.createElement('button');
@@ -66,6 +73,7 @@ class FactorInput {
             }
         });
 
+        bottomRow.appendChild(addBtn);
         bottomRow.appendChild(removeBtn);
 
         wrapper.appendChild(controlsContainer);
@@ -131,14 +139,6 @@ class FactorInput {
         this.monomials.forEach(monomialInput => {
             content.appendChild(monomialInput.element);
         });
-
-        // Кнопка добавления монома внутри скобок
-        const addBtn = document.createElement('button');
-        addBtn.className = 'add-monomial-in-factor-btn-inline';
-        addBtn.innerHTML = '<span class="plus-icon">+</span>';
-        addBtn.title = 'Добавить моном';
-        addBtn.addEventListener('click', () => this.addMonomial());
-        content.appendChild(addBtn);
 
         // Правая скобка
         const rightBracket = document.createElement('span');
