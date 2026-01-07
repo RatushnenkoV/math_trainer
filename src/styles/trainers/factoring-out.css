@@ -22,13 +22,17 @@
 
 /* Контейнер для вынесения за скобки */
 .factoring-out-factorization-container {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto;
     align-items: center;
-    justify-content: center;
-    gap: 0px;
+    justify-content: flex-start;
+    gap: 0;
     padding: 20px 10px;
-    flex-wrap: wrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* Знак умножения */
@@ -38,27 +42,34 @@
     padding: 0;
 }
 
-/* Контейнер для скобок */
-.brackets-container {
+/* Левая верхняя ячейка: множитель и знак умножения */
+.factor-and-multiply-container {
+    grid-column: 1;
+    grid-row: 1;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    gap: 0;
+    gap: 10px;
 }
 
-/* Спейсер под множителем для выравнивания со скобками */
-.factor-spacer {
-    height: 36px;
-    margin: 5px 0;
-}
-
-/* Внутренний контейнер для скобок с содержимым */
-.brackets-inner {
+/* Правая верхняя ячейка: скобки */
+.brackets-container {
+    grid-column: 2;
+    grid-row: 1;
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 0;
-    margin-bottom: 20px;
+}
+
+/* Правая нижняя ячейка: кнопка */
+.button-container {
+    grid-column: 2;
+    grid-row: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5px;
 }
 
 /* Скобки */

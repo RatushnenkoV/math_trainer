@@ -224,14 +224,13 @@ class FactoringOutTrainer extends BaseTrainer {
         this.elements.factorizationContainer.innerHTML = '';
         console.log('Container cleared');
 
-        // Создаём структуру: factor × (monomial1 + monomial2 + ...)
+        // Создаём структуру: grid 2x2
+        // Верхний ряд: [множитель × ] [скобки]
+        // Нижний ряд: [пусто] [кнопка +]
 
-        // 1. Создаём контейнер для множителя за скобками (чтобы выровнять со скобками)
-        const factorContainer = document.createElement('div');
-        factorContainer.className = 'brackets-container'; // Используем тот же класс для единообразия
-
-        const factorInner = document.createElement('div');
-        factorInner.className = 'brackets-inner';
+        // 1. Левая верхняя ячейка: множитель и знак умножения
+        const factorAndMultiplyContainer = document.createElement('div');
+        factorAndMultiplyContainer.className = 'factor-and-multiply-container';
 
         this.factorInput = new MonomialInputFactoringOut(
             'factor',
@@ -244,55 +243,29 @@ class FactoringOutTrainer extends BaseTrainer {
         console.log('factorInput.element:', this.factorInput.element);
 
         if (this.factorInput && this.factorInput.element) {
-            factorInner.appendChild(this.factorInput.element);
-            factorContainer.appendChild(factorInner);
+            factorAndMultiplyContainer.appendChild(this.factorInput.element);
 
-            // Добавляем пустой div для выравнивания (такой же высоты как кнопка)
-            const spacer = document.createElement('div');
-            spacer.className = 'factor-spacer';
-            factorContainer.appendChild(spacer);
+            // Добавляем знак умножения
+            const multiplySign = document.createElement('div');
+            multiplySign.className = 'multiply-sign';
+            multiplySign.textContent = '·';
+            factorAndMultiplyContainer.appendChild(multiplySign);
 
-            this.elements.factorizationContainer.appendChild(factorContainer);
+            this.elements.factorizationContainer.appendChild(factorAndMultiplyContainer);
             console.log('factorInput added to container');
-            console.log('Container children:', this.elements.factorizationContainer.children.length);
         } else {
             console.error('factorInput.element is null or undefined!');
         }
 
-        // 2. Добавляем знак умножения (точку) с контейнером для выравнивания
-        const multiplyContainer = document.createElement('div');
-        multiplyContainer.className = 'brackets-container';
-
-        const multiplyInner = document.createElement('div');
-        multiplyInner.className = 'brackets-inner';
-
-        const multiplySign = document.createElement('div');
-        multiplySign.className = 'multiply-sign';
-        multiplySign.textContent = '·';
-        multiplyInner.appendChild(multiplySign);
-
-        multiplyContainer.appendChild(multiplyInner);
-
-        // Добавляем пустой div для выравнивания
-        const multiplySpacer = document.createElement('div');
-        multiplySpacer.className = 'factor-spacer';
-        multiplyContainer.appendChild(multiplySpacer);
-
-        this.elements.factorizationContainer.appendChild(multiplyContainer);
-
-        // 3. Создаём контейнер для скобок
+        // 2. Правая верхняя ячейка: скобки
         const bracketsContainer = document.createElement('div');
         bracketsContainer.className = 'brackets-container';
-
-        // Внутренний контейнер для скобок с содержимым
-        const bracketsInner = document.createElement('div');
-        bracketsInner.className = 'brackets-inner';
 
         // Левая скобка
         const leftBracket = document.createElement('div');
         leftBracket.className = 'bracket';
         leftBracket.textContent = '(';
-        bracketsInner.appendChild(leftBracket);
+        bracketsContainer.appendChild(leftBracket);
 
         // Контейнер для мономов внутри скобок
         const monomialsContainer = document.createElement('div');
@@ -302,17 +275,20 @@ class FactoringOutTrainer extends BaseTrainer {
         this.bracketMonomials = [];
         this.monomialsContainer = monomialsContainer;
 
-        bracketsInner.appendChild(monomialsContainer);
+        bracketsContainer.appendChild(monomialsContainer);
 
         // Правая скобка
         const rightBracket = document.createElement('div');
         rightBracket.className = 'bracket';
         rightBracket.textContent = ')';
-        bracketsInner.appendChild(rightBracket);
+        bracketsContainer.appendChild(rightBracket);
 
-        bracketsContainer.appendChild(bracketsInner);
+        this.elements.factorizationContainer.appendChild(bracketsContainer);
 
-        // Кнопка добавления монома (под скобками)
+        // 3. Правая нижняя ячейка: кнопка добавления монома
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = 'button-container';
+
         const addBracketMonomialBtn = document.createElement('button');
         addBracketMonomialBtn.className = 'add-bracket-monomial-button';
         addBracketMonomialBtn.innerHTML = '<span class="plus-icon">+</span>';
@@ -320,9 +296,8 @@ class FactoringOutTrainer extends BaseTrainer {
             this.addBracketMonomial();
         });
 
-        bracketsContainer.appendChild(addBracketMonomialBtn);
-
-        this.elements.factorizationContainer.appendChild(bracketsContainer);
+        buttonContainer.appendChild(addBracketMonomialBtn);
+        this.elements.factorizationContainer.appendChild(buttonContainer);
 
         console.log('setupFactoringMode finished');
         console.log('Final container children:', this.elements.factorizationContainer.children.length);
