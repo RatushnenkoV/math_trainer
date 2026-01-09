@@ -7,7 +7,6 @@
     align-items: center;
     justify-content: center;
     padding: 20px;
-    background: var(--tg-theme-secondary-bg-color, #f0f0f0);
     border-radius: 12px;
     width: 100%;
 }
@@ -56,6 +55,8 @@
     cursor: pointer;
     transition: transform 0.2s, opacity 0.2s;
     text-align: center;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .answer-button:active {
@@ -159,7 +160,6 @@
 }
 
 .input-section {
-    background: var(--tg-theme-secondary-bg-color, #f0f0f0);
     padding: 16px;
     border-radius: 10px;
 }
@@ -315,4 +315,9 @@
         flex-direction: column;
         align-items: flex-start;
     }
+}
+
+#functions-step-specific {
+    margin-left: auto;
+    margin-right: auto;
 }
