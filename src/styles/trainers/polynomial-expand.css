@@ -256,7 +256,6 @@
     gap: 6px;
     justify-content: center;
     padding: 0px;
-    background: rgba(255, 255, 255, 0.05);
     border-radius: 8px;
     margin: 5px 0;
 }
@@ -307,28 +306,3 @@
     opacity: 0.9;
 }
 
-@media (max-width: 768px) {
-    .polynomial-expand-problem-display {
-        font-size: 1.5rem;
-    }
-
-    .problem-expression {
-        font-size: 1.6rem;
-    }
-
-    .variable-chip {
-        width: 50px;
-        height: 50px;
-        font-size: 1.3rem;
-    }
-
-    .monomial-content {
-        flex-wrap: wrap;
-    }
-
-    .sign-wheel {
-        width: 45px;
-        height: 35px;
-        font-size: 1.3rem;
-    }
-}
