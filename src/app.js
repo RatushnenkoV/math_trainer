@@ -734,12 +734,6 @@ function handleBackButton() {
             trainers.functions.generateNewProblem();
             break;
 
-        case 'coordinates-settings-screen':
-            // Из настроек координат возвращаемся к тренажёру координат
-            showScreen('coordinates-screen');
-            trainers.coordinates.generateNewProblem();
-            break;
-
         case 'main-menu':
             // Из главного меню закрываем приложение
             if (tg) {

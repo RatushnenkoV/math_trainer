@@ -41,15 +41,10 @@
 
 #coordinates-screen .coordinates-inputs {
     display: flex;
-    gap: 20px;
+    align-items: center;
+    gap: 15px;
     justify-content: center;
     margin-top: 20px;
-}
-
-#coordinates-screen .input-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
     font-size: 1.5rem;
 }
 
@@ -70,55 +65,6 @@
 }
 
 #coordinates-screen input[type="number"]:focus {
-    outline: none;
-    border-color: #764ba2;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
-}
-
-/* Настройки */
-#coordinates-settings-screen .settings-content {
-    padding: 20px;
-}
-
-#coordinates-settings-screen .settings-group {
-    margin-bottom: 25px;
-    padding: 20px;
-    background: var(--tg-theme-secondary-bg-color, #f0f0f0);
-    border-radius: 12px;
-}
-
-#coordinates-settings-screen .settings-group h3 {
-    margin: 0 0 15px 0;
-    font-size: 1.1rem;
-    color: var(--tg-theme-text-color, #000);
-    font-weight: 600;
-}
-
-#coordinates-settings-screen .range-setting {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
-    flex-wrap: wrap;
-}
-
-#coordinates-settings-screen .range-setting label {
-    font-size: 1rem;
-    color: var(--tg-theme-text-color, #000);
-}
-
-#coordinates-settings-screen .range-setting input[type="number"] {
-    width: 70px;
-    padding: 8px 10px;
-    font-size: 1rem;
-    border: 2px solid #667eea;
-    border-radius: 8px;
-    text-align: center;
-    background: var(--tg-theme-bg-color, #fff);
-    color: var(--tg-theme-text-color, #000);
-}
-
-#coordinates-settings-screen .range-setting input[type="number"]:focus {
     outline: none;
     border-color: #764ba2;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
@@ -147,24 +93,12 @@
     }
 
     #coordinates-screen .coordinates-inputs {
-        gap: 15px;
-    }
-
-    #coordinates-screen .input-group {
+        gap: 10px;
         font-size: 1.3rem;
     }
 
     #coordinates-screen input[type="number"] {
         width: 80px;
         font-size: 1.1rem;
-    }
-
-    #coordinates-settings-screen .range-setting {
-        font-size: 0.9rem;
-    }
-
-    #coordinates-settings-screen .range-setting input[type="number"] {
-        width: 60px;
-        font-size: 0.9rem;
     }
 }

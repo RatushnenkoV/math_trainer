@@ -24,10 +24,7 @@ class CoordinatesTrainer extends BaseTrainer {
         this.elements = {
             screen: document.getElementById('coordinates-screen'),
             backBtn: document.getElementById('coordinates-back-btn'),
-            settingsBtn: document.getElementById('coordinates-settings-btn'),
             checkBtn: document.getElementById('coordinates-check-btn'),
-            settingsScreen: document.getElementById('coordinates-settings-screen'),
-            settingsBackBtn: document.getElementById('coordinates-settings-back-btn'),
 
             levelText: document.getElementById('coordinates-level-text'),
             progressText: document.getElementById('coordinates-progress-text'),
@@ -43,35 +40,19 @@ class CoordinatesTrainer extends BaseTrainer {
         };
 
         this.initEventHandlers();
-        this.initSettingsHandlers();
     }
 
-    initSettingsHandlers() {
-        // Настройки диапазона координат
-        const minXInput = document.getElementById('coordinates-min-x');
-        const maxXInput = document.getElementById('coordinates-max-x');
-        const minYInput = document.getElementById('coordinates-min-y');
-        const maxYInput = document.getElementById('coordinates-max-y');
-
-        [minXInput, maxXInput, minYInput, maxYInput].forEach(input => {
-            if (input) {
-                input.addEventListener('change', () => {
-                    this.settings.minX = parseInt(minXInput.value);
-                    this.settings.maxX = parseInt(maxXInput.value);
-                    this.settings.minY = parseInt(minYInput.value);
-                    this.settings.maxY = parseInt(maxYInput.value);
-
-                    this.saveSettings();
-                    this.updateGeneratorSettings();
-                });
-            }
+    // Переопределяем initEventHandlers, убираем кнопку настроек
+    initEventHandlers() {
+        // Кнопка назад
+        this.elements.backBtn.addEventListener('click', () => {
+            this.showScreen('main-menu');
         });
 
-        // Загружаем сохранённые настройки
-        if (minXInput) minXInput.value = this.settings.minX;
-        if (maxXInput) maxXInput.value = this.settings.maxX;
-        if (minYInput) minYInput.value = this.settings.minY;
-        if (maxYInput) maxYInput.value = this.settings.maxY;
+        // Кнопка проверки
+        this.elements.checkBtn.addEventListener('click', () => {
+            this.checkAnswer();
+        });
     }
 
     // Переопределяем проверку операций, т.к. у нас нет операций
@@ -254,14 +235,6 @@ class CoordinatesTrainer extends BaseTrainer {
 
     hideNoOperationsMessage() {
         this.elements.problemDisplay.innerHTML = '';
-    }
-
-    showSettingsScreen() {
-        showScreen('coordinates-settings-screen');
-    }
-
-    hideSettingsScreen() {
-        showScreen('coordinates-screen');
     }
 
     showScreen(screenId) {

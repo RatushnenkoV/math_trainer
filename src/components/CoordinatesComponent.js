@@ -25,7 +25,7 @@ class CoordinatesComponent extends BaseTrainerComponent {
                             <div id="coordinates-progress-fill" class="progress-fill"></div>
                         </div>
                     </div>
-                    <button id="coordinates-settings-btn" class="icon-button">⚙</button>
+                    <div></div>
                 </div>
 
                 <div class="content">
@@ -37,14 +37,10 @@ class CoordinatesComponent extends BaseTrainerComponent {
                     </div>
 
                     <div id="coordinates-inputs-container" class="coordinates-inputs">
-                        <div class="input-group">
-                            <span class="input-label">x =</span>
-                            <input type="number" id="coordinates-x-input" placeholder="0">
-                        </div>
-                        <div class="input-group">
-                            <span class="input-label">y =</span>
-                            <input type="number" id="coordinates-y-input" placeholder="0">
-                        </div>
+                        <span class="input-label">x =</span>
+                        <input type="number" id="coordinates-x-input" placeholder="0">
+                        <span class="input-label">y =</span>
+                        <input type="number" id="coordinates-y-input" placeholder="0">
                     </div>
 
                     <button id="coordinates-check-btn" class="check-button">Проверить</button>
@@ -55,35 +51,7 @@ class CoordinatesComponent extends BaseTrainerComponent {
     }
 
     getSettingsTemplate() {
-        return `
-            <div id="coordinates-settings-screen" class="screen">
-                <div class="header">
-                    <button id="coordinates-settings-back-btn" class="icon-button">←</button>
-                    <h2>Настройки</h2>
-                    <div></div>
-                </div>
-
-                <div class="settings-content">
-                    <div class="settings-group">
-                        <h3>Диапазон координат</h3>
-
-                        <div class="range-setting">
-                            <label>По оси X: от</label>
-                            <input type="number" id="coordinates-min-x" value="-5" min="-10" max="0">
-                            <label>до</label>
-                            <input type="number" id="coordinates-max-x" value="5" min="0" max="10">
-                        </div>
-
-                        <div class="range-setting">
-                            <label>По оси Y: от</label>
-                            <input type="number" id="coordinates-min-y" value="-5" min="-10" max="0">
-                            <label>до</label>
-                            <input type="number" id="coordinates-max-y" value="5" min="0" max="10">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
+        return '';
     }
 
     initTrainer() {
