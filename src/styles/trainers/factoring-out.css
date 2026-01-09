@@ -308,36 +308,38 @@
     transform: scale(1.1);
 }
 
-/* Кнопка добавления монома в скобки */
-.add-bracket-monomial-button {
-    display: inline-flex;
+
+
+/* Кнопка добавления монома */
+.add-monomial-button {
+    display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
-    margin: 0 5px;
-    padding: 0;
-    background: var(--tg-theme-button-color, #3390ec);
-    color: var(--tg-theme-button-text-color, #ffffff);
-    border: none;
-    border-radius: 50%;
+    width: 40px;
+    height: 40px;
     font-size: 1.5rem;
     font-weight: bold;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(230, 240, 255, 0.9));
+    border: 2px dashed rgba(100, 150, 255, 0.5);
+    border-radius: 10px;
+    color: #4299e1;
     cursor: pointer;
     transition: all 0.2s ease;
-    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.add-bracket-monomial-button:hover {
-    transform: scale(1.1);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+.add-monomial-button:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 1), rgba(220, 235, 255, 1));
+    border-color: rgba(66, 153, 225, 0.8);
+    transform: scale(1.15);
+    box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
 }
 
-.add-bracket-monomial-button:active {
+.add-monomial-button:active {
     transform: scale(0.95);
 }
 
-.add-bracket-monomial-button .plus-icon {
-    display: inline-block;
+.add-monomial-button .plus-icon {
+    font-size: 1.5rem;
     line-height: 1;
 }

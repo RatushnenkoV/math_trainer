@@ -290,7 +290,7 @@ class FactoringOutTrainer extends BaseTrainer {
         buttonContainer.className = 'button-container';
 
         const addBracketMonomialBtn = document.createElement('button');
-        addBracketMonomialBtn.className = 'add-bracket-monomial-button';
+        addBracketMonomialBtn.className = 'add-monomial-button';
         addBracketMonomialBtn.innerHTML = '<span class="plus-icon">+</span>';
         addBracketMonomialBtn.addEventListener('click', () => {
             this.addBracketMonomial();
