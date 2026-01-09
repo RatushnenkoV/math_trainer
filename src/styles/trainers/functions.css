@@ -266,6 +266,7 @@
     max-width: 500px;
     height: 400px;
     background: #fcfcfc;
+    color: #000000;
     border-radius: 10px;
     overflow: hidden;
 }
