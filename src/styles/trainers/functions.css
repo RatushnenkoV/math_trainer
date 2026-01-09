@@ -265,7 +265,7 @@
     width: 100%;
     max-width: 500px;
     height: 400px;
-    background: var(--tg-theme-bg-color, #ffffff);
+    background: #fcfcfc;
     border-radius: 10px;
     overflow: hidden;
 }
@@ -319,3 +319,4 @@
     margin-left: auto;
     margin-right: auto;
 }
+
