@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Универсальный конструктор геометрии</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; padding: 20px; display: flex; justify-content: center; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); width: 1100px; }
+        
+        /* Стили табов */
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .tab-btn { padding: 10px 20px; border: none; background: #e0e0e0; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .tab-btn.active { background: #2196F3; color: white; }
+        
+        .grid { display: grid; grid-template-columns: 350px 1fr; gap: 30px; }
+        .controls { display: flex; flex-direction: column; gap: 12px; border-right: 1px solid #eee; padding-right: 20px; max-height: 75vh; overflow-y: auto; }
+        .visualizer { display: flex; justify-content: center; align-items: center; min-height: 500px; background: #fafafa; border-radius: 8px; }
+        
+        label { font-size: 13px; font-weight: bold; color: #444; }
+        input[type="range"] { width: 100%; }
+        select { padding: 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; }
+        
+        .math-box { margin-top: 15px; padding: 15px; border-radius: 8px; font-size: 15px; line-height: 1.5; }
+        .math-classic { background: #fffde7; border-left: 4px solid #fbc02d; }
+        .math-diag { background: #e8f5e9; border-left: 4px solid #4caf50; }
+        
+        .formula { font-family: 'Courier New', monospace; font-weight: bold; color: #2c3e50; display: block; margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        const App = () => {
+            const [activeTab, setActiveTab] = useState('classic');
+            const [type, setType] = useState('parallelogram_angle');
+            const [val, setVal] = useState({ 
+                a: 160, b: 100, h: 80, angle: 60, c: 130, top: 80, r: 70,
+                d1: 300, d2: 200, diag_angle: 60 
+            });
+
+            const handleChange = (e) => setVal({ ...val, [e.target.name]: Number(e.target.value) });
+
+            const CX = 300; 
+            const CY = 300;
+            const style = { fill: "rgba(33, 150, 243, 0.08)", stroke: "#2196F3", strokeWidth: "2" };
+            const diagStyle = { stroke: "#9e9e9e", strokeWidth: "1.5", strokeDasharray: "5,5" };
+
+            // Вспомогательная функция для дуги угла
+            const renderAngleArc = (x, y, angle, size = 35) => {
+                const rad = (angle * Math.PI) / 180;
+                const x2 = x + size * Math.cos(rad);
+                const y2 = y - size * Math.sin(rad);
+                return (
+                    <g>
+                        <path d={`M ${x + size},${y} A ${size},${size} 0 0 0 ${x2},${y2}`} fill="none" stroke="#ff5722" strokeWidth="2" />
+                        <text x={x + size + 5} y={y - 10} fontSize="14" fill="#ff5722" fontWeight="bold">{angle}°</text>
+                    </g>
+                );
+            };
+
+            const calculateArea = () => {
+                if (activeTab === 'diag') {
+                    const r = (val.diag_angle * Math.PI) / 180;
+                    switch(type) {
+                        case 'parallelogram_diag': return 0.5 * val.d1 * val.d2 * Math.sin(r);
+                        case 'rhombus_diag': return 0.5 * val.d1 * val.d2;
+                        case 'rect_diag': return 0.5 * val.d1 * val.d1 * Math.sin(r);
+                        case 'square_diag': return 0.5 * val.d1 * val.d1;
+                        default: return 0;
+                    }
+                } else {
+                    const rad = (val.angle * Math.PI) / 180;
+                    switch(type) {
+                        case 'rectangle': return val.a * val.b;
+                        case 'square': return val.a * val.a;
+                        case 'parallelogram_angle': return val.a * val.b * Math.sin(rad);
+                        case 'parallelogram_h': return val.a * val.h;
+                        case 'rhombus_angle': return val.a * val.a * Math.sin(rad);
+                        case 'rhombus_h': return val.a * val.h;
+                        case 'trapezoid': return 0.5 * (val.a + val.top) * val.h;
+                        case 'tri_3sides': {
+                            const s = (val.a + val.b + val.c) / 2;
+                            return Math.sqrt(Math.max(0, s * (s - val.a) * (s - val.b) * (s - val.c)));
+                        }
+                        case 'tri_angle': return 0.5 * val.a * val.b * Math.sin(rad);
+                        case 'tri_h': return 0.5 * val.a * val.h;
+                        case 'circle': return Math.PI * val.r**2;
+                        default: return 0;
+                    }
+                }
+            };
+
+            const renderShape = () => {
+                const baseCX = 150; 
+                const baseCY = 350;
+
+                if (activeTab === 'diag') {
+                    const d1 = val.d1;
+                    const d2 = (type === 'rect_diag' || type === 'square_diag') ? val.d1 : val.d2;
+                    const currentAngle = (type === 'rhombus_diag' || type === 'square_diag') ? 90 : val.diag_angle;
+                    const currentRad = (currentAngle * Math.PI) / 180;
+                    const x1 = d1 / 2, x2 = (d2 / 2) * Math.cos(currentRad), y2 = (d2 / 2) * Math.sin(currentRad);
+                    const p = [{x: CX+x1, y: CY}, {x: CX+x2, y: CY-y2}, {x: CX-x1, y: CY}, {x: CX-x2, y: CY+y2}];
+                    
+                    return (
+                        <g>
+                            <polygon points={p.map(pt => `${pt.x},${pt.y}`).join(' ')} {...style} />
+                            <line x1={p[2].x} y1={p[2].y} x2={p[0].x} y2={p[0].y} {...diagStyle} />
+                            <line x1={p[3].x} y1={p[3].y} x2={p[1].x} y2={p[1].y} {...diagStyle} />
+                            <text x={CX + x1/2} y={CY + 20} fontSize="13" fontWeight="bold">{type.includes('rect') ? `d = ${d1}` : `d1 = ${d1}`}</text>
+                            {!type.includes('rect') && !type.includes('square') && <text x={CX + x2/2 + 10} y={CY - y2/2 - 10} fontSize="13" fontWeight="bold">d2 = {d2}</text>}
+                            {(type === 'parallelogram_diag' || type === 'rect_diag') && renderAngleArc(CX, CY, currentAngle, 45)}
+                        </g>
+                    );
+                }
+
+                // Логика отрисовки первого инструмента
+                switch(type) {
+                    case 'rectangle':
+                        return (
+                            <g>
+                                <rect x={baseCX} y={baseCY-val.b} width={val.a} height={val.b} {...style} />
+                                <text x={baseCX + val.a/2} y={baseCY + 25} textAnchor="middle">a = {val.a}</text>
+                                <text x={baseCX + val.a + 15} y={baseCY - val.b/2} style={{writingMode:'vertical-rl'}}>b = {val.b}</text>
+                            </g>
+                        );
+                    case 'square':
+                        return (
+                            <g>
+                                <rect x={baseCX} y={baseCY-val.a} width={val.a} height={val.a} {...style} />
+                                <text x={baseCX + val.a/2} y={baseCY + 25} textAnchor="middle">a = {val.a}</text>
+                            </g>
+                        );
+                    case 'parallelogram_angle': {
+                        const rad = (val.angle * Math.PI) / 180;
+                        const dx = val.b * Math.cos(rad), h = val.b * Math.sin(rad);
+                        return (
+                            <g>
+                                <polygon points={`${baseCX+dx},${baseCY-h} ${baseCX+dx+val.a},${baseCY-h} ${baseCX+val.a},${baseCY} ${baseCX},${baseCY}`} {...style} />
+                                <text x={baseCX + val.a/2} y={baseCY + 25} textAnchor="middle">a = {val.a}</text>
+                                <text x={baseCX + dx/2 - 20} y={baseCY - h/2}>b = {val.b}</text>
+                                {renderAngleArc(baseCX, baseCY, val.angle)}
+                            </g>
+                        );
+                    }
+                    case 'parallelogram_h': {
+                        const dx = Math.sqrt(Math.max(0, val.b**2 - Math.min(val.h, val.b-1)**2));
+                        return (
+                            <g>
+                                <polygon points={`${baseCX+dx},${baseCY-val.h} ${baseCX+dx+val.a},${baseCY-val.h} ${baseCX+val.a},${baseCY} ${baseCX},${baseCY}`} {...style} />
+                                <line x1={baseCX+dx} y1={baseCY-val.h} x2={baseCX+dx} y2={baseCY} stroke="#999" strokeDasharray="4" />
+                                <text x={baseCX+dx-10} y={baseCY-val.h/2} textAnchor="end">h = {val.h}</text>
+                                <text x={baseCX + val.a/2} y={baseCY + 25} textAnchor="middle">a = {val.a}</text>
+                            </g>
+                        );
+                    }
+                    case 'rhombus_angle': {
+                        const rad = (val.angle * Math.PI) / 180;
+                        const dx = val.a * Math.cos(rad), h = val.a * Math.sin(rad);
+                        return (
+                            <g>
+                                <polygon points={`${baseCX+dx},${baseCY-h} ${baseCX+dx+val.a},${baseCY-h} ${baseCX+val.a},${baseCY} ${baseCX},${baseCY}`} {...style} />
+                                <text x={baseCX + val.a/2} y={baseCY + 25} textAnchor="middle">a = {val.a}</text>
+                                {renderAngleArc(baseCX, baseCY, val.angle)}
+                            </g>
+                        );
+                    }
+                    case 'rhombus_h': {
+                        const h = Math.min(val.h, val.a);
+                        const dx = Math.sqrt(val.a**2 - h**2);
+                        return (
+                            <g>
+                                <polygon points={`${baseCX+dx},${baseCY-h} ${baseCX+dx+val.a},${baseCY-h} ${baseCX+val.a},${baseCY} ${baseCX},${baseCY}`} {...style} />
+                                <line x1={baseCX+dx} y1={baseCY-h} x2={baseCX+dx} y2={baseCY} stroke="#999" strokeDasharray="4" />
+                                <text x={baseCX+dx-10} y={baseCY-h/2} textAnchor="end">h = {h}</text>
+                                <text x={baseCX + val.a/2} y={baseCY + 25} textAnchor="middle">a = {val.a}</text>
+                            </g>
+                        );
+                    }
+                    case 'trapezoid':
+                        return (
+                            <g>
+                                <polygon points={`${baseCX+30},${baseCY-val.h} ${baseCX+30+val.top},${baseCY-val.h} ${baseCX+val.a},${baseCY} ${baseCX},${baseCY}`} {...style} />
+                                <text x={baseCX + 30 + val.top/2} y={baseCY - val.h - 10} textAnchor="middle">b = {val.top}</text>
+                                <text x={baseCX + val.a/2} y={baseCY + 25} textAnchor="middle">a = {val.a}</text>
+                                <line x1={baseCX+30} y1={baseCY-val.h} x2={baseCX+30} y2={baseCY} stroke="#999" strokeDasharray="4" />
+                                <text x={baseCX+10} y={baseCY-val.h/2}>h = {val.h}</text>
+                            </g>
+                        );
+                    case 'tri_3sides': {
+                        const a = val.a, b = val.b, c = val.c;
+                        if (a+b<=c || a+c<=b || b+c<=a) return <text x={100} y={200} fill="red">Стороны не образуют треугольник</text>;
+                        const x = (a**2 + b**2 - c**2) / (2 * a), y = Math.sqrt(Math.max(0, b**2 - x**2));
+                        return (
+                            <g>
+                                <polygon points={`${baseCX},${baseCY} ${baseCX+a},${baseCY} ${baseCX+x},${baseCY-y}`} {...style} />
+                                <text x={baseCX + a/2} y={baseCY + 25} textAnchor="middle">a = {a}</text>
+                                <text x={baseCX + x/2 - 15} y={baseCY - y/2}>b = {b}</text>
+                                <text x={baseCX + a - (a-x)/2 + 5} y={baseCY - y/2}>c = {c}</text>
+                            </g>
+                        );
+                    }
+                    case 'tri_angle': {
+                        const rad = (val.angle * Math.PI) / 180;
+                        const x2 = val.b * Math.cos(rad), y2 = val.b * Math.sin(rad);
+                        return (
+                            <g>
+                                <polygon points={`${baseCX},${baseCY} ${baseCX+val.a},${baseCY} ${baseCX+x2},${baseCY-y2}`} {...style} />
+                                <text x={baseCX + val.a/2} y={baseCY + 25} textAnchor="middle">a = {val.a}</text>
+                                <text x={baseCX + x2/2 - 15} y={baseCY - y2/2}>b = {val.b}</text>
+                                {renderAngleArc(baseCX, baseCY, val.angle)}
+                            </g>
+                        );
+                    }
+                    case 'tri_h':
+                        return (
+                            <g>
+                                <polygon points={`${baseCX},${baseCY} ${baseCX+val.a},${baseCY} ${baseCX+val.a/3},${baseCY-val.h}`} {...style} />
+                                <line x1={baseCX+val.a/3} y1={baseCY-val.h} x2={baseCX+val.a/3} y2={baseCY} stroke="#999" strokeDasharray="4" />
+                                <text x={baseCX + val.a/2} y={baseCY + 25} textAnchor="middle">a = {val.a}</text>
+                                <text x={baseCX + val.a/3 - 10} y={baseCY - val.h/2} textAnchor="end">h = {val.h}</text>
+                            </g>
+                        );
+                    case 'circle':
+                        return (
+                            <g>
+                                <circle cx={baseCX + 150} cy={baseCY - 150} r={val.r} {...style} />
+                                <line x1={baseCX + 150} y1={baseCY - 150} x2={baseCX + 150 + val.r} y2={baseCY - 150} stroke="#2196F3" />
+                                <text x={baseCX + 150 + val.r/2} y={baseCY - 160} textAnchor="middle">R = {val.r}</text>
+                            </g>
+                        );
+                    default: return null;
+                }
+            };
+
+            const getFormulaText = () => {
+                if (activeTab === 'diag') {
+                    if (type === 'parallelogram_diag') return "S = ½ · d1 · d2 · sin(α)";
+                    if (type === 'rhombus_diag') return "S = ½ · d1 · d2";
+                    if (type === 'rect_diag') return "S = ½ · d² · sin(α)";
+                    if (type === 'square_diag') return "S = ½ · d²";
+                } else {
+                    if (type === 'rectangle') return "S = a · b";
+                    if (type === 'square') return "S = a²";
+                    if (type === 'parallelogram_angle') return "S = a · b · sin(α)";
+                    if (type === 'parallelogram_h') return "S = a · h";
+                    if (type === 'rhombus_angle') return "S = a² · sin(α)";
+                    if (type === 'rhombus_h') return "S = a · h";
+                    if (type === 'trapezoid') return "S = ½ · (a + b) · h";
+                    if (type === 'tri_3sides') return "Формула Герона: √(p(p-a)(p-b)(p-c))";
+                    if (type === 'tri_angle') return "S = ½ · a · b · sin(α)";
+                    if (type === 'tri_h') return "S = ½ · a · h";
+                    if (type === 'circle') return "S = π · R²";
+                }
+                return "";
+            };
+
+            return (
+                <div className="card">
+                    <div className="tabs">
+                        <button className={`tab-btn ${activeTab === 'classic' ? 'active' : ''}`} onClick={() => {setActiveTab('classic'); setType('parallelogram_angle')}}>Классический метод</button>
+                        <button className={`tab-btn ${activeTab === 'diag' ? 'active' : ''}`} onClick={() => {setActiveTab('diag'); setType('parallelogram_diag')}}>Через диагонали</button>
+                    </div>
+
+                    <div className="grid">
+                        <div className="controls">
+                            <label>Тип фигуры</label>
+                            <select value={type} onChange={(e) => setType(e.target.value)}>
+                                {activeTab === 'classic' ? (
+                                    <>
+                                        <optgroup label="Четырехугольники">
+                                            <option value="rectangle">Прямоугольник</option>
+                                            <option value="square">Квадрат</option>
+                                            <option value="parallelogram_angle">Параллелограмм (стор. + угол)</option>
+                                            <option value="parallelogram_h">Параллелограмм (2 стор. + выс.)</option>
+                                            <option value="rhombus_angle">Ромб (сторона + угол)</option>
+                                            <option value="rhombus_h">Ромб (основание + высота)</option>
+                                            <option value="trapezoid">Трапеция</option>
+                                        </optgroup>
+                                        <optgroup label="Треугольники и прочее">
+                                            <option value="tri_3sides">Треугольник (3 стороны)</option>
+                                            <option value="tri_angle">Треугольник (2 стор. + угол)</option>
+                                            <option value="tri_h">Треугольник (основание + высота)</option>
+                                            <option value="circle">Круг</option>
+                                        </optgroup>
+                                    </>
+                                ) : (
+                                    <>
+                                        <option value="parallelogram_diag">Параллелограмм (d1, d2, α)</option>
+                                        <option value="rhombus_diag">Ромб (d1, d2)</option>
+                                        <option value="rect_diag">Прямоугольник (d, α)</option>
+                                        <option value="square_diag">Квадрат (d)</option>
+                                    </>
+                                )}
+                            </select>
+
+                            {/* Контролы классические */}
+                            {activeTab === 'classic' && (
+                                <>
+                                    {type !== 'circle' && (
+                                        <><label>Основание a: {val.a}</label>
+                                        <input type="range" name="a" min="60" max="250" value={val.a} onChange={handleChange} /></>
+                                    )}
+                                    {(['rectangle', 'parallelogram_angle', 'parallelogram_h', 'tri_3sides', 'tri_angle'].includes(type)) && (
+                                        <><label>Сторона b: {val.b}</label>
+                                        <input type="range" name="b" min="40" max="200" value={val.b} onChange={handleChange} /></>
+                                    )}
+                                    {type === 'tri_3sides' && (
+                                        <><label>Сторона c: {val.c}</label>
+                                        <input type="range" name="c" min="40" max="200" value={val.c} onChange={handleChange} /></>
+                                    )}
+                                    {(['parallelogram_h', 'rhombus_h', 'trapezoid', 'tri_h'].includes(type)) && (
+                                        <><label>Высота h: {val.h}</label>
+                                        <input type="range" name="h" min="30" max="200" value={val.h} onChange={handleChange} /></>
+                                    )}
+                                    {type === 'trapezoid' && (
+                                        <><label>Верхнее основание b: {val.top}</label>
+                                        <input type="range" name="top" min="20" max="250" value={val.top} onChange={handleChange} /></>
+                                    )}
+                                    {(['parallelogram_angle', 'rhombus_angle', 'tri_angle'].includes(type)) && (
+                                        <><label>Угол: {val.angle}°</label>
+                                        <input type="range" name="angle" min="10" max="170" value={val.angle} onChange={handleChange} /></>
+                                    )}
+                                    {type === 'circle' && (
+                                        <><label>Радиус R: {val.r}</label>
+                                        <input type="range" name="r" min="20" max="150" value={val.r} onChange={handleChange} /></>
+                                    )}
+                                </>
+                            )}
+
+                            {/* Контролы диагональные */}
+                            {activeTab === 'diag' && (
+                                <>
+                                    <label>{type.includes('rect') || type.includes('square') ? 'Диагональ d' : 'Диагональ d1'}: {val.d1}</label>
+                                    <input type="range" name="d1" min="100" max="450" value={val.d1} onChange={handleChange} />
+                                    {['parallelogram_diag', 'rhombus_diag'].includes(type) && (
+                                        <><label>Диагональ d2: {val.d2}</label>
+                                        <input type="range" name="d2" min="100" max="450" value={val.d2} onChange={handleChange} /></>
+                                    )}
+                                    {['parallelogram_diag', 'rect_diag'].includes(type) && (
+                                        <><label>Угол α: {val.diag_angle}°</label>
+                                        <input type="range" name="diag_angle" min="10" max="170" value={val.diag_angle} onChange={handleChange} /></>
+                                    )}
+                                </>
+                            )}
+
+                            <div className={`math-box ${activeTab === 'diag' ? 'math-diag' : 'math-classic'}`}>
+                                <strong>Результат расчета:</strong><br/>
+                                <span style={{fontSize: '20px', color: '#2c3e50'}}>S = {calculateArea().toFixed(2)}</span>
+                                <span className="formula">{getFormulaText()}</span>
+                            </div>
+                        </div>
+
+                        <div className="visualizer">
+                            <svg width="650" height="500" viewBox="0 0 650 500">
+                                {renderShape()}
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

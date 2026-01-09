@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Геометрия Треугольника</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 20px; display: flex; justify-content: center; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); width: 900px; }
+        .header-box { margin-bottom: 25px; border-bottom: 2px solid #eee; padding-bottom: 15px; }
+        .grid { display: grid; grid-template-columns: 300px 1fr; gap: 30px; }
+        .controls { display: flex; flex-direction: column; gap: 15px; border-right: 1px solid #eee; padding-right: 20px; }
+        .visualizer { display: flex; justify-content: center; align-items: center; background: #fafafa; border-radius: 8px; min-height: 450px; }
+        label { font-size: 13px; font-weight: bold; color: #444; margin-bottom: 4px; display: block; }
+        input[type="range"] { width: 100%; accent-color: #673ab7; }
+        select { width: 100%; padding: 12px; border-radius: 8px; border: 2px solid #673ab7; font-size: 15px; cursor: pointer; }
+        .math-box { margin-top: 15px; padding: 15px; border-radius: 8px; background: #ede7f6; border-left: 5px solid #673ab7; }
+        .formula { font-family: 'Courier New', monospace; font-weight: bold; color: #311b92; display: block; margin-top: 5px; border-top: 1px solid #d1c4e9; padding-top: 5px; }
+        .val-highlight { color: #d32f2f; font-weight: bold; font-size: 1.2em; }
+        .error { color: #d32f2f; background: #ffebee; padding: 10px; border-radius: 6px; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useMemo } = React;
+
+        const App = () => {
+            const [mode, setMode] = useState('circum'); // circum или in
+            const [val, setVal] = useState({ a: 200, b: 180, c: 160 });
+
+            const handleChange = (e) => setVal({ ...val, [e.target.name]: Number(e.target.value) });
+
+            const data = useMemo(() => {
+                const { a, b, c } = val;
+                const p = (a + b + c) / 2;
+                const sSq = p * (p - a) * (p - b) * (p - c);
+                const isValid = sSq > 0;
+                
+                if (!isValid) return { isValid: false };
+
+                const S = Math.sqrt(sSq);
+                const r = S / p;
+                const R = (a * b * c) / (4 * S);
+
+                // Координаты
+                const ax = 0, ay = 0;
+                const bx = a, by = 0;
+                const cx = (a*a + b*b - c*c) / (2*a);
+                const cy = Math.sqrt(Math.max(0, b*b - cx*cx));
+
+                return { isValid: true, S, r, R, ax, ay, bx, by, cx, cy };
+            }, [val]);
+
+            const renderShape = () => {
+                if (!data.isValid) return <foreignObject x="50" y="200" width="400"><div className="error">Треугольник с такими сторонами невозможен! (Сумма двух сторон должна быть больше третьей)</div></foreignObject>;
+
+                const { ax, ay, bx, by, cx, cy, r, R } = data;
+                
+                // Центр вписанной
+                const ix = (val.a*cx + val.b*bx + val.c*ax) / (val.a+val.b+val.c);
+                const iy = (val.a*cy + val.b*by + val.c*ay) / (val.a+val.b+val.c);
+                
+                // Центр описанной
+                const D = 2 * (ax*(by-cy) + bx*(cy-ay) + cx*(ay-by));
+                const ux = ((ax**2+ay**2)*(by-cy) + (bx**2+by**2)*(cy-ay) + (cx**2+cy**2)*(ay-by)) / D;
+                const uy = ((ax**2+ay**2)*(cx-bx) + (bx**2+by**2)*(ax-cx) + (cx**2+cy**2)*(bx-ax)) / D;
+
+                return (
+                    <g transform="translate(150, 350) scale(1, -1)">
+                        <polygon points={`${ax},${ay} ${bx},${by} ${cx},${cy}`} fill="none" stroke="#673ab7" strokeWidth="3" />
+                        
+                        <g transform="scale(1, -1)">
+                            <text x={bx/2} y={25} textAnchor="middle" fontWeight="bold">a = {val.a}</text>
+                            <text x={cx/2 - 35} y={-cy/2} fontWeight="bold">b = {val.b}</text>
+                            <text x={(bx+cx)/2 + 15} y={-cy/2} fontWeight="bold">c = {val.c}</text>
+                        </g>
+
+                        {mode === 'circum' ? (
+                            <g>
+                                <circle cx={ux} cy={uy} r={R} fill="none" stroke="#2196F3" strokeDasharray="5" strokeWidth="2" />
+                                <line x1={ux} y1={uy} x2={cx} y2={cy} stroke="#2196F3" strokeWidth="2" />
+                                <circle cx={ux} cy={uy} r="4" fill="#2196F3" />
+                                <text x={ux+5} y={-uy-10} transform="scale(1, -1)" fill="#2196F3" fontWeight="bold">R = {R.toFixed(1)}</text>
+                            </g>
+                        ) : (
+                            <g>
+                                <circle cx={ix} cy={iy} r={r} fill="none" stroke="#4CAF50" strokeDasharray="5" strokeWidth="2" />
+                                <line x1={ix} y1={iy} x2={ix} y2="0" stroke="#4CAF50" strokeWidth="2" />
+                                <circle cx={ix} cy={iy} r="4" fill="#4CAF50" />
+                                <text x={ix+5} y={-iy+10} transform="scale(1, -1)" fill="#4CAF50" fontWeight="bold">r = {r.toFixed(1)}</text>
+                            </g>
+                        )}
+                    </g>
+                );
+            };
+
+            return (
+                <div className="card">
+                    <div className="header-box">
+                        <label>Режим расчета площади:</label>
+                        <select value={mode} onChange={(e) => setMode(e.target.value)}>
+                            <option value="circum">Через радиус описанной окружности (R)</option>
+                            <option value="in">Через радиус вписанной окружности (r)</option>
+                        </select>
+                    </div>
+
+                    <div className="grid">
+                        <div className="controls">
+                            <label>Сторона a: {val.a}</label>
+                            <input type="range" name="a" min="100" max="250" value={val.a} onChange={handleChange} />
+                            <label>Сторона b: {val.b}</label>
+                            <input type="range" name="b" min="100" max="250" value={val.b} onChange={handleChange} />
+                            <label>Сторона c: {val.c}</label>
+                            <input type="range" name="c" min="100" max="250" value={val.c} onChange={handleChange} />
+
+                            <div className="math-box">
+                                <strong>Результат S:</strong><br/>
+                                <span className="val-highlight">{data.isValid ? data.S.toFixed(2) : "—"}</span>
+                                <span className="formula">
+                                    {mode === 'circum' ? 'S = (a * b * c) / 4R' : 'S = p * r'}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div className="visualizer">
+                            <svg width="600" height="500">
+                                {renderShape()}
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

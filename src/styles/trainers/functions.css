@@ -1,0 +1,318 @@
+/* Functions Trainer */
+
+/* Формула */
+.formula-display {
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: var(--tg-theme-secondary-bg-color, #f0f0f0);
+    border-radius: 12px;
+    width: 100%;
+}
+
+.formula-display .katex {
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+}
+
+/* Контейнер вопросов */
+.questions-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-width: 600px;
+}
+
+/* Вопросы */
+.step-question {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--tg-theme-text-color, #000000);
+    margin-bottom: 12px;
+}
+
+.step-question.final-step {
+    color: var(--tg-theme-button-color, #3390ec);
+}
+
+/* Сетка кнопок ответов */
+.answer-buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+}
+
+/* Кнопки ответов */
+.answer-button {
+    padding: 14px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    background: var(--tg-theme-button-color, #3390ec);
+    color: var(--tg-theme-button-text-color, #ffffff);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s, opacity 0.2s;
+    text-align: center;
+}
+
+.answer-button:active {
+    transform: scale(0.95);
+    opacity: 0.8;
+}
+
+/* Группы кнопок */
+.button-group {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.button-group-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+}
+
+/* Контейнер шага */
+.step-container {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Поля ввода асимптот */
+.asymptotes-inputs {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.asymptotes-inputs label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* Поля ввода чисел */
+.number-input {
+    width: 80px;
+    padding: 10px;
+    font-size: 18px;
+    text-align: center;
+    border: 2px solid var(--tg-theme-button-color, #3390ec);
+    border-radius: 8px;
+    background: var(--tg-theme-bg-color, #ffffff);
+    color: var(--tg-theme-text-color, #000000);
+}
+
+.number-input.small {
+    width: 60px;
+    padding: 8px;
+    font-size: 16px;
+}
+
+.number-input:focus {
+    outline: none;
+    border-color: var(--tg-theme-button-color, #3390ec);
+    box-shadow: 0 0 0 3px rgba(51, 144, 236, 0.2);
+}
+
+/* Сетка точек */
+.points-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.point-input-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.point-input-group span {
+    font-weight: 500;
+    min-width: 70px;
+}
+
+.point-input-group label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+}
+
+/* Ввод параболы */
+.parabola-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.input-section {
+    background: var(--tg-theme-secondary-bg-color, #f0f0f0);
+    padding: 16px;
+    border-radius: 10px;
+}
+
+.input-section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--tg-theme-hint-color, #999999);
+    margin-bottom: 12px;
+}
+
+/* Вершина параболы */
+.parabola-vertex-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.parabola-vertex-group span {
+    font-weight: 500;
+    min-width: 70px;
+}
+
+.parabola-coords {
+    display: flex;
+    gap: 12px;
+}
+
+.parabola-coords label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+}
+
+/* Контейнер точек X - горизонтальный */
+.x-points-container-horizontal {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.x-point-input {
+    display: flex;
+    align-items: center;
+}
+
+.x-point-input label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Кнопки управления точками */
+.x-points-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.small-button {
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.small-button:active {
+    transform: scale(0.95);
+    opacity: 0.8;
+}
+
+.small-button.add {
+    background: var(--tg-theme-button-color, #3390ec);
+    color: var(--tg-theme-button-text-color, #ffffff);
+}
+
+.small-button.remove {
+    background: #ef4444;
+    color: #ffffff;
+}
+
+/* Контейнер графика */
+.plot-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+}
+
+.plot-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #10b981;
+}
+
+.plot {
+    width: 100%;
+    max-width: 500px;
+    height: 400px;
+    background: var(--tg-theme-bg-color, #ffffff);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* Утилиты */
+.hidden {
+    display: none !important;
+}
+
+.opacity-50 {
+    opacity: 0.5;
+}
+
+.pointer-events-none {
+    pointer-events: none;
+}
+
+/* Сообщение об отсутствии операций */
+.no-operations-message {
+    font-size: 18px;
+    color: var(--tg-theme-hint-color, #999999);
+    text-align: center;
+    padding: 40px 20px;
+}
+
+/* Адаптивность */
+@media (max-width: 640px) {
+    .formula-display .katex {
+        font-size: 1.5rem;
+    }
+
+    .answer-buttons-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .plot {
+        height: 300px;
+    }
+
+    .asymptotes-inputs {
+        flex-direction: column;
+    }
+
+    .point-input-group {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
