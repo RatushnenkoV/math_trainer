@@ -8,7 +8,7 @@ class FunctionsComponent extends BaseTrainerComponent {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
-        `;
+        `; 
     }
 
     getMainScreenTemplate() {
@@ -32,6 +32,8 @@ class FunctionsComponent extends BaseTrainerComponent {
                     <div id="functions-problem-display" class="problem-display">
                         <div id="functions-formula" class="formula-display"></div>
                     </div>
+
+                    <span id="no-operations-message" class="no-operations-message">Не выбрано ни одного типа функций в настройках 😢</span>
 
                     <div id="functions-questions-flow" class="questions-flow">
                         <div id="functions-step-type">

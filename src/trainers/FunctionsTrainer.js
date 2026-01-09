@@ -39,6 +39,7 @@ class FunctionsTrainer extends BaseTrainer {
             resultMessage: document.getElementById('functions-result-message'),
             problemDisplay: document.getElementById('functions-problem-display'),
             formula: document.getElementById('functions-formula'),
+            noOperationsMessage: document.getElementById('no-operations-message'),
 
             // Контейнеры для шагов
             questionsFlow: document.getElementById('functions-questions-flow'),
@@ -461,12 +462,17 @@ class FunctionsTrainer extends BaseTrainer {
 
     // Показать сообщение об отсутствии операций
     showNoOperationsMessage() {
-        this.elements.problemDisplay.innerHTML = '<span class="no-operations-message">Не выбрано ни одного типа функций в настройках 😢</span>';
+        this.elements.noOperationsMessage.hidden = false;
+        this.elements.problemDisplay.style.display = 'none';
+        this.elements.questionsFlow.style.display = 'none';
     }
 
     // Скрыть сообщение об отсутствии операций
     hideNoOperationsMessage() {
-        // Сообщение очищается при отображении примера
+        this.elements.noOperationsMessage.hidden = true;
+        this.elements.problemDisplay.style.display = 'flex';
+        this.elements.questionsFlow.style.display = 'flex';
+        
     }
 
     // Показать экран настроек
