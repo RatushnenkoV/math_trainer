@@ -136,6 +136,11 @@ const trainerConfig = {
         screen: 'functions-screen',
         trainer: 'functions'
     },
+    'coordinates-btn': {
+        name: 'Координаты',
+        screen: 'coordinates-screen',
+        trainer: 'coordinates'
+    },
     'areas-btn': {
         name: 'Площади фигур',
         screen: 'areas-screen',
@@ -237,6 +242,7 @@ async function loadTrainer(trainerName, showLoader = true) {
         'factoringOut': 'src/styles/trainers/factoring-out.css',
         'definitions': 'src/styles/trainers/definitions.css',
         'functions': 'src/styles/trainers/functions.css',
+        'coordinates': 'src/styles/trainers/coordinates.css',
         'areas': 'src/styles/trainers/areas.css'
     };
 
@@ -368,6 +374,11 @@ async function loadTrainer(trainerName, showLoader = true) {
             'src/trainers/FunctionsTrainer.js',
             'src/components/FunctionsComponent.js'
         ],
+        'coordinates': [
+            'src/utils/generators/CoordinatesGenerator.js',
+            'src/trainers/CoordinatesTrainer.js',
+            'src/components/CoordinatesComponent.js'
+        ],
         'areas': [
             'src/utils/generators/AreasGenerator.js',
             'src/trainers/AreasTrainer.js',
@@ -480,7 +491,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
     });
 
     // Скрываем все компоненты тренажеров
-    document.querySelectorAll('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, trig-equations-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer, polynomial-simplification-trainer, polynomial-expand-trainer, algebraic-identities-trainer, definitions-trainer, functions-trainer, areas-trainer').forEach(trainer => {
+    document.querySelectorAll('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, trig-equations-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer, polynomial-simplification-trainer, polynomial-expand-trainer, algebraic-identities-trainer, definitions-trainer, functions-trainer, coordinates-trainer, areas-trainer').forEach(trainer => {
         trainer.classList.remove('active');
     });
 
@@ -490,7 +501,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
         targetScreen.classList.add('active');
 
         // Если экран находится внутри компонента тренажера, показываем этот компонент
-        const trainerComponent = targetScreen.closest('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, trig-equations-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer, polynomial-simplification-trainer, polynomial-expand-trainer, algebraic-identities-trainer, definitions-trainer, functions-trainer, areas-trainer');
+        const trainerComponent = targetScreen.closest('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, trig-equations-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer, polynomial-simplification-trainer, polynomial-expand-trainer, algebraic-identities-trainer, definitions-trainer, functions-trainer, coordinates-trainer, areas-trainer');
         if (trainerComponent) {
             trainerComponent.classList.add('active');
         }
@@ -586,6 +597,7 @@ function handleBackButton() {
         case 'definitions-screen':
         case 'functions-screen':
         case 'factoring-out-screen':
+        case 'coordinates-screen':
             // Из экрана тренажёра возвращаемся в главное меню
             showScreen('main-menu');
             break;
@@ -719,9 +731,14 @@ function handleBackButton() {
         case 'functions-settings-screen':
             // Из настроек функций возвращаемся к тренажёру
             showScreen('functions-screen');
-            trainers.definitions.generateNewProblem();
+            trainers.functions.generateNewProblem();
             break;
 
+        case 'coordinates-settings-screen':
+            // Из настроек координат возвращаемся к тренажёру координат
+            showScreen('coordinates-screen');
+            trainers.coordinates.generateNewProblem();
+            break;
 
         case 'main-menu':
             // Из главного меню закрываем приложение
@@ -799,6 +816,8 @@ function initHistoryNavigation() {
                 trainers.definitions.generateNewProblem();
             } else if (screenId === 'functions-screen') {
                 trainers.functions.generateNewProblem();
+            } else if (screenId === 'coordinates-screen') {
+                trainers.coordinates.generateNewProblem();
             }
         } else {
             // Если нет состояния, возвращаемся в главное меню

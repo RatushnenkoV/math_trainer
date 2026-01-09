@@ -1,0 +1,170 @@
+/* Стили для тренажёра координат */
+
+#coordinates-screen .problem-display {
+    /* Используется для отображения сообщения об ошибке */
+    text-align: center;
+    padding: 10px;
+}
+
+#coordinates-screen .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+#coordinates-screen .mode-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--tg-theme-text-color, #000);
+    margin: 0;
+    text-align: center;
+}
+
+#coordinates-screen .grid-container {
+    width: 100%;
+    max-width: 450px;
+    background: #fafafa;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+#coordinates-screen .grid-container svg {
+    max-width: 100%;
+    height: auto;
+}
+
+#coordinates-screen .coordinates-inputs {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#coordinates-screen .input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.5rem;
+}
+
+#coordinates-screen .input-label {
+    font-weight: bold;
+    color: var(--tg-theme-text-color, #000);
+}
+
+#coordinates-screen input[type="number"] {
+    width: 100px;
+    padding: 12px 15px;
+    font-size: 1.3rem;
+    border: 2px solid #667eea;
+    border-radius: 8px;
+    text-align: center;
+    background: var(--tg-theme-bg-color, #fff);
+    color: var(--tg-theme-text-color, #000);
+}
+
+#coordinates-screen input[type="number"]:focus {
+    outline: none;
+    border-color: #764ba2;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+/* Настройки */
+#coordinates-settings-screen .settings-content {
+    padding: 20px;
+}
+
+#coordinates-settings-screen .settings-group {
+    margin-bottom: 25px;
+    padding: 20px;
+    background: var(--tg-theme-secondary-bg-color, #f0f0f0);
+    border-radius: 12px;
+}
+
+#coordinates-settings-screen .settings-group h3 {
+    margin: 0 0 15px 0;
+    font-size: 1.1rem;
+    color: var(--tg-theme-text-color, #000);
+    font-weight: 600;
+}
+
+#coordinates-settings-screen .range-setting {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+#coordinates-settings-screen .range-setting label {
+    font-size: 1rem;
+    color: var(--tg-theme-text-color, #000);
+}
+
+#coordinates-settings-screen .range-setting input[type="number"] {
+    width: 70px;
+    padding: 8px 10px;
+    font-size: 1rem;
+    border: 2px solid #667eea;
+    border-radius: 8px;
+    text-align: center;
+    background: var(--tg-theme-bg-color, #fff);
+    color: var(--tg-theme-text-color, #000);
+}
+
+#coordinates-settings-screen .range-setting input[type="number"]:focus {
+    outline: none;
+    border-color: #764ba2;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+/* Сообщение об отсутствии операций */
+#coordinates-screen .no-operations-message {
+    font-size: 1.2rem;
+    color: #999;
+    text-align: center;
+    padding: 40px 20px;
+}
+
+/* Адаптация для мобильных устройств */
+@media (max-width: 600px) {
+    #coordinates-screen .content {
+        padding: 10px;
+    }
+
+    #coordinates-screen .grid-container {
+        padding: 10px;
+    }
+
+    #coordinates-screen .mode-title {
+        font-size: 1.1rem;
+    }
+
+    #coordinates-screen .coordinates-inputs {
+        gap: 15px;
+    }
+
+    #coordinates-screen .input-group {
+        font-size: 1.3rem;
+    }
+
+    #coordinates-screen input[type="number"] {
+        width: 80px;
+        font-size: 1.1rem;
+    }
+
+    #coordinates-settings-screen .range-setting {
+        font-size: 0.9rem;
+    }
+
+    #coordinates-settings-screen .range-setting input[type="number"] {
+        width: 60px;
+        font-size: 0.9rem;
+    }
+}
