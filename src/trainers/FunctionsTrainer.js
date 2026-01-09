@@ -157,9 +157,9 @@ class FunctionsTrainer extends BaseTrainer {
             this.showNextStep();
         } else {
             this.handleWrongAnswer();
-            setTimeout(() => {
-                this.generateNewProblem();
-            }, 1000);
+            // setTimeout(() => {
+            //     this.generateNewProblem();
+            // }, 1000);
         }
     }
 
@@ -225,9 +225,9 @@ class FunctionsTrainer extends BaseTrainer {
             this.showNextStep();
         } else {
             this.handleWrongAnswer();
-            setTimeout(() => {
-                this.generateNewProblem();
-            }, 1000);
+            // setTimeout(() => {
+            //     this.generateNewProblem();
+            // }, 1000);
         }
     }
 
@@ -240,9 +240,9 @@ class FunctionsTrainer extends BaseTrainer {
             this.showNextStep();
         } else {
             this.handleWrongAnswer();
-            setTimeout(() => {
-                this.generateNewProblem();
-            }, 1000);
+            // setTimeout(() => {
+            //     this.generateNewProblem();
+            // }, 1000);
         }
     }
 
@@ -272,9 +272,9 @@ class FunctionsTrainer extends BaseTrainer {
             this.showNextStep();
         } else {
             this.handleWrongAnswer();
-            setTimeout(() => {
-                this.generateNewProblem();
-            }, 1000);
+            // setTimeout(() => {
+            //     this.generateNewProblem();
+            // }, 1000);
         }
     }
 
@@ -329,8 +329,8 @@ class FunctionsTrainer extends BaseTrainer {
                         <p class="input-section-title">Точки пересечения с осью OX (0-2):</p>
                         <div id="x-points-container" class="x-points-container-horizontal"></div>
                         <div class="x-points-buttons">
-                            <button onclick="trainers.functions.addXPoint()" class="small-button add">+ Добавить X</button>
-                            <button onclick="trainers.functions.removeXPoint()" class="small-button remove">− Удалить</button>
+                            <button onclick="trainers.functions.addXPoint()" class="small-button add">Добавить точку</button>
+                            <button onclick="trainers.functions.removeXPoint()" class="small-button remove">Удалить точку</button>
                         </div>
                     </div>
                 </div>
@@ -416,9 +416,9 @@ class FunctionsTrainer extends BaseTrainer {
             }, 500);
         } else {
             this.handleWrongAnswer();
-            setTimeout(() => {
-                this.generateNewProblem();
-            }, 1000);
+            // setTimeout(() => {
+            //     this.generateNewProblem();
+            // }, 1000);
         }
     }
 
