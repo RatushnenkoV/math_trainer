@@ -585,6 +585,7 @@ function handleBackButton() {
         case 'algebraic-identities-screen':
         case 'definitions-screen':
         case 'functions-screen':
+        case 'factoring-out-screen':
             // Из экрана тренажёра возвращаемся в главное меню
             showScreen('main-menu');
             break;
@@ -720,6 +721,7 @@ function handleBackButton() {
             showScreen('functions-screen');
             trainers.definitions.generateNewProblem();
             break;
+
 
         case 'main-menu':
             // Из главного меню закрываем приложение
