@@ -278,6 +278,15 @@ class VectorOperationsTrainer extends BaseTrainer {
                 this.isDragging = true;
                 this.selectedStart = { x: gridX, y: gridY };
                 this.selectedEnd = { x: gridX, y: gridY };
+
+                // Удаляем предыдущий вектор перед рисованием нового
+                const oldVectors = svg.querySelectorAll('.user-vector');
+                oldVectors.forEach(v => v.remove());
+
+                // Draw initial zero vector immediately
+                this.drawVector(svg, this.selectedStart.x, this.selectedStart.y,
+                              this.selectedEnd.x, this.selectedEnd.y,
+                              minCoord, cellWidth, cellHeight, width, height, padding, '#2196F3', 'user');
             }
         };
 
@@ -297,12 +306,10 @@ class VectorOperationsTrainer extends BaseTrainer {
                 const oldVectors = svg.querySelectorAll('.user-vector');
                 oldVectors.forEach(v => v.remove());
 
-                // Рисуем новый вектор
-                if (this.selectedStart.x !== this.selectedEnd.x || this.selectedStart.y !== this.selectedEnd.y) {
-                    this.drawVector(svg, this.selectedStart.x, this.selectedStart.y,
-                                  this.selectedEnd.x, this.selectedEnd.y,
-                                  minCoord, cellWidth, cellHeight, width, height, padding, '#2196F3', 'user');
-                }
+                // Рисуем новый вектор (включая нулевой)
+                this.drawVector(svg, this.selectedStart.x, this.selectedStart.y,
+                              this.selectedEnd.x, this.selectedEnd.y,
+                              minCoord, cellWidth, cellHeight, width, height, padding, '#2196F3', 'user');
             }
         };
 
@@ -336,22 +343,27 @@ class VectorOperationsTrainer extends BaseTrainer {
         const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
         if (vectorId === 'user') group.setAttribute('class', 'user-vector');
 
-        // Линия вектора
-        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        line.setAttribute('x1', x1);
-        line.setAttribute('y1', y1);
-        line.setAttribute('x2', x2);
-        line.setAttribute('y2', y2);
-        line.setAttribute('stroke', color);
-        line.setAttribute('stroke-width', '3');
-        line.setAttribute('marker-end', `url(#arrowhead-${vectorId})`);
-        group.appendChild(line);
+        const isZeroVector = (startX === endX && startY === endY);
 
-        // Начальная точка (кружок)
+        // Рисуем линию только если вектор не нулевой
+        if (!isZeroVector) {
+            // Линия вектора
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', x1);
+            line.setAttribute('y1', y1);
+            line.setAttribute('x2', x2);
+            line.setAttribute('y2', y2);
+            line.setAttribute('stroke', color);
+            line.setAttribute('stroke-width', '3');
+            line.setAttribute('marker-end', `url(#arrowhead-${vectorId})`);
+            group.appendChild(line);
+        }
+
+        // Начальная точка (кружок) - для нулевого вектора делаем её чуть больше
         const startCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
         startCircle.setAttribute('cx', x1);
         startCircle.setAttribute('cy', y1);
-        startCircle.setAttribute('r', '5');
+        startCircle.setAttribute('r', isZeroVector ? '7' : '5');
         startCircle.setAttribute('fill', color);
         group.appendChild(startCircle);
 
