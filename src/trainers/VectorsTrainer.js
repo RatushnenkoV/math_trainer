@@ -149,10 +149,25 @@ class VectorsTrainer extends BaseTrainer {
             // Добавляем возможность рисовать вектор
             svg.style.cursor = 'crosshair';
 
-            const handleMouseDown = (e) => {
+            const getCoordinates = (e) => {
                 const rect = svg.getBoundingClientRect();
-                const clickX = e.clientX - rect.left;
-                const clickY = e.clientY - rect.top;
+                let clickX, clickY;
+
+                if (e.type.startsWith('touch')) {
+                    const touch = e.touches[0] || e.changedTouches[0];
+                    clickX = touch.clientX - rect.left;
+                    clickY = touch.clientY - rect.top;
+                } else {
+                    clickX = e.clientX - rect.left;
+                    clickY = e.clientY - rect.top;
+                }
+
+                return { clickX, clickY };
+            };
+
+            const handleStart = (e) => {
+                e.preventDefault();
+                const { clickX, clickY } = getCoordinates(e);
 
                 const gridX = Math.round((clickX - padding) / cellWidth) + minCoord;
                 const gridY = Math.round((height - padding - clickY) / cellHeight) + minCoord;
@@ -164,12 +179,11 @@ class VectorsTrainer extends BaseTrainer {
                 }
             };
 
-            const handleMouseMove = (e) => {
+            const handleMove = (e) => {
                 if (!this.isDragging) return;
+                e.preventDefault();
 
-                const rect = svg.getBoundingClientRect();
-                const clickX = e.clientX - rect.left;
-                const clickY = e.clientY - rect.top;
+                const { clickX, clickY } = getCoordinates(e);
 
                 const gridX = Math.round((clickX - padding) / cellWidth) + minCoord;
                 const gridY = Math.round((height - padding - clickY) / cellHeight) + minCoord;
@@ -190,14 +204,22 @@ class VectorsTrainer extends BaseTrainer {
                 }
             };
 
-            const handleMouseUp = () => {
+            const handleEnd = (e) => {
+                e.preventDefault();
                 this.isDragging = false;
             };
 
-            svg.addEventListener('mousedown', handleMouseDown);
-            svg.addEventListener('mousemove', handleMouseMove);
-            svg.addEventListener('mouseup', handleMouseUp);
-            svg.addEventListener('mouseleave', handleMouseUp);
+            // Поддержка мыши
+            svg.addEventListener('mousedown', handleStart);
+            svg.addEventListener('mousemove', handleMove);
+            svg.addEventListener('mouseup', handleEnd);
+            svg.addEventListener('mouseleave', handleEnd);
+
+            // Поддержка касаний
+            svg.addEventListener('touchstart', handleStart, { passive: false });
+            svg.addEventListener('touchmove', handleMove, { passive: false });
+            svg.addEventListener('touchend', handleEnd, { passive: false });
+            svg.addEventListener('touchcancel', handleEnd, { passive: false });
         }
 
         container.appendChild(svg);

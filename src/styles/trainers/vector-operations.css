@@ -1,0 +1,114 @@
+/* Стили для тренажёра действий над векторами */
+
+#vector-operations-screen .problem-display {
+    text-align: center;
+    padding: 10px;
+}
+
+#vector-operations-screen .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+#vector-operations-screen .task-text {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--tg-theme-text-color, #000);
+    text-align: center;
+}
+
+#vector-operations-screen .mode-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--tg-theme-text-color, #000);
+    margin: 0;
+    text-align: center;
+}
+
+#vector-operations-screen .grid-container {
+    width: 100%;
+    max-width: 450px;
+    background: #fafafa;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+#vector-operations-screen .grid-container svg {
+    max-width: 100%;
+    height: auto;
+}
+
+#vector-operations-screen .vectors-inputs {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+    font-size: 1.5rem;
+}
+
+#vector-operations-screen .input-label {
+    font-weight: bold;
+    color: var(--tg-theme-text-color, #000);
+}
+
+#vector-operations-screen input[type="number"] {
+    width: 100px;
+    padding: 12px 15px;
+    font-size: 1.3rem;
+    border: 2px solid #667eea;
+    border-radius: 8px;
+    text-align: center;
+    background: var(--tg-theme-bg-color, #fff);
+    color: var(--tg-theme-text-color, #000);
+}
+
+#vector-operations-screen input[type="number"]:focus {
+    outline: none;
+    border-color: #764ba2;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+/* Сообщение об отсутствии операций */
+#vector-operations-screen .no-operations {
+    font-size: 1.2rem;
+    color: #999;
+    text-align: center;
+    padding: 40px 20px;
+}
+
+/* Адаптация для мобильных устройств */
+@media (max-width: 600px) {
+    #vector-operations-screen .content {
+        padding: 10px;
+    }
+
+    #vector-operations-screen .grid-container {
+        padding: 10px;
+    }
+
+    #vector-operations-screen .task-text {
+        font-size: 1.2rem;
+    }
+
+    #vector-operations-screen .mode-title {
+        font-size: 1.1rem;
+    }
+
+    #vector-operations-screen .vectors-inputs {
+        gap: 10px;
+        font-size: 1.3rem;
+    }
+
+    #vector-operations-screen input[type="number"] {
+        width: 80px;
+        font-size: 1.1rem;
+    }
+}
