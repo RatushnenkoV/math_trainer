@@ -402,6 +402,9 @@ async function loadTrainer(trainerName, showLoader = true) {
             'src/components/VectorOperationsComponent.js'
         ],
         'areas': [
+            'src/utils/ShapeDrawer.js',
+            'src/utils/TriangleDrawer.js',
+            'src/utils/ParallelogramDrawer.js',
             'src/utils/generators/AreasGenerator.js',
             'src/trainers/AreasTrainer.js',
             'src/components/AreasComponent.js'
@@ -513,7 +516,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
     });
 
     // Скрываем все компоненты тренажеров
-    document.querySelectorAll('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, trig-equations-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer, polynomial-simplification-trainer, polynomial-expand-trainer, algebraic-identities-trainer, definitions-trainer, functions-trainer, coordinates-trainer, vectors-trainer, vector-operations-trainer, areas-trainer').forEach(trainer => {
+    document.querySelectorAll('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, trig-equations-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer, polynomial-simplification-trainer, polynomial-expand-trainer, algebraic-identities-trainer, definitions-trainer, functions-trainer, coordinates-trainer, vectors-trainer, vector-operations-trainer, factoring-out-trainer, areas-trainer').forEach(trainer => {
         trainer.classList.remove('active');
     });
 
@@ -523,7 +526,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
         targetScreen.classList.add('active');
 
         // Если экран находится внутри компонента тренажера, показываем этот компонент
-        const trainerComponent = targetScreen.closest('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, trig-equations-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer, polynomial-simplification-trainer, polynomial-expand-trainer, algebraic-identities-trainer, definitions-trainer, functions-trainer, coordinates-trainer, vectors-trainer, vector-operations-trainer, areas-trainer');
+        const trainerComponent = targetScreen.closest('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, trig-equations-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer, polynomial-simplification-trainer, polynomial-expand-trainer, algebraic-identities-trainer, definitions-trainer, functions-trainer, coordinates-trainer, vectors-trainer, vector-operations-trainer, factoring-out-trainer, areas-trainer');
         if (trainerComponent) {
             trainerComponent.classList.add('active');
         }
@@ -622,6 +625,7 @@ function handleBackButton() {
         case 'coordinates-screen':
         case 'vectors-screen':
         case 'vector-operations-screen':
+        case 'areas-screen':
             // Из экрана тренажёра возвращаемся в главное меню
             showScreen('main-menu');
             break;
@@ -764,6 +768,12 @@ function handleBackButton() {
             trainers.vectorOperations.generateNewProblem();
             break;
 
+        case 'areas-settings':
+            // Из настроек площадей возвращаемся к тренажёру
+            showScreen('areas-screen');
+            trainers.areas.generateNewProblem();
+            break;
+
         case 'main-menu':
             // Из главного меню закрываем приложение
             if (tg) {
@@ -846,6 +856,8 @@ function initHistoryNavigation() {
                 trainers.vectors.generateNewProblem();
             } else if (screenId === 'vector-operations-screen') {
                 trainers.vectorOperations.generateNewProblem();
+            } else if (screenId === 'areas-screen') {
+                trainers.areas.generateNewProblem();
             }
         } else {
             // Если нет состояния, возвращаемся в главное меню

@@ -18,7 +18,8 @@
       "Bash(curl:*)",
       "Bash(netstat:*)",
       "Bash(node:*)",
-      "Bash(node -c:*)"
+      "Bash(node -c:*)",
+      "Bash(start test-areas.html)"
     ]
   }
 }

@@ -84,7 +84,7 @@ class BaseTrainer {
 
         this.hideNoOperationsMessage();
         this.enableInputs();
-        this.currentProblem = this.generator.generate();
+        this.currentProblem = this.generator.generate(this.settings);
         this.displayProblem(this.currentProblem);
         this.clearInputs();
     }

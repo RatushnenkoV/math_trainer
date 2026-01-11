@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест компонента TriangleDrawer</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h2 {
+            margin-top: 0;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Тест компонента TriangleDrawer</h1>
+
+    <div class="test-container">
+        <h2>1. Треугольник по двум сторонам и углу между ними</h2>
+        <div id="test1"></div>
+    </div>
+
+    <div class="test-container">
+        <h2>2. Треугольник по трем сторонам</h2>
+        <div id="test2"></div>
+    </div>
+
+    <div class="test-container">
+        <h2>3. Треугольник по основанию и высоте</h2>
+        <div id="test3"></div>
+    </div>
+
+    <div class="test-container">
+        <h2>4. Прямоугольный треугольник</h2>
+        <div id="test4"></div>
+    </div>
+
+    <div class="test-container">
+        <h2>5. Треугольник с углом 90°</h2>
+        <div id="test5"></div>
+    </div>
+
+    <div class="test-container">
+        <h2>6. Равносторонний треугольник (три стороны)</h2>
+        <div id="test6"></div>
+    </div>
+
+    <script src="src/utils/TriangleDrawer.js"></script>
+    <script>
+        const drawer = new TriangleDrawer();
+
+        // Масштаб для визуального отображения
+        const SCALE = 10;
+
+        // Тест 1: Треугольник по двум сторонам и углу
+        {
+            const svg = drawer.createSVGElement('svg', {
+                width: '650',
+                height: '500',
+                viewBox: '0 0 650 500',
+                style: 'max-width:100%;height:auto'
+            });
+
+            const shape = drawer.drawBySidesAndAngle({
+                baseX: 150,
+                baseY: 350,
+                sideA: 18 * SCALE,
+                sideB: 14 * SCALE,
+                angle: 60,
+                labels: {
+                    a: 'a = 18',
+                    b: 'b = 14',
+                    c: 'c',
+                    showAngle: true
+                }
+            });
+
+            svg.appendChild(shape);
+            document.getElementById('test1').appendChild(svg);
+        }
+
+        // Тест 2: Треугольник по трем сторонам
+        {
+            const svg = drawer.createSVGElement('svg', {
+                width: '650',
+                height: '500',
+                viewBox: '0 0 650 500',
+                style: 'max-width:100%;height:auto'
+            });
+
+            const shape = drawer.drawByThreeSides({
+                baseX: 150,
+                baseY: 350,
+                sideA: 16 * SCALE,
+                sideB: 13 * SCALE,
+                sideC: 15 * SCALE,
+                labels: {
+                    a: 'a = 16',
+                    b: 'b = 13',
+                    c: 'c = 15'
+                }
+            });
+
+            svg.appendChild(shape);
+            document.getElementById('test2').appendChild(svg);
+        }
+
+        // Тест 3: Треугольник по основанию и высоте
+        {
+            const svg = drawer.createSVGElement('svg', {
+                width: '650',
+                height: '500',
+                viewBox: '0 0 650 500',
+                style: 'max-width:100%;height:auto'
+            });
+
+            const shape = drawer.drawByBaseAndHeight({
+                baseX: 150,
+                baseY: 350,
+                base: 20 * SCALE,
+                height: 12 * SCALE,
+                heightPosition: 7 * SCALE,
+                labels: {
+                    a: 'a = \\sqrt{2}',
+                    h: 'h = 12'
+                }
+            });
+
+            svg.appendChild(shape);
+            document.getElementById('test3').appendChild(svg);
+        }
+
+        // Тест 4: Прямоугольный треугольник
+        {
+            const svg = drawer.createSVGElement('svg', {
+                width: '650',
+                height: '500',
+                viewBox: '0 0 650 500',
+                style: 'max-width:100%;height:auto'
+            });
+
+            const shape = drawer.drawRightTriangle({
+                baseX: 150,
+                baseY: 350,
+                cathetus1: 15 * SCALE,
+                cathetus2: 12 * SCALE,
+                labels: {
+                    a: 'a = 15',
+                    b: 'b = 12',
+                    c: 'c'
+                }
+            });
+
+            svg.appendChild(shape);
+            document.getElementById('test4').appendChild(svg);
+        }
+
+        // Тест 5: Треугольник с углом 90°
+        {
+            const svg = drawer.createSVGElement('svg', {
+                width: '650',
+                height: '500',
+                viewBox: '0 0 650 500',
+                style: 'max-width:100%;height:auto'
+            });
+
+            const shape = drawer.drawBySidesAndAngle({
+                baseX: 150,
+                baseY: 350,
+                sideA: 16 * SCALE,
+                sideB: 12 * SCALE,
+                angle: 90,
+                labels: {
+                    a: 'a = 16',
+                    b: 'b = 12',
+                    showAngle: true
+                }
+            });
+
+            svg.appendChild(shape);
+            document.getElementById('test5').appendChild(svg);
+        }
+
+        // Тест 6: Равносторонний треугольник
+        {
+            const svg = drawer.createSVGElement('svg', {
+                width: '650',
+                height: '500',
+                viewBox: '0 0 650 500',
+                style: 'max-width:100%;height:auto'
+            });
+
+            const shape = drawer.drawByThreeSides({
+                baseX: 150,
+                baseY: 350,
+                sideA: 15 * SCALE,
+                sideB: 15 * SCALE,
+                sideC: 15 * SCALE,
+                labels: {
+                    a: 'a = 15',
+                    b: 'b = 15',
+                    c: 'c = 15'
+                }
+            });
+
+            svg.appendChild(shape);
+            document.getElementById('test6').appendChild(svg);
+        }
+    </script>
+</body>
+</html>

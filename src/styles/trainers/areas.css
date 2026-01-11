@@ -1,0 +1,99 @@
+/* Стили для тренажёра на площади */
+
+/* Экран настроек должен быть поверх основного экрана */
+#areas-settings {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    background: var(--bg-color, #fff);
+}
+
+.shape-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+    min-height: 500px;
+}
+
+.shape-container svg {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Исправление отображения SVG внутри KaTeX (для корней и других элементов) */
+.shape-container foreignObject svg {
+    display: inline-block;
+    overflow: visible;
+}
+
+.shape-container .katex svg {
+    display: inline-block;
+    position: absolute;
+    overflow: visible;
+}
+
+.shape-container .katex .hide-tail {
+    overflow: hidden;
+}
+
+.areas-input-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.areas-input-container .input-label {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.areas-input-container input[type="number"] {
+    width: 150px;
+    padding: 12px;
+    font-size: 18px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    text-align: center;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+}
+
+.areas-input-container input[type="number"]:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+}
+
+.mode-title {
+    text-align: center;
+    font-size: 24px;
+    color: var(--text-color);
+    margin: 20px 0;
+    font-weight: 600;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 600px) {
+    .shape-container {
+        min-height: 400px;
+    }
+
+    .shape-container svg {
+        width: 100%;
+        height: auto;
+    }
+
+    .mode-title {
+        font-size: 20px;
+    }
+
+    .areas-input-container input[type="number"] {
+        width: 120px;
+        font-size: 16px;
+    }
+}

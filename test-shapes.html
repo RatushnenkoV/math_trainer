@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест компонента ShapeDrawer</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        svg {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Тест компонента ShapeDrawer</h1>
+
+    <div class="test-container">
+        <h2>1. Круг по радиусу</h2>
+        <div id="test1"></div>
+    </div>
+
+    <div class="test-container">
+        <h2>2. Круг с диаметром</h2>
+        <div id="test2"></div>
+    </div>
+
+    <div class="test-container">
+        <h2>3. Трапеция по двум основаниям и высоте</h2>
+        <div id="test3"></div>
+    </div>
+
+    <div class="test-container">
+        <h2>4. Трапеция со средней линией</h2>
+        <div id="test4"></div>
+    </div>
+
+    <div class="test-container">
+        <h2>5. Параллелограмм по диагоналям</h2>
+        <div id="test5"></div>
+    </div>
+
+    <div class="test-container">
+        <h2>6. Ромб по диагоналям</h2>
+        <div id="test6"></div>
+    </div>
+
+    <script src="src/utils/ShapeDrawer.js"></script>
+    <script>
+        const drawer = new ShapeDrawer();
+
+        // Масштаб для визуального отображения
+        const SCALE = 10;
+
+        // Тест 1: Круг по радиусу
+        {
+            const svg = drawer.createSVGElement('svg', {
+                width: '650',
+                height: '500',
+                viewBox: '0 0 650 500',
+                style: 'max-width:100%;height:auto'
+            });
+
+            const shape = drawer.drawCircle({
+                centerX: 300,
+                centerY: 250,
+                radius: 12 * SCALE,
+                labels: {
+                    r: 'R = 12'
+                }
+            });
+
+            svg.appendChild(shape);
+            document.getElementById('test1').appendChild(svg);
+        }
+
+        // Тест 2: Круг с диаметром
+        {
+            const svg = drawer.createSVGElement('svg', {
+                width: '650',
+                height: '500',
+                viewBox: '0 0 650 500',
+                style: 'max-width:100%;height:auto'
+            });
+
+            const shape = drawer.drawCircle({
+                centerX: 300,
+                centerY: 250,
+                radius: 10 * SCALE,
+                labels: {
+                    r: 'R = 10',
+                    showDiameter: true,
+                    d: 'd = 20'
+                }
+            });
+
+            svg.appendChild(shape);
+            document.getElementById('test2').appendChild(svg);
+        }
+
+        // Тест 3: Трапеция по двум основаниям и высоте
+        {
+            const svg = drawer.createSVGElement('svg', {
+                width: '650',
+                height: '500',
+                viewBox: '0 0 650 500',
+                style: 'max-width:100%;height:auto'
+            });
+
+            const shape = drawer.drawTrapezoid({
+                baseX: 100,
+                baseY: 350,
+                base1: 20 * SCALE,
+                base2: 12 * SCALE,
+                height: 10 * SCALE,
+                labels: {
+                    a: 'a = 20',
+                    b: 'b = 12',
+                    h: 'h = 10'
+                }
+            });
+
+            svg.appendChild(shape);
+            document.getElementById('test3').appendChild(svg);
+        }
+
+        // Тест 4: Трапеция со средней линией
+        {
+            const svg = drawer.createSVGElement('svg', {
+                width: '650',
+                height: '500',
+                viewBox: '0 0 650 500',
+                style: 'max-width:100%;height:auto'
+            });
+
+            const shape = drawer.drawTrapezoid({
+                baseX: 100,
+                baseY: 350,
+                base1: 18 * SCALE,
+                base2: 10 * SCALE,
+                height: 12 * SCALE,
+                labels: {
+                    a: 'a = 18',
+                    b: 'b = 10',
+                    h: 'h = 12',
+                    showMidline: true,
+                    m: 'm = 14'
+                }
+            });
+
+            svg.appendChild(shape);
+            document.getElementById('test4').appendChild(svg);
+        }
+
+        // Тест 5: Параллелограмм по диагоналям
+        {
+            const svg = drawer.createSVGElement('svg', {
+                width: '650',
+                height: '500',
+                viewBox: '0 0 650 500',
+                style: 'max-width:100%;height:auto'
+            });
+
+            const shape = drawer.drawParallelogramByDiagonals({
+                centerX: 300,
+                centerY: 250,
+                diagonal1: 20 * SCALE,
+                diagonal2: 16 * SCALE,
+                angle: 60,
+                labels: {
+                    d1: 'd_1 = 20',
+                    d2: 'd_2 = 16',
+                    showAngle: true
+                }
+            });
+
+            svg.appendChild(shape);
+            document.getElementById('test5').appendChild(svg);
+        }
+
+        // Тест 6: Ромб по диагоналям
+        {
+            const svg = drawer.createSVGElement('svg', {
+                width: '650',
+                height: '500',
+                viewBox: '0 0 650 500',
+                style: 'max-width:100%;height:auto'
+            });
+
+            const shape = drawer.drawRhombusByDiagonals({
+                centerX: 300,
+                centerY: 250,
+                diagonal1: 18 * SCALE,
+                diagonal2: 14 * SCALE,
+                labels: {
+                    d1: 'd_1 = 18',
+                    d2: 'd_2 = 14'
+                }
+            });
+
+            svg.appendChild(shape);
+            document.getElementById('test6').appendChild(svg);
+        }
+    </script>
+</body>
+</html>
