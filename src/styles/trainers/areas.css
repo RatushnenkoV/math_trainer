@@ -1,12 +1,40 @@
 /* Стили для тренажёра на площади */
+/* @import "src/styles/main.css"; */
 
-/* Экран настроек должен быть поверх основного экрана */
-#areas-settings {
+/* Исправление проблемы с прокруткой при открытии клавиатуры */
+#areas-screen {
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
     position: fixed;
     top: 0;
     left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#areas-screen .header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--tg-theme-bg-color, #ffffff);
+}
+
+#areas-screen .content {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 20px;
+}
+
+/* Экран настроек должен быть поверх основного экрана */
+#areas-settings-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     z-index: 100;
-    background: var(--bg-color, #fff);
+    background: var(--tg-theme-bg-color, #ffffff);
 }
 
 .shape-container {
@@ -52,7 +80,7 @@
     color: var(--text-color);
 }
 
-.areas-input-container input[type="number"] {
+/* .areas-input-container input[type="number"] {
     width: 150px;
     padding: 12px;
     font-size: 18px;
@@ -67,6 +95,21 @@
     outline: none;
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+} */
+
+
+
+/* Answer Input */
+.areas-input-container input[type="number"]  {
+    width: 150px;
+    padding: 10px;
+    font-size: 20px;
+    text-align: center;
+    border: 2px solid var(--tg-theme-button-color, #3390ec);
+    border-radius: 8px;
+    background: var(--tg-theme-bg-color, #ffffff);
+    color: var(--tg-theme-text-color, #000000);
+    -moz-appearance: textfield;
 }
 
 .mode-title {
@@ -92,8 +135,8 @@
         font-size: 20px;
     }
 
-    .areas-input-container input[type="number"] {
+    /* .areas-input-container input[type="number"] {
         width: 120px;
         font-size: 16px;
-    }
+    } */
 }

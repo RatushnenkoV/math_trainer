@@ -124,6 +124,39 @@ class AreasTrainer extends BaseTrainer {
             }
         });
 
+        // Исправление проблемы с прокруткой при открытии клавиатуры
+        this.elements.answerInput.addEventListener('focus', () => {
+            // Запоминаем текущую позицию прокрутки
+            this.scrollPosition = window.scrollY || window.pageYOffset;
+        });
+
+        this.elements.answerInput.addEventListener('blur', () => {
+            // Возвращаем страницу в исходную позицию после закрытия клавиатуры
+            setTimeout(() => {
+                window.scrollTo(0, 0);
+                // Убеждаемся, что экран тренажера также прокручен наверх
+                if (this.elements.screen) {
+                    this.elements.screen.scrollTop = 0;
+                }
+            }, 100);
+        });
+
+        // Дополнительная защита: при изменении размера окна (когда закрывается клавиатура)
+        // прокручиваем обратно наверх
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                // Проверяем, что input не в фокусе (клавиатура закрыта)
+                if (document.activeElement !== this.elements.answerInput) {
+                    window.scrollTo(0, 0);
+                    if (this.elements.screen) {
+                        this.elements.screen.scrollTop = 0;
+                    }
+                }
+            }, 300);
+        });
+
         // Кнопка назад из настроек
         this.elements.settingsBackBtn.addEventListener('click', () => {
             this.hideSettingsScreen();
@@ -599,6 +632,9 @@ class AreasTrainer extends BaseTrainer {
     }
 
     checkAnswer() {
+        // Убираем фокус с input, чтобы закрыть клавиатуру
+        this.elements.answerInput.blur();
+
         const userAnswer = parseFloat(this.elements.answerInput.value);
 
         if (isNaN(userAnswer)) {
