@@ -37,7 +37,7 @@ class AreasComponent extends BaseTrainerComponent {
                     </div>
 
                     <div class="areas-input-container">
-                        <span id="areas-input-label" class="input-label">S =</span>
+                        <div id="areas-input-label" class="input-label"></div>
                         <input type="number" id="areas-answer-input" placeholder="0" step="any">
                     </div>
 
@@ -50,7 +50,7 @@ class AreasComponent extends BaseTrainerComponent {
 
     getSettingsTemplate() {
         return `
-            <div id="areas-settings" class="screen">
+            <div id="areas-settings-screen" class="screen">
                 <div class="header">
                     <button id="areas-settings-back-btn" class="icon-button">←</button>
                     <h2>Настройки</h2>

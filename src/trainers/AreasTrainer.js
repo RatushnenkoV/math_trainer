@@ -28,6 +28,13 @@ class AreasTrainer extends BaseTrainer {
         this.SVG_HEIGHT = 500;
         this.PADDING = 80; // отступы от краёв
         this.TARGET_SIZE = 300; // желаемый размер фигуры (примерно)
+
+        // Параметры для перемещения и масштабирования
+        this.viewBox = { x: 0, y: 0, width: 650, height: 500 };
+        this.isPanning = false;
+        this.startPoint = { x: 0, y: 0 };
+        this.minScale = 0.5;
+        this.maxScale = 3;
     }
 
     /**
@@ -74,7 +81,7 @@ class AreasTrainer extends BaseTrainer {
             answerInput: document.getElementById('areas-answer-input'),
             inputLabel: document.getElementById('areas-input-label'),
 
-            settingsScreen: document.getElementById('areas-settings'),
+            settingsScreen: document.getElementById('areas-settings-screen'),
             settingsBackBtn: document.getElementById('areas-settings-back-btn'),
 
             // Чекбоксы настроек
@@ -172,28 +179,64 @@ class AreasTrainer extends BaseTrainer {
 
     displayProblem(problem) {
         // Обновляем текст вопроса и подпись инпута в зависимости от типа задачи
+        let inputLatex;
+
         if (problem.questionType === 'divideByPi') {
-            this.elements.questionText.textContent = `Найдите площадь ${problem.shapeName}, делённую на π`;
-            this.elements.inputLabel.textContent = 'S/π =';
+            this.elements.questionText.textContent = `Найдите площадь ${problem.shapeName}, делённую на `;
+            // Добавляем π через KaTeX
+            const piSpan = document.createElement('span');
+            try {
+                katex.render('\\pi', piSpan, { throwOnError: false });
+            } catch (e) {
+                piSpan.textContent = 'π';
+            }
+            this.elements.questionText.appendChild(piSpan);
+            inputLatex = '\\frac{S}{\\pi} =';
         } else if (problem.questionType === 'divideBySqrt2') {
-            this.elements.questionText.textContent = `Найдите площадь ${problem.shapeName}, делённую на √2`;
-            this.elements.inputLabel.textContent = 'S/√2 =';
+            this.elements.questionText.textContent = `Найдите площадь ${problem.shapeName}, делённую на `;
+            // Добавляем √2 через KaTeX
+            const sqrtSpan = document.createElement('span');
+            try {
+                katex.render('\\sqrt{2}', sqrtSpan, { throwOnError: false });
+            } catch (e) {
+                sqrtSpan.textContent = '√2';
+            }
+            this.elements.questionText.appendChild(sqrtSpan);
+            inputLatex = '\\frac{S}{\\sqrt{2}} =';
         } else if (problem.questionType === 'divideBySqrt3') {
-            this.elements.questionText.textContent = `Найдите площадь ${problem.shapeName}, делённую на √3`;
-            this.elements.inputLabel.textContent = 'S/√3 =';
+            this.elements.questionText.textContent = `Найдите площадь ${problem.shapeName}, делённую на `;
+            // Добавляем √3 через KaTeX
+            const sqrtSpan = document.createElement('span');
+            try {
+                katex.render('\\sqrt{3}', sqrtSpan, { throwOnError: false });
+            } catch (e) {
+                sqrtSpan.textContent = '√3';
+            }
+            this.elements.questionText.appendChild(sqrtSpan);
+            inputLatex = '\\frac{S}{\\sqrt{3}} =';
         } else {
             this.elements.questionText.textContent = `Найдите площадь ${problem.shapeName}`;
-            this.elements.inputLabel.textContent = 'S =';
+            inputLatex = 'S =';
+        }
+
+        // Рендерим подпись инпута через KaTeX
+        try {
+            katex.render(inputLatex, this.elements.inputLabel, { throwOnError: false });
+        } catch (e) {
+            this.elements.inputLabel.textContent = inputLatex;
         }
 
         // Очищаем контейнер
         this.elements.shapeContainer.innerHTML = '';
 
+        // Сброс viewBox для новой задачи
+        this.viewBox = { x: 0, y: 0, width: 650, height: 500 };
+
         // Создаём SVG
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         svg.setAttribute('width', '650');
         svg.setAttribute('height', '500');
-        svg.setAttribute('viewBox', '0 0 650 500');
+        this.updateViewBox(svg);
 
         // Рисуем фигуру в зависимости от типа
         let shape;
@@ -225,7 +268,157 @@ class AreasTrainer extends BaseTrainer {
             svg.appendChild(shape);
         }
 
+        // Добавляем обработчики для перемещения и масштабирования
+        this.setupInteractions(svg);
+
         this.elements.shapeContainer.appendChild(svg);
+    }
+
+    /**
+     * Обновляет viewBox SVG элемента
+     */
+    updateViewBox(svg) {
+        const vb = this.viewBox;
+        svg.setAttribute('viewBox', `${vb.x} ${vb.y} ${vb.width} ${vb.height}`);
+    }
+
+    /**
+     * Настраивает интерактивность для SVG (перемещение и масштабирование)
+     */
+    setupInteractions(svg) {
+        // Перемещение мышью
+        svg.addEventListener('mousedown', (e) => {
+            if (e.button === 0) { // Левая кнопка мыши
+                this.isPanning = true;
+                this.startPoint = { x: e.clientX, y: e.clientY };
+                e.preventDefault();
+            }
+        });
+
+        svg.addEventListener('mousemove', (e) => {
+            if (this.isPanning) {
+                const dx = (e.clientX - this.startPoint.x) * (this.viewBox.width / this.SVG_WIDTH);
+                const dy = (e.clientY - this.startPoint.y) * (this.viewBox.height / this.SVG_HEIGHT);
+
+                this.viewBox.x -= dx;
+                this.viewBox.y -= dy;
+
+                this.startPoint = { x: e.clientX, y: e.clientY };
+                this.updateViewBox(svg);
+            }
+        });
+
+        svg.addEventListener('mouseup', () => {
+            this.isPanning = false;
+        });
+
+        svg.addEventListener('mouseleave', () => {
+            this.isPanning = false;
+        });
+
+        // Масштабирование колесом мыши
+        svg.addEventListener('wheel', (e) => {
+            e.preventDefault();
+
+            const rect = svg.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            // Точка в координатах viewBox
+            const svgX = this.viewBox.x + mouseX * (this.viewBox.width / this.SVG_WIDTH);
+            const svgY = this.viewBox.y + mouseY * (this.viewBox.height / this.SVG_HEIGHT);
+
+            // Коэффициент масштабирования
+            const scaleFactor = e.deltaY > 0 ? 1.1 : 0.9;
+
+            const newWidth = this.viewBox.width * scaleFactor;
+            const newHeight = this.viewBox.height * scaleFactor;
+
+            // Проверяем границы масштабирования
+            const newScale = this.SVG_WIDTH / newWidth;
+
+            if (newScale >= this.minScale && newScale <= this.maxScale) {
+                // Пересчитываем положение так, чтобы точка под курсором осталась на месте
+                this.viewBox.x = svgX - (mouseX * (newWidth / this.SVG_WIDTH));
+                this.viewBox.y = svgY - (mouseY * (newHeight / this.SVG_HEIGHT));
+                this.viewBox.width = newWidth;
+                this.viewBox.height = newHeight;
+
+                this.updateViewBox(svg);
+            }
+        }, { passive: false });
+
+        // Перемещение касанием (touch)
+        let lastTouchX = 0;
+        let lastTouchY = 0;
+        let lastTouchDistance = 0;
+
+        svg.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                this.isPanning = true;
+                lastTouchX = e.touches[0].clientX;
+                lastTouchY = e.touches[0].clientY;
+            } else if (e.touches.length === 2) {
+                this.isPanning = false;
+                const dx = e.touches[0].clientX - e.touches[1].clientX;
+                const dy = e.touches[0].clientY - e.touches[1].clientY;
+                lastTouchDistance = Math.sqrt(dx * dx + dy * dy);
+            }
+            e.preventDefault();
+        }, { passive: false });
+
+        svg.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 1 && this.isPanning) {
+                const dx = (e.touches[0].clientX - lastTouchX) * (this.viewBox.width / this.SVG_WIDTH);
+                const dy = (e.touches[0].clientY - lastTouchY) * (this.viewBox.height / this.SVG_HEIGHT);
+
+                this.viewBox.x -= dx;
+                this.viewBox.y -= dy;
+
+                lastTouchX = e.touches[0].clientX;
+                lastTouchY = e.touches[0].clientY;
+
+                this.updateViewBox(svg);
+            } else if (e.touches.length === 2) {
+                // Пинч для масштабирования
+                const dx = e.touches[0].clientX - e.touches[1].clientX;
+                const dy = e.touches[0].clientY - e.touches[1].clientY;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (lastTouchDistance > 0) {
+                    const scaleFactor = lastTouchDistance / distance;
+
+                    const centerX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+                    const centerY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+
+                    const rect = svg.getBoundingClientRect();
+                    const svgCenterX = this.viewBox.x + (centerX - rect.left) * (this.viewBox.width / this.SVG_WIDTH);
+                    const svgCenterY = this.viewBox.y + (centerY - rect.top) * (this.viewBox.height / this.SVG_HEIGHT);
+
+                    const newWidth = this.viewBox.width * scaleFactor;
+                    const newHeight = this.viewBox.height * scaleFactor;
+
+                    const newScale = this.SVG_WIDTH / newWidth;
+
+                    if (newScale >= this.minScale && newScale <= this.maxScale) {
+                        this.viewBox.x = svgCenterX - ((centerX - rect.left) * (newWidth / this.SVG_WIDTH));
+                        this.viewBox.y = svgCenterY - ((centerY - rect.top) * (newHeight / this.SVG_HEIGHT));
+                        this.viewBox.width = newWidth;
+                        this.viewBox.height = newHeight;
+
+                        this.updateViewBox(svg);
+                    }
+                }
+
+                lastTouchDistance = distance;
+            }
+            e.preventDefault();
+        }, { passive: false });
+
+        svg.addEventListener('touchend', () => {
+            this.isPanning = false;
+            lastTouchDistance = 0;
+        });
     }
 
     drawParallelogram(problem) {
@@ -441,11 +634,13 @@ class AreasTrainer extends BaseTrainer {
     }
 
     showSettingsScreen() {
+        this.elements.screen.classList.remove('active');
         this.elements.settingsScreen.classList.add('active');
     }
 
     hideSettingsScreen() {
         this.elements.settingsScreen.classList.remove('active');
+        this.elements.screen.classList.add('active');
     }
 
     showScreen(screenId) {
