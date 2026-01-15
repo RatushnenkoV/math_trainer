@@ -41,7 +41,8 @@ system-of-equations-trainer,
 system-of-inequalities-trainer,
 square-roots-trainer,
 powers-trainer,
-polynomial-simplification-trainer {
+polynomial-simplification-trainer,
+areas-trainer {
     display: none;
     position: absolute;
     top: 0;
@@ -69,7 +70,8 @@ system-of-equations-trainer.active,
 system-of-inequalities-trainer.active,
 square-roots-trainer.active,
 powers-trainer.active,
-polynomial-simplification-trainer.active {
+polynomial-simplification-trainer.active,
+areas-trainer.active {
     display: block;
     z-index: 10;
 }
