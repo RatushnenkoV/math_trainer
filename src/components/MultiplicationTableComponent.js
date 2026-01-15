@@ -5,11 +5,13 @@ class MultiplicationTableComponent extends BaseTrainerComponent {
     }
 
     render() {
+        console.log('Рендеринг MultiplicationTableComponent');
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
-            ${this.getShareModalTemplate()}
+            ${this.getShareModalTemplate('multiplication-table')}
         `;
+        console.log('Рендеринг завершён, проверяем модальное окно:', !!document.getElementById('multiplication-table-share-modal'));
     }
 
     getMainScreenTemplate() {
@@ -134,8 +136,12 @@ class MultiplicationTableComponent extends BaseTrainerComponent {
     }
 
     initTrainer() {
+        console.log('Инициализация MultiplicationTableTrainer');
         this.trainer = new MultiplicationTableTrainer();
+        console.log('Trainer создан, name:', this.trainer.name);
         this.trainer.initDOM();
+        console.log('DOM инициализирован');
+        console.log('Кнопка share найдена:', !!this.trainer.elements.shareBtn);
     }
 }
 
