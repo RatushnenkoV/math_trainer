@@ -24,6 +24,7 @@ class MultiplicationTableTrainer extends BaseTrainer {
             screen: document.getElementById('multiplication-table-screen'),
             backBtn: document.getElementById('multiplication-table-back-btn'),
             settingsBtn: document.getElementById('multiplication-table-settings-btn'),
+            shareBtn: document.getElementById('multiplication-table-share-btn'),
             checkBtn: document.getElementById('multiplication-table-check-btn'),
             settingsScreen: document.getElementById('multiplication-table-settings-screen'),
             settingsBackBtn: document.getElementById('multiplication-table-settings-back-btn'),
@@ -43,6 +44,7 @@ class MultiplicationTableTrainer extends BaseTrainer {
         this.initEventHandlers();
         this.initSettingsHandlers();
         this.initInputHandlers();
+        this.initShareModalHandlers();
     }
 
     // Инициализация обработчиков для полей ввода

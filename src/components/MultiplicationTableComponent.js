@@ -8,6 +8,7 @@ class MultiplicationTableComponent extends BaseTrainerComponent {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
+            ${this.getShareModalTemplate()}
         `;
     }
 
@@ -120,6 +121,12 @@ class MultiplicationTableComponent extends BaseTrainerComponent {
                                 <span>20</span>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>Поделиться</h3>
+                        <p class="settings-description">Создайте челлендж с текущими настройками</p>
+                        <button id="multiplication-table-share-btn" class="settings-button">🔗 Создать ссылку</button>
                     </div>
                 </div>
             </div>

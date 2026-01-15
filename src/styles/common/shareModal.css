@@ -1,0 +1,217 @@
+/* Стили для модального окна "Поделиться" */
+
+.share-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.share-modal-overlay.active {
+    display: flex;
+}
+
+.share-modal {
+    background: var(--tg-theme-bg-color, #ffffff);
+    border-radius: 16px;
+    padding: 24px;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.share-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.share-modal-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--tg-theme-text-color, #000000);
+    margin: 0;
+}
+
+.share-modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--tg-theme-hint-color, #999999);
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.share-modal-close:hover {
+    background-color: var(--tg-theme-secondary-bg-color, #f0f0f0);
+}
+
+.share-modal-body {
+    margin-bottom: 20px;
+}
+
+.share-modal-description {
+    color: var(--tg-theme-hint-color, #999999);
+    font-size: 14px;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.share-modal-group {
+    margin-bottom: 20px;
+}
+
+.share-modal-label {
+    display: block;
+    color: var(--tg-theme-text-color, #000000);
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.share-modal-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--tg-theme-hint-color, #cccccc);
+    border-radius: 8px;
+    font-size: 16px;
+    background: var(--tg-theme-bg-color, #ffffff);
+    color: var(--tg-theme-text-color, #000000);
+    box-sizing: border-box;
+}
+
+.share-modal-input:focus {
+    outline: none;
+    border-color: var(--tg-theme-button-color, #3390ec);
+}
+
+.share-modal-range-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.share-modal-range {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(to right,
+        var(--tg-theme-button-color, #3390ec) 0%,
+        var(--tg-theme-button-color, #3390ec) 50%,
+        rgba(51, 144, 236, 0.3) 50%,
+        rgba(51, 144, 236, 0.3) 100%);
+    outline: none;
+}
+
+.share-modal-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--tg-theme-button-color, #3390ec);
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.share-modal-range::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--tg-theme-button-color, #3390ec);
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.share-modal-value {
+    min-width: 40px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--tg-theme-text-color, #000000);
+}
+
+.share-modal-footer {
+    display: flex;
+    gap: 12px;
+}
+
+.share-modal-button {
+    flex: 1;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.share-modal-button:hover {
+    opacity: 0.8;
+}
+
+.share-modal-button.primary {
+    background: var(--tg-theme-button-color, #3390ec);
+    color: var(--tg-theme-button-text-color, #ffffff);
+}
+
+.share-modal-button.secondary {
+    background: var(--tg-theme-secondary-bg-color, #f0f0f0);
+    color: var(--tg-theme-text-color, #000000);
+}
+
+.share-modal-success {
+    display: none;
+    padding: 12px;
+    background: #4caf50;
+    color: white;
+    border-radius: 8px;
+    text-align: center;
+    margin-top: 12px;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.share-modal-success.show {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

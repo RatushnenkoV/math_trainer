@@ -504,8 +504,14 @@ async function initApp() {
     // Инициализация обработки кнопки "Назад" браузера/Android
     initHistoryNavigation();
 
-    // Показываем главное меню
-    showScreen('main-menu');
+    // Проверка URL параметров для режима челленджа
+    const challengeParams = ShareLinkUtil.decodeFromURL();
+    if (challengeParams) {
+        await loadChallengeMode(challengeParams);
+    } else {
+        // Показываем главное меню
+        showScreen('main-menu');
+    }
 }
 
 // Показ экрана (делаем глобальной для использования в тренажёрах)
@@ -1008,4 +1014,102 @@ function initDonateButton() {
         tg.openTelegramLink(link);
         tg.close();
     });
+}
+
+// Загрузка режима челленджа из URL параметров
+async function loadChallengeMode(params) {
+    const { trainerName, settings, taskCount } = params;
+
+    // Маппинг имён тренажёров из URL в внутренние имена
+    // URL формат: multiplication-table, внутренний: multiplicationTable
+    const trainerNameMap = {
+        'multiplication-table': 'multiplicationTable',
+        'divisibility': 'divisibility',
+        'square-roots': 'squareRoots',
+        'percentages': 'percentages',
+        'negatives': 'negatives',
+        'fraction-visual': 'fractionVisual',
+        'fraction-sense': 'fractionSense',
+        'fractions': 'fractions',
+        'decimals': 'decimals',
+        'linear-equations': 'linearEquations',
+        'linear-inequalities': 'linearInequalities',
+        'quadratic-equations': 'quadraticEquations',
+        'quadratic-inequalities': 'quadraticInequalities',
+        'system-of-equations': 'systemOfEquations',
+        'system-of-inequalities': 'systemOfInequalities',
+        'trigonometry': 'trigonometry',
+        'trig-equations': 'trigEquations',
+        'powers': 'powers',
+        'polynomial-simplification': 'polynomialSimplification',
+        'polynomial-expand': 'polynomialExpand',
+        'algebraic-identities': 'algebraicIdentities',
+        'factoring-out': 'factoringOut',
+        'definitions': 'definitions',
+        'functions': 'functions',
+        'coordinates': 'coordinates',
+        'vectors': 'vectors',
+        'vector-operations': 'vectorOperations',
+        'areas': 'areas'
+    };
+
+    const internalTrainerName = trainerNameMap[trainerName] || trainerName;
+
+    // Находим конфигурацию тренажёра по имени
+    let config = null;
+    let buttonId = null;
+    for (const [id, cfg] of Object.entries(trainerConfig)) {
+        if (cfg.trainer === internalTrainerName) {
+            config = cfg;
+            buttonId = id;
+            break;
+        }
+    }
+
+    if (!config) {
+        console.error(`Trainer not found: ${trainerName}`);
+        showScreen('main-menu');
+        return;
+    }
+
+    // Загружаем тренажёр
+    const loaded = await loadTrainer(config.trainer);
+    if (!loaded) {
+        console.error('Failed to load trainer');
+        showScreen('main-menu');
+        return;
+    }
+
+    // Создаём custom element
+    const componentTag = config.screen.replace('-screen', '-trainer');
+    let trainerElement = document.querySelector(componentTag);
+
+    if (!trainerElement) {
+        trainerElement = document.createElement(componentTag);
+        document.getElementById('app').appendChild(trainerElement);
+    }
+
+    // Получаем trainer из компонента
+    const trainer = trainerElement.trainer;
+    if (!trainer) {
+        console.error('Trainer instance not found');
+        showScreen('main-menu');
+        return;
+    }
+
+    trainers[config.trainer] = trainer;
+
+    // Применяем настройки из URL
+    trainer.settings = settings;
+    trainer.saveSettings();
+    trainer.updateGeneratorSettings();
+
+    // Активируем режим челленджа
+    trainer.activateChallengeMode(taskCount);
+
+    // Показываем экран тренажёра
+    showScreen(config.screen);
+
+    // Запускаем тест
+    trainer.startTest();
 }

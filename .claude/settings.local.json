@@ -19,7 +19,8 @@
       "Bash(netstat:*)",
       "Bash(node:*)",
       "Bash(node -c:*)",
-      "Bash(start test-areas.html)"
+      "Bash(start test-areas.html)",
+      "Bash(git pull:*)"
     ]
   }
 }

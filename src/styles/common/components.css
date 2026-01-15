@@ -10,6 +10,11 @@
     gap: 12px;
 }
 
+.header-buttons {
+    display: flex;
+    gap: 8px;
+}
+
 .icon-button {
     width: 40px;
     height: 40px;
@@ -315,6 +320,31 @@
     font-weight: 600;
     margin-bottom: 16px;
     color: var(--tg-theme-text-color, #000000);
+}
+
+.settings-description {
+    font-size: 14px;
+    color: var(--tg-theme-hint-color, #999999);
+    margin-bottom: 12px;
+    line-height: 1.5;
+}
+
+.settings-button {
+    width: 100%;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+    background: var(--tg-theme-button-color, #3390ec);
+    color: var(--tg-theme-button-text-color, #ffffff);
+}
+
+.settings-button:active {
+    transform: scale(0.98);
+    opacity: 0.8;
 }
 
 /* Settings header */
