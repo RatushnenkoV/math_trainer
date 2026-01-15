@@ -30,7 +30,7 @@
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     padding: 20px;
-    gap: 20px;
+    gap: 0px;
 }
 
 /* Экран настроек должен быть поверх основного экрана */
