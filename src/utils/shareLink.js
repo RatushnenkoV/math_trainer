@@ -9,28 +9,33 @@ class ShareLinkUtil {
      * @returns {string} - Полная URL ссылка или startapp параметр для Telegram
      */
     static encodeSettings(trainerName, settings, taskCount = 10) {
-        const params = new URLSearchParams();
-
-        // Добавляем название тренажёра
-        params.set('trainer', trainerName);
-
-        // Добавляем количество задач
-        params.set('tasks', taskCount);
-
-        // Сжимаем и кодируем настройки в base64
-        const settingsJson = JSON.stringify(settings);
-        const settingsBase64 = btoa(encodeURIComponent(settingsJson));
-        params.set('settings', settingsBase64);
-
         // Проверяем, запущено ли приложение в Telegram
         const tg = window.Telegram?.WebApp;
+
         if (tg) {
-            // Для Telegram Mini App используем формат с startapp
-            // Это создаст ссылку вида: https://t.me/botname?startapp=params
-            const startParam = params.toString();
-            return startParam;
+            // Для Telegram Mini App: кодируем всё в один base64 строку
+            // start_param может содержать только: A-Z, a-z, 0-9, _, -
+            const data = {
+                trainer: trainerName,
+                tasks: taskCount,
+                settings: settings
+            };
+            const dataJson = JSON.stringify(data);
+            // Кодируем в base64 и заменяем недопустимые символы
+            const base64 = btoa(encodeURIComponent(dataJson))
+                .replace(/\+/g, '-')
+                .replace(/\//g, '_')
+                .replace(/=/g, '');
+            return base64;
         } else {
-            // Для обычного браузера - стандартный URL
+            // Для обычного браузера - стандартный URL с параметрами
+            const params = new URLSearchParams();
+            params.set('trainer', trainerName);
+            params.set('tasks', taskCount);
+            const settingsJson = JSON.stringify(settings);
+            const settingsBase64 = btoa(encodeURIComponent(settingsJson));
+            params.set('settings', settingsBase64);
+
             const baseUrl = window.location.origin + window.location.pathname;
             return `${baseUrl}?${params.toString()}`;
         }
@@ -41,39 +46,59 @@ class ShareLinkUtil {
      * @returns {Object|null} - Объект с параметрами {trainerName, settings, taskCount} или null
      */
     static decodeFromURL() {
-        let params;
-
         // Проверяем, запущено ли в Telegram
         const tg = window.Telegram?.WebApp;
+
         if (tg && tg.initDataUnsafe && tg.initDataUnsafe.start_param) {
-            // Получаем параметры из start_param
-            params = new URLSearchParams(tg.initDataUnsafe.start_param);
+            // Telegram Mini App: декодируем из одной base64 строки
+            try {
+                const startParam = tg.initDataUnsafe.start_param;
+                // Восстанавливаем стандартный base64 формат
+                const base64 = startParam
+                    .replace(/-/g, '+')
+                    .replace(/_/g, '/');
+                // Добавляем padding если нужен
+                const padding = '='.repeat((4 - base64.length % 4) % 4);
+                const base64WithPadding = base64 + padding;
+
+                const dataJson = decodeURIComponent(atob(base64WithPadding));
+                const data = JSON.parse(dataJson);
+
+                return {
+                    trainerName: data.trainer,
+                    settings: data.settings,
+                    taskCount: data.tasks
+                };
+            } catch (error) {
+                console.error('Ошибка декодирования Telegram параметров:', error);
+                return null;
+            }
         } else {
-            // Обычный URL
-            params = new URLSearchParams(window.location.search);
-        }
+            // Обычный URL с параметрами
+            const params = new URLSearchParams(window.location.search);
 
-        const trainerName = params.get('trainer');
-        const taskCount = params.get('tasks');
-        const settingsBase64 = params.get('settings');
+            const trainerName = params.get('trainer');
+            const taskCount = params.get('tasks');
+            const settingsBase64 = params.get('settings');
 
-        if (!trainerName || !settingsBase64 || !taskCount) {
-            return null;
-        }
+            if (!trainerName || !settingsBase64 || !taskCount) {
+                return null;
+            }
 
-        try {
-            // Декодируем настройки из base64
-            const settingsJson = decodeURIComponent(atob(settingsBase64));
-            const settings = JSON.parse(settingsJson);
+            try {
+                // Декодируем настройки из base64
+                const settingsJson = decodeURIComponent(atob(settingsBase64));
+                const settings = JSON.parse(settingsJson);
 
-            return {
-                trainerName,
-                settings,
-                taskCount: parseInt(taskCount, 10)
-            };
-        } catch (error) {
-            console.error('Ошибка декодирования параметров:', error);
-            return null;
+                return {
+                    trainerName,
+                    settings,
+                    taskCount: parseInt(taskCount, 10)
+                };
+            } catch (error) {
+                console.error('Ошибка декодирования URL параметров:', error);
+                return null;
+            }
         }
     }
 

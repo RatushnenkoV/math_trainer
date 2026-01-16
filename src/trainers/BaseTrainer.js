@@ -36,13 +36,9 @@ class BaseTrainer {
 
         // Кнопка "Поделиться" (если есть)
         if (this.elements.shareBtn) {
-            console.log('Найдена кнопка "Поделиться"', this.elements.shareBtn);
             this.elements.shareBtn.addEventListener('click', () => {
-                console.log('Клик по кнопке "Поделиться"');
                 this.showShareModal();
             });
-        } else {
-            console.warn('Кнопка "Поделиться" не найдена для', this.name);
         }
 
         // Кнопка проверки
@@ -270,8 +266,6 @@ class BaseTrainer {
 
     // Инициализация обработчиков модального окна
     initShareModalHandlers() {
-        console.log('Инициализация модального окна для', this.name);
-
         const modal = document.getElementById(`${this.name}-share-modal`);
         const closeBtn = document.getElementById(`${this.name}-share-close`);
         const cancelBtn = document.getElementById(`${this.name}-share-cancel`);
@@ -280,20 +274,7 @@ class BaseTrainer {
         const tasksValue = document.getElementById(`${this.name}-share-tasks-value`);
         const successMessage = document.getElementById(`${this.name}-share-success`);
 
-        console.log('Элементы модального окна:', {
-            modal: !!modal,
-            closeBtn: !!closeBtn,
-            cancelBtn: !!cancelBtn,
-            copyBtn: !!copyBtn,
-            tasksSlider: !!tasksSlider,
-            tasksValue: !!tasksValue,
-            successMessage: !!successMessage
-        });
-
-        if (!modal) {
-            console.error('Модальное окно не найдено!');
-            return;
-        }
+        if (!modal) return;
 
         // Обновление значения слайдера
         const updateSliderGradient = (value) => {
@@ -330,16 +311,9 @@ class BaseTrainer {
 
         // Копирование/Шаринг ссылки
         copyBtn?.addEventListener('click', async () => {
-            console.log('Клик по кнопке "Поделиться" в модальном окне');
             const taskCount = parseInt(tasksSlider.value, 10);
-            console.log('Количество задач:', taskCount);
-            console.log('Настройки:', this.settings);
-
             const shareParams = ShareLinkUtil.encodeSettings(this.name, this.settings, taskCount);
-            console.log('Параметры для шаринга:', shareParams);
-
             const success = await ShareLinkUtil.shareChallenge(shareParams, this.name, taskCount);
-            console.log('Результат шаринга:', success);
 
             if (success) {
                 successMessage.classList.add('show');
@@ -356,14 +330,9 @@ class BaseTrainer {
 
     // Показать модальное окно "Поделиться"
     showShareModal() {
-        console.log('Попытка показать модальное окно для', this.name);
         const modal = document.getElementById(`${this.name}-share-modal`);
-        console.log('Модальное окно найдено:', !!modal);
         if (modal) {
-            console.log('Добавляем класс active');
             modal.classList.add('active');
-        } else {
-            console.error('Модальное окно не найдено!', `${this.name}-share-modal`);
         }
     }
 
