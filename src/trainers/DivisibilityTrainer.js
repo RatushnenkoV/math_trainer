@@ -48,19 +48,28 @@ class DivisibilityTrainer extends BaseTrainer {
         this.initEventHandlers();
         this.initSettingsHandlers();
         this.initAnswerHandlers();
+        this.initShareModalHandlers();
     }
 
     // Инициализация обработчиков событий (переопределяем базовый метод)
     initEventHandlers() {
         // Кнопка назад
         this.elements.backBtn.addEventListener('click', () => {
-            this.showScreen('main-menu');
+            this.handleBackButtonClick();
         });
 
         // Кнопка настроек
         this.elements.settingsBtn.addEventListener('click', () => {
             this.showSettingsScreen();
         });
+
+        // Кнопка "Поделиться"
+        this.elements.shareBtn = document.getElementById('divisibility-share-btn');
+        if (this.elements.shareBtn) {
+            this.elements.shareBtn.addEventListener('click', () => {
+                this.showShareModal();
+            });
+        }
 
         // Кнопка назад из настроек
         this.elements.settingsBackBtn.addEventListener('click', () => {

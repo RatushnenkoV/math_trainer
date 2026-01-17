@@ -8,6 +8,7 @@ class SquareRootsComponent extends BaseTrainerComponent {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
+            ${this.getShareModalTemplate('square-roots')}
         `;
     }
 
@@ -73,6 +74,12 @@ class SquareRootsComponent extends BaseTrainerComponent {
                                    value="10"
                                    step="10">
                         </div>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>Поделиться</h3>
+                        <p class="settings-description">Создайте челлендж с текущими настройками</p>
+                        <button id="square-roots-share-btn" class="settings-button">🔗 Создать ссылку</button>
                     </div>
                 </div>
             </div>

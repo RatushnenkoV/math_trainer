@@ -8,6 +8,7 @@ class PercentagesComponent extends BaseTrainerComponent {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
+            ${this.getShareModalTemplate('percentages')}
         `;
     }
 
@@ -69,6 +70,12 @@ class PercentagesComponent extends BaseTrainerComponent {
                             <input type="checkbox" id="percentages-find-percentage" checked>
                             <span>Определить процент</span>
                         </label>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>Поделиться</h3>
+                        <p class="settings-description">Создайте челлендж с текущими настройками</p>
+                        <button id="percentages-share-btn" class="settings-button">🔗 Создать ссылку</button>
                     </div>
                 </div>
             </div>

@@ -8,6 +8,7 @@ class DivisibilityComponent extends BaseTrainerComponent {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
+            ${this.getShareModalTemplate('divisibility')}
         `;
     }
 
@@ -90,6 +91,12 @@ class DivisibilityComponent extends BaseTrainerComponent {
                             <input type="checkbox" id="divisibility-div10" checked>
                             <span>10</span>
                         </label>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>Поделиться</h3>
+                        <p class="settings-description">Создайте челлендж с текущими настройками</p>
+                        <button id="divisibility-share-btn" class="settings-button">🔗 Создать ссылку</button>
                     </div>
                 </div>
             </div>

@@ -50,6 +50,16 @@ class PercentagesTrainer extends BaseTrainer {
         this.initEventHandlers();
         this.initSettingsHandlers();
         this.initInputHandlers();
+        this.initShareModalHandlers();
+    }
+
+    // Инициализация обработчиков событий (переопределяем, чтобы добавить shareBtn)
+    initEventHandlers() {
+        // Вызываем базовый метод
+        super.initEventHandlers();
+
+        // Добавляем ссылку на кнопку "Поделиться"
+        this.elements.shareBtn = document.getElementById('percentages-share-btn');
     }
 
     // Инициализация обработчиков для полей ввода

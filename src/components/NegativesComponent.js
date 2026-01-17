@@ -8,6 +8,7 @@ class NegativesComponent extends BaseTrainerComponent {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
+            ${this.getShareModalTemplate('negatives')}
         `;
     }
 
@@ -78,6 +79,12 @@ class NegativesComponent extends BaseTrainerComponent {
                             <input type="checkbox" id="negatives-division">
                             <span>Деление</span>
                         </label>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>Поделиться</h3>
+                        <p class="settings-description">Создайте челлендж с текущими настройками</p>
+                        <button id="negatives-share-btn" class="settings-button">🔗 Создать ссылку</button>
                     </div>
                 </div>
             </div>
