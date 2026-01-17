@@ -101,6 +101,11 @@ const trainerConfig = {
         screen: 'trig-equations-screen',
         trainer: 'trigEquations'
     },
+    'angle-conversion-btn': {
+        name: 'Перевод градусов в радианы',
+        screen: 'angle-conversion-screen',
+        trainer: 'angleConversion'
+    },
     'powers-btn': {
         name: 'Свойства степеней',
         screen: 'powers-screen',
@@ -242,6 +247,7 @@ async function loadTrainer(trainerName, showLoader = true) {
         'quadraticInequalities': 'src/styles/trainers/quadratic-inequalities.css',
         'trigonometry': 'src/styles/trainers/trigonometry.css',
         'trigEquations': 'src/styles/trainers/trig-equations.css',
+        'angleConversion': 'src/styles/trainers/angle-conversion.css',
         'percentages': null, // использует только общие стили
         'systemOfEquations': 'src/styles/trainers/system-of-equations.css',
         'systemOfInequalities': 'src/styles/trainers/system-of-inequalities.css',
@@ -328,6 +334,11 @@ async function loadTrainer(trainerName, showLoader = true) {
             'src/utils/generators/TrigEquationsGenerator.js',
             'src/trainers/TrigEquationsTrainer.js',
             'src/components/TrigEquationsComponent.js'
+        ],
+        'angleConversion': [
+            'src/utils/generators/AngleConversionGenerator.js',
+            'src/trainers/AngleConversionTrainer.js',
+            'src/components/AngleConversionComponent.js'
         ],
         'percentages': [
             'src/utils/generators/PercentagesGenerator.js',
@@ -522,7 +533,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
     });
 
     // Скрываем все компоненты тренажеров
-    document.querySelectorAll('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, trig-equations-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer, polynomial-simplification-trainer, polynomial-expand-trainer, algebraic-identities-trainer, definitions-trainer, functions-trainer, coordinates-trainer, vectors-trainer, vector-operations-trainer, factoring-out-trainer, areas-trainer').forEach(trainer => {
+    document.querySelectorAll('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, trig-equations-trainer, angle-conversion-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer, polynomial-simplification-trainer, polynomial-expand-trainer, algebraic-identities-trainer, definitions-trainer, functions-trainer, coordinates-trainer, vectors-trainer, vector-operations-trainer, factoring-out-trainer, areas-trainer').forEach(trainer => {
         trainer.classList.remove('active');
     });
 
@@ -532,7 +543,7 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
         targetScreen.classList.add('active');
 
         // Если экран находится внутри компонента тренажера, показываем этот компонент
-        const trainerComponent = targetScreen.closest('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, trig-equations-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer, polynomial-simplification-trainer, polynomial-expand-trainer, algebraic-identities-trainer, definitions-trainer, functions-trainer, coordinates-trainer, vectors-trainer, vector-operations-trainer, factoring-out-trainer, areas-trainer');
+        const trainerComponent = targetScreen.closest('multiplication-table-trainer, square-roots-trainer, powers-trainer, fractions-trainer, fraction-visual-trainer, fraction-sense-trainer, decimals-trainer, negatives-trainer, divisibility-trainer, linear-equations-trainer, linear-inequalities-trainer, quadratic-equations-trainer, quadratic-inequalities-trainer, trigonometry-trainer, trig-equations-trainer, angle-conversion-trainer, percentages-trainer, system-of-equations-trainer, system-of-inequalities-trainer, polynomial-simplification-trainer, polynomial-expand-trainer, algebraic-identities-trainer, definitions-trainer, functions-trainer, coordinates-trainer, vectors-trainer, vector-operations-trainer, factoring-out-trainer, areas-trainer');
         if (trainerComponent) {
             trainerComponent.classList.add('active');
         }
@@ -619,6 +630,7 @@ function handleBackButton() {
         case 'quadratic-inequalities-screen':
         case 'trigonometry-screen':
         case 'trig-equations-screen':
+        case 'angle-conversion-screen':
         case 'percentages-screen':
         case 'system-of-equations-screen':
         case 'system-of-inequalities-screen':
@@ -724,6 +736,12 @@ function handleBackButton() {
             // Из настроек простейших тригонометрических уравнений возвращаемся к тренажёру
             showScreen('trig-equations-screen');
             trainers.trigEquations.generateNewProblem();
+            break;
+
+        case 'angle-conversion-settings-screen':
+            // Из настроек перевода углов возвращаемся к тренажёру перевода углов
+            showScreen('angle-conversion-screen');
+            trainers.angleConversion.generateNewProblem();
             break;
 
         case 'percentages-settings-screen':

@@ -1,0 +1,63 @@
+/* Angle Conversion Trainer */
+
+#angle-conversion-screen .content {
+    gap: 16px;
+    padding: 16px 0;
+    overflow: hidden;
+}
+
+#angle-conversion-problem-display {
+    flex-shrink: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.angle-conversion-question-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    overflow: hidden;
+    padding: 8px 20px;
+}
+
+.angle-conversion-question {
+    font-size: clamp(24px, 6vw, 40px);
+    font-weight: 500;
+    text-align: center;
+    line-height: 1.6;
+    color: var(--tg-theme-text-color, #000000);
+}
+
+/* Поля ввода для дроби с π */
+.fraction-input-with-pi {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.pi-symbol {
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--tg-theme-text-color, #000000);
+}
+
+/* Поле ввода с символом градусов */
+.input-with-degrees {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.degree-symbol {
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--tg-theme-text-color, #000000);
+}
+
+#angle-conversion-result-message {
+    flex-shrink: 0;
+    margin: 0;
+}
