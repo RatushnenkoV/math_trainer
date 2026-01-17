@@ -43,7 +43,10 @@ class PercentagesTrainer extends BaseTrainer {
             problemDisplay: document.getElementById('percentages-problem-display'),
 
             // Элементы ввода
-            answerInput: document.getElementById('percentages-answer-input')
+            answerInput: document.getElementById('percentages-answer-input'),
+
+            // Кнопка "Поделиться"
+            shareBtn: document.getElementById('percentages-share-btn')
         };
 
         // Инициализация обработчиков
@@ -51,15 +54,6 @@ class PercentagesTrainer extends BaseTrainer {
         this.initSettingsHandlers();
         this.initInputHandlers();
         this.initShareModalHandlers();
-    }
-
-    // Инициализация обработчиков событий (переопределяем, чтобы добавить shareBtn)
-    initEventHandlers() {
-        // Вызываем базовый метод
-        super.initEventHandlers();
-
-        // Добавляем ссылку на кнопку "Поделиться"
-        this.elements.shareBtn = document.getElementById('percentages-share-btn');
     }
 
     // Инициализация обработчиков для полей ввода

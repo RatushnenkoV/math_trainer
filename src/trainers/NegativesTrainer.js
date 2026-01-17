@@ -37,7 +37,10 @@ class NegativesTrainer extends BaseTrainer {
             problemDisplay: document.getElementById('negatives-problem-display'),
 
             // Элементы ввода
-            answerInput: document.getElementById('negative-answer-input')
+            answerInput: document.getElementById('negative-answer-input'),
+
+            // Кнопка "Поделиться"
+            shareBtn: document.getElementById('negatives-share-btn')
         };
 
         // Инициализация обработчиков
@@ -45,15 +48,6 @@ class NegativesTrainer extends BaseTrainer {
         this.initSettingsHandlers();
         this.initInputHandlers();
         this.initShareModalHandlers();
-    }
-
-    // Инициализация обработчиков событий (переопределяем, чтобы добавить shareBtn)
-    initEventHandlers() {
-        // Вызываем базовый метод
-        super.initEventHandlers();
-
-        // Добавляем ссылку на кнопку "Поделиться"
-        this.elements.shareBtn = document.getElementById('negatives-share-btn');
     }
 
     // Инициализация обработчиков для полей ввода

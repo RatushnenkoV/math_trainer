@@ -34,7 +34,10 @@ class SquareRootsTrainer extends BaseTrainer {
             problemDisplay: document.getElementById('square-roots-problem-display'),
 
             // Элементы ввода
-            answerInput: document.getElementById('square-roots-answer-input')
+            answerInput: document.getElementById('square-roots-answer-input'),
+
+            // Кнопка "Поделиться"
+            shareBtn: document.getElementById('square-roots-share-btn')
         };
 
         // Инициализация обработчиков
@@ -42,15 +45,6 @@ class SquareRootsTrainer extends BaseTrainer {
         this.initSettingsHandlers();
         this.initInputHandlers();
         this.initShareModalHandlers();
-    }
-
-    // Инициализация обработчиков событий (переопределяем, чтобы добавить shareBtn)
-    initEventHandlers() {
-        // Вызываем базовый метод
-        super.initEventHandlers();
-
-        // Добавляем ссылку на кнопку "Поделиться"
-        this.elements.shareBtn = document.getElementById('square-roots-share-btn');
     }
 
     // Инициализация обработчиков для полей ввода
