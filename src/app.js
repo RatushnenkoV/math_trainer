@@ -517,7 +517,10 @@ async function initApp() {
 
     // Проверка URL параметров для режима челленджа
     const challengeParams = ShareLinkUtil.decodeFromURL();
-    if (challengeParams) {
+    // Проверяем, не был ли челлендж закрыт в этой сессии
+    const challengeClosed = sessionStorage.getItem('challengeClosed');
+
+    if (challengeParams && !challengeClosed) {
         await loadChallengeMode(challengeParams);
     } else {
         // Показываем главное меню
@@ -606,6 +609,16 @@ function initTelegramBackButton() {
     });
 }
 
+// Вспомогательная функция для получения имени тренажёра по ID экрана
+function getTrainerNameByScreen(screenId) {
+    for (const [btnId, config] of Object.entries(trainerConfig)) {
+        if (config.screen === screenId) {
+            return config.trainer;
+        }
+    }
+    return null;
+}
+
 // Обработка нажатия кнопки "Назад"
 function handleBackButton() {
     const activeScreen = document.querySelector('.screen.active');
@@ -644,8 +657,15 @@ function handleBackButton() {
         case 'vectors-screen':
         case 'vector-operations-screen':
         case 'areas-screen':
-            // Из экрана тренажёра возвращаемся в главное меню
-            showScreen('main-menu');
+            // Из экрана тренажёра - используем метод handleBackButtonClick тренажёра
+            // Это позволит показать подтверждение в режиме челленджа
+            const trainerName = getTrainerNameByScreen(screenId);
+            if (trainerName && trainers[trainerName] && trainers[trainerName].handleBackButtonClick) {
+                trainers[trainerName].handleBackButtonClick();
+            } else {
+                // Fallback на обычный выход
+                showScreen('main-menu');
+            }
             break;
 
         case 'multiplication-table-settings-screen':

@@ -26,7 +26,7 @@ class BaseTrainer {
     initEventHandlers() {
         // Кнопка назад
         this.elements.backBtn.addEventListener('click', () => {
-            this.showScreen('main-menu');
+            this.handleBackButtonClick();
         });
 
         // Кнопка настроек
@@ -51,6 +51,21 @@ class BaseTrainer {
             this.hideSettingsScreen();
             this.generateNewProblem();
         });
+    }
+
+    // Обработка нажатия кнопки "Назад"
+    handleBackButtonClick() {
+        if (this.challengeMode) {
+            // В режиме челленджа показываем подтверждение
+            const confirmed = confirm('Вы действительно хотите выйти из челленджа? Прогресс будет сброшен.');
+            if (confirmed) {
+                this.deactivateChallengeMode();
+                this.showScreen('main-menu');
+            }
+        } else {
+            // В обычном режиме просто выходим
+            this.showScreen('main-menu');
+        }
     }
 
     // Загрузка настроек из localStorage
@@ -365,6 +380,8 @@ class BaseTrainer {
             // Челлендж завершён успешно
             setTimeout(() => {
                 alert(`Поздравляем! Вы успешно решили все ${this.challengeTasksTotal} задач!`);
+                // Деактивируем режим челленджа
+                this.deactivateChallengeMode();
                 // Возвращаемся в главное меню
                 this.showScreen('main-menu');
             }, 1000);
@@ -379,13 +396,42 @@ class BaseTrainer {
 
     // Обработка неправильного ответа в режиме челленджа
     handleWrongAnswerChallenge() {
+        // Сбрасываем прогресс челленджа
+        this.challengeTasksCompleted = 0;
         this.showResultMessage(false);
         this.showEmoji(false);
 
         setTimeout(() => {
-            alert('К сожалению, вы ошиблись. Челлендж не пройден.');
-            // Возвращаемся в главное меню
-            this.showScreen('main-menu');
+            alert('К сожалению, вы ошиблись. Прогресс челленджа сброшен. Попробуйте снова!');
+            // Обновляем прогресс и генерируем новую задачу
+            this.updateProgressDisplay();
+            this.generateNewProblem();
         }, 1000);
+    }
+
+    // Деактивация режима челленджа
+    deactivateChallengeMode() {
+        this.challengeMode = false;
+        this.challengeTasksTotal = 0;
+        this.challengeTasksCompleted = 0;
+
+        // Показываем кнопки настроек и "Поделиться" обратно
+        if (this.elements.settingsBtn) {
+            this.elements.settingsBtn.style.display = '';
+        }
+        if (this.elements.shareBtn) {
+            this.elements.shareBtn.style.display = '';
+        }
+
+        // Помечаем, что челлендж был закрыт для этой сессии
+        sessionStorage.setItem('challengeClosed', 'true');
+
+        // Очищаем URL параметры, чтобы при повторном входе открывался обычный режим
+        if (window.history && window.history.replaceState) {
+            const cleanUrl = window.location.origin + window.location.pathname;
+            window.history.replaceState({}, document.title, cleanUrl);
+        }
+
+        this.updateProgressDisplay();
     }
 }
