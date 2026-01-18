@@ -8,6 +8,7 @@ class LinearInequalitiesComponent extends BaseTrainerComponent {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
+            ${this.getShareModalTemplate('linearInequalities')}
         `;
     }
 
@@ -105,6 +106,12 @@ class LinearInequalitiesComponent extends BaseTrainerComponent {
                             <input type="checkbox" id="linear-inequalities-hard">
                             <span>Сложный (с дробями)</span>
                         </label>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>Поделиться</h3>
+                        <p class="settings-description">Создайте челлендж с текущими настройками</p>
+                        <button id="linear-inequalities-share-btn" class="settings-button">🔗 Создать ссылку</button>
                     </div>
                 </div>
             </div>

@@ -27,6 +27,9 @@ class SystemOfInequalitiesTrainer extends BaseTrainer {
         this.elements = {
             screen: document.getElementById('system-of-inequalities-screen'),
             backBtn: document.getElementById('system-of-inequalities-back-btn'),
+            settingsBtn: document.getElementById('system-of-inequalities-settings-btn'),
+            settingsScreen: document.getElementById('system-of-inequalities-settings-screen'),
+            settingsBackBtn: document.getElementById('system-of-inequalities-settings-back-btn'),
 
             // Элементы отображения
             levelText: document.getElementById('system-of-inequalities-level-text'),
@@ -42,25 +45,51 @@ class SystemOfInequalitiesTrainer extends BaseTrainer {
             removePointBtn: document.getElementById('system-remove-point-btn'),
 
             // Кнопка проверки
-            checkBtn: document.getElementById('system-of-inequalities-check-btn')
+            checkBtn: document.getElementById('system-of-inequalities-check-btn'),
+
+            // Кнопка "Поделиться"
+            shareBtn: document.getElementById('system-of-inequalities-share-btn')
         };
 
         // Инициализация обработчиков
         this.initEventHandlers();
         this.initNumberLineHandlers();
+        this.initShareModalHandlers();
     }
 
-    // Переопределение initEventHandlers (нет настроек)
+    // Переопределение initEventHandlers
     initEventHandlers() {
         // Кнопка назад
         this.elements.backBtn.addEventListener('click', () => {
-            this.showScreen('main-menu');
+            this.handleBackButtonClick();
+        });
+
+        // Кнопка настроек
+        this.elements.settingsBtn.addEventListener('click', () => {
+            this.showSettingsScreen();
+        });
+
+        // Кнопка назад в настройках
+        this.elements.settingsBackBtn.addEventListener('click', () => {
+            this.hideSettingsScreen();
         });
 
         // Кнопка проверки
         this.elements.checkBtn.addEventListener('click', () => {
             this.checkAnswer();
         });
+    }
+
+    // Показать экран настроек
+    showSettingsScreen() {
+        this.elements.screen.classList.remove('active');
+        this.elements.settingsScreen.classList.add('active');
+    }
+
+    // Скрыть экран настроек
+    hideSettingsScreen() {
+        this.elements.settingsScreen.classList.remove('active');
+        this.elements.screen.classList.add('active');
     }
 
     // Инициализация обработчиков числовой прямой

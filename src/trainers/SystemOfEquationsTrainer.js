@@ -41,13 +41,17 @@ class SystemOfEquationsTrainer extends BaseTrainer {
             // Поля ввода ответов
             answerXInput: document.getElementById('system-of-equations-answer-x'),
             answerYInput: document.getElementById('system-of-equations-answer-y'),
-            checkBtn: document.getElementById('system-of-equations-check-btn')
+            checkBtn: document.getElementById('system-of-equations-check-btn'),
+
+            // Кнопка "Поделиться"
+            shareBtn: document.getElementById('system-of-equations-share-btn')
         };
 
         // Инициализация обработчиков
         this.initEventHandlers();
         this.initSettingsHandlers();
         this.initInputHandlers();
+        this.initShareModalHandlers();
     }
 
     // Инициализация обработчиков для полей ввода

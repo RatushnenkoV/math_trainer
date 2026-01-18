@@ -8,6 +8,7 @@ class QuadraticEquationsComponent extends BaseTrainerComponent {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
+            ${this.getShareModalTemplate('quadraticEquations')}
         `;
     }
 
@@ -80,6 +81,12 @@ class QuadraticEquationsComponent extends BaseTrainerComponent {
                             <input type="checkbox" id="quadratic-equations-allow-incomplete" checked>
                             <span>Неполные уравнения</span>
                         </label>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>Поделиться</h3>
+                        <p class="settings-description">Создайте челлендж с текущими настройками</p>
+                        <button id="quadratic-equations-share-btn" class="settings-button">🔗 Создать ссылку</button>
                     </div>
                 </div>
             </div>

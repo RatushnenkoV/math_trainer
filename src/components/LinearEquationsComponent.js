@@ -8,6 +8,7 @@ class LinearEquationsComponent extends BaseTrainerComponent {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
+            ${this.getShareModalTemplate('linearEquations')}
         `;
     }
 
@@ -77,6 +78,12 @@ class LinearEquationsComponent extends BaseTrainerComponent {
                             <input type="checkbox" id="linear-equations-hard">
                             <span>Сложная (с дробями)</span>
                         </label>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>Поделиться</h3>
+                        <p class="settings-description">Создайте челлендж с текущими настройками</p>
+                        <button id="linear-equations-share-btn" class="settings-button">🔗 Создать ссылку</button>
                     </div>
                 </div>
             </div>

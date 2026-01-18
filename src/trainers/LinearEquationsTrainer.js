@@ -37,13 +37,17 @@ class LinearEquationsTrainer extends BaseTrainer {
 
             // Поле ввода ответа
             answerInput: document.getElementById('linear-equations-answer-input'),
-            checkBtn: document.getElementById('linear-equations-check-btn')
+            checkBtn: document.getElementById('linear-equations-check-btn'),
+
+            // Кнопка "Поделиться"
+            shareBtn: document.getElementById('linear-equations-share-btn')
         };
 
         // Инициализация обработчиков
         this.initEventHandlers();
         this.initSettingsHandlers();
         this.initInputHandlers();
+        this.initShareModalHandlers();
     }
 
     // Инициализация обработчиков для полей ввода

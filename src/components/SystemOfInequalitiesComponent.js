@@ -5,7 +5,11 @@ class SystemOfInequalitiesComponent extends BaseTrainerComponent {
     }
 
     render() {
-        this.innerHTML = this.getMainScreenTemplate();
+        this.innerHTML = `
+            ${this.getMainScreenTemplate()}
+            ${this.getSettingsTemplate()}
+            ${this.getShareModalTemplate('systemOfInequalities')}
+        `;
     }
 
     getMainScreenTemplate() {
@@ -22,7 +26,7 @@ class SystemOfInequalitiesComponent extends BaseTrainerComponent {
                             <div id="system-of-inequalities-progress-fill" class="progress-fill"></div>
                         </div>
                     </div>
-                    <div></div>
+                    <button id="system-of-inequalities-settings-btn" class="icon-button">⚙</button>
                 </div>
 
                 <div class="content">
@@ -58,6 +62,26 @@ class SystemOfInequalitiesComponent extends BaseTrainerComponent {
 
                     <button id="system-of-inequalities-check-btn" class="check-button">Проверить</button>
                     <div id="system-of-inequalities-result-message" class="result-message"></div>
+                </div>
+            </div>
+        `;
+    }
+
+    getSettingsTemplate() {
+        return `
+            <div id="system-of-inequalities-settings-screen" class="screen">
+                <div class="header">
+                    <button id="system-of-inequalities-settings-back-btn" class="icon-button">←</button>
+                    <h2>Настройки</h2>
+                    <div></div>
+                </div>
+
+                <div class="settings-content">
+                    <div class="settings-group">
+                        <h3>Поделиться</h3>
+                        <p class="settings-description">Создайте челлендж с текущими настройками</p>
+                        <button id="system-of-inequalities-share-btn" class="settings-button">🔗 Создать ссылку</button>
+                    </div>
                 </div>
             </div>
         `;

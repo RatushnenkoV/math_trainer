@@ -52,13 +52,17 @@ class QuadraticInequalitiesTrainer extends BaseTrainer {
             removePointBtn: document.getElementById('remove-point-btn'),
 
             // Кнопка проверки
-            checkBtn: document.getElementById('quadratic-inequalities-check-btn')
+            checkBtn: document.getElementById('quadratic-inequalities-check-btn'),
+
+            // Кнопка "Поделиться"
+            shareBtn: document.getElementById('quadratic-inequalities-share-btn')
         };
 
         // Инициализация обработчиков
         this.initEventHandlers();
         this.initSettingsHandlers();
         this.initNumberLineHandlers();
+        this.initShareModalHandlers();
     }
 
     // Инициализация обработчиков числовой прямой

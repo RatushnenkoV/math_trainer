@@ -37,13 +37,17 @@ class QuadraticEquationsTrainer extends BaseTrainer {
             // Поля ввода ответа
             x1Input: document.getElementById('quadratic-equations-x1-input'),
             x2Input: document.getElementById('quadratic-equations-x2-input'),
-            checkBtn: document.getElementById('quadratic-equations-check-btn')
+            checkBtn: document.getElementById('quadratic-equations-check-btn'),
+
+            // Кнопка "Поделиться"
+            shareBtn: document.getElementById('quadratic-equations-share-btn')
         };
 
         // Инициализация обработчиков
         this.initEventHandlers();
         this.initSettingsHandlers();
         this.initInputHandlers();
+        this.initShareModalHandlers();
     }
 
     // Инициализация обработчиков для полей ввода

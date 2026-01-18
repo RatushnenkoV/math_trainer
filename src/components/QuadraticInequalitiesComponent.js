@@ -8,6 +8,7 @@ class QuadraticInequalitiesComponent extends BaseTrainerComponent {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
+            ${this.getShareModalTemplate('quadraticInequalities')}
         `;
     }
 
@@ -102,6 +103,12 @@ class QuadraticInequalitiesComponent extends BaseTrainerComponent {
                             <input type="checkbox" id="quadratic-inequalities-allow-incomplete" checked>
                             <span>Разрешить неполные неравенства</span>
                         </label>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>Поделиться</h3>
+                        <p class="settings-description">Создайте челлендж с текущими настройками</p>
+                        <button id="quadratic-inequalities-share-btn" class="settings-button">🔗 Создать ссылку</button>
                     </div>
                 </div>
             </div>

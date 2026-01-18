@@ -50,13 +50,17 @@ class LinearInequalitiesTrainer extends BaseTrainer {
             pointValueInput: document.getElementById('point-value-input'),
 
             // Кнопка проверки
-            checkBtn: document.getElementById('linear-inequalities-check-btn')
+            checkBtn: document.getElementById('linear-inequalities-check-btn'),
+
+            // Кнопка "Поделиться"
+            shareBtn: document.getElementById('linear-inequalities-share-btn')
         };
 
         // Инициализация обработчиков
         this.initEventHandlers();
         this.initSettingsHandlers();
         this.initNumberLineHandlers();
+        this.initShareModalHandlers();
     }
 
     // Инициализация обработчиков числовой прямой

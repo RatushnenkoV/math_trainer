@@ -8,6 +8,7 @@ class SystemOfEquationsComponent extends BaseTrainerComponent {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
+            ${this.getShareModalTemplate('systemOfEquations')}
         `;
     }
 
@@ -77,6 +78,12 @@ class SystemOfEquationsComponent extends BaseTrainerComponent {
                             <input type="checkbox" id="system-of-equations-non-standard-form">
                             <span>С переносами слагаемых</span>
                         </label>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>Поделиться</h3>
+                        <p class="settings-description">Создайте челлендж с текущими настройками</p>
+                        <button id="system-of-equations-share-btn" class="settings-button">🔗 Создать ссылку</button>
                     </div>
                 </div>
             </div>
