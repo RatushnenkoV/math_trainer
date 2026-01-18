@@ -43,13 +43,17 @@ class FractionsTrainer extends BaseTrainer {
             // Элементы ввода
             wholeInput: document.getElementById('whole-input'),
             numeratorInput: document.getElementById('numerator-input'),
-            denominatorInput: document.getElementById('denominator-input')
+            denominatorInput: document.getElementById('denominator-input'),
+
+            // Кнопка "Поделиться"
+            shareBtn: document.getElementById('fractions-share-btn')
         };
 
         // Инициализация обработчиков
         this.initEventHandlers();
         this.initSettingsHandlers();
         this.initInputHandlers();
+        this.initShareModalHandlers();
     }
 
     // Инициализация обработчиков для полей ввода

@@ -43,13 +43,17 @@ class FractionSenseTrainer extends BaseTrainer {
             sliderValue: document.getElementById('fraction-sense-slider-value'),
             sliderTrack: document.getElementById('fraction-sense-slider-track'),
             sliderFill: document.getElementById('fraction-sense-slider-fill'),
-            sliderThumb: document.getElementById('fraction-sense-slider-thumb')
+            sliderThumb: document.getElementById('fraction-sense-slider-thumb'),
+
+            // Кнопка "Поделиться"
+            shareBtn: document.getElementById('fraction-sense-share-btn')
         };
 
         // Инициализация обработчиков
         this.initEventHandlers();
         this.initSettingsHandlers();
         this.initSliderHandlers();
+        this.initShareModalHandlers();
     }
 
     // Инициализация обработчиков событий

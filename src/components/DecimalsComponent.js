@@ -8,6 +8,7 @@ class DecimalsComponent extends BaseTrainerComponent {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
+            ${this.getShareModalTemplate('decimals')}
         `;
     }
 
@@ -86,6 +87,12 @@ class DecimalsComponent extends BaseTrainerComponent {
                             <input type="checkbox" id="decimals-negative-numbers">
                             <span>Отрицательные числа</span>
                         </label>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>Поделиться</h3>
+                        <p class="settings-description">Создайте челлендж с текущими настройками</p>
+                        <button id="decimals-share-btn" class="settings-button">🔗 Создать ссылку</button>
                     </div>
                 </div>
             </div>

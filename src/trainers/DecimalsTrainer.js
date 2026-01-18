@@ -38,13 +38,17 @@ class DecimalsTrainer extends BaseTrainer {
             problemDisplay: document.getElementById('decimals-problem-display'),
 
             // Элементы ввода
-            answerInput: document.getElementById('decimal-answer-input')
+            answerInput: document.getElementById('decimal-answer-input'),
+
+            // Кнопка "Поделиться"
+            shareBtn: document.getElementById('decimals-share-btn')
         };
 
         // Инициализация обработчиков
         this.initEventHandlers();
         this.initSettingsHandlers();
         this.initInputHandlers();
+        this.initShareModalHandlers();
     }
 
     // Инициализация обработчиков для полей ввода

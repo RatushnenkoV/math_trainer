@@ -8,6 +8,7 @@ class FractionSenseComponent extends BaseTrainerComponent {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
+            ${this.getShareModalTemplate('fraction-sense')}
         `;
     }
 
@@ -83,6 +84,12 @@ class FractionSenseComponent extends BaseTrainerComponent {
                                 <span>Сложно<br>±5%</span>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>Поделиться</h3>
+                        <p class="settings-description">Создайте челлендж с текущими настройками</p>
+                        <button id="fraction-sense-share-btn" class="settings-button">🔗 Создать ссылку</button>
                     </div>
                 </div>
             </div>

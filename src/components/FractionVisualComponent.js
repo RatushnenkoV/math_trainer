@@ -8,6 +8,7 @@ class FractionVisualComponent extends BaseTrainerComponent {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
+            ${this.getShareModalTemplate('fraction-visual')}
         `;
     }
 
@@ -96,6 +97,12 @@ class FractionVisualComponent extends BaseTrainerComponent {
                             <input type="checkbox" id="unsimplified-fractions">
                             <span>Сокращенные дроби</span>
                         </label>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>Поделиться</h3>
+                        <p class="settings-description">Создайте челлендж с текущими настройками</p>
+                        <button id="fraction-visual-share-btn" class="settings-button">🔗 Создать ссылку</button>
                     </div>
                 </div>
             </div>

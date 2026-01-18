@@ -48,13 +48,17 @@ class FractionVisualTrainer extends BaseTrainer {
             // Поля ввода для обратной задачи
             inputContainer: document.getElementById('fraction-input-container'),
             numeratorInput: document.getElementById('fraction-visual-numerator-input'),
-            denominatorInput: document.getElementById('fraction-visual-denominator-input')
+            denominatorInput: document.getElementById('fraction-visual-denominator-input'),
+
+            // Кнопка "Поделиться"
+            shareBtn: document.getElementById('fraction-visual-share-btn')
         };
 
         // Инициализация обработчиков
         this.initEventHandlers();
         this.initSettingsHandlers();
         this.initInputHandlers();
+        this.initShareModalHandlers();
     }
 
     // Инициализация обработчиков событий
