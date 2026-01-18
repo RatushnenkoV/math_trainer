@@ -8,7 +8,7 @@ class LinearInequalitiesComponent extends BaseTrainerComponent {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
-            ${this.getShareModalTemplate('linearInequalities')}
+            ${this.getShareModalTemplate('linear-inequalities')}
         `;
     }
 

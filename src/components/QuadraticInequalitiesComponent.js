@@ -8,7 +8,7 @@ class QuadraticInequalitiesComponent extends BaseTrainerComponent {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
-            ${this.getShareModalTemplate('quadraticInequalities')}
+            ${this.getShareModalTemplate('quadratic-inequalities')}
         `;
     }
 

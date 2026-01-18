@@ -8,7 +8,7 @@ class SystemOfEquationsComponent extends BaseTrainerComponent {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
-            ${this.getShareModalTemplate('systemOfEquations')}
+            ${this.getShareModalTemplate('system-of-equations')}
         `;
     }
 

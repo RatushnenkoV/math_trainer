@@ -8,7 +8,7 @@ class LinearEquationsComponent extends BaseTrainerComponent {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
-            ${this.getShareModalTemplate('linearEquations')}
+            ${this.getShareModalTemplate('linear-equations')}
         `;
     }
 

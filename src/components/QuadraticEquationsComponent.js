@@ -8,7 +8,7 @@ class QuadraticEquationsComponent extends BaseTrainerComponent {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
-            ${this.getShareModalTemplate('quadraticEquations')}
+            ${this.getShareModalTemplate('quadratic-equations')}
         `;
     }
 

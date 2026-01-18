@@ -8,7 +8,7 @@ class SystemOfInequalitiesComponent extends BaseTrainerComponent {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
-            ${this.getShareModalTemplate('systemOfInequalities')}
+            ${this.getShareModalTemplate('system-of-inequalities')}
         `;
     }
 
