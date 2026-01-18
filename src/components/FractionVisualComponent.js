@@ -8,7 +8,7 @@ class FractionVisualComponent extends BaseTrainerComponent {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
-            ${this.getShareModalTemplate('fraction-visual')}
+            ${this.getShareModalTemplate('fractionVisual')}
         `;
     }
 

@@ -8,7 +8,7 @@ class FractionSenseComponent extends BaseTrainerComponent {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
-            ${this.getShareModalTemplate('fraction-sense')}
+            ${this.getShareModalTemplate('fractionSense')}
         `;
     }
 
