@@ -14,7 +14,7 @@ class TrigEquationsTrainer extends BaseTrainer {
         };
 
         super({
-            name: 'trigEquations',
+            name: 'trig-equations',
             generator: new TrigEquationsProblemGenerator(settings),
             progressTracker: new ProgressTracker('mathTrainerTrigEquationsProgress'),
             settings: settings,
@@ -40,12 +40,16 @@ class TrigEquationsTrainer extends BaseTrainer {
 
             // Конструктор ответа
             constructorContainer: document.getElementById('trig-equations-answer-constructor'),
-            checkBtn: document.getElementById('trig-equations-check-btn')
+            checkBtn: document.getElementById('trig-equations-check-btn'),
+
+            // Кнопка "Поделиться"
+            shareBtn: document.getElementById('trig-equations-share-btn')
         };
 
         // Инициализация обработчиков
         this.initEventHandlers();
         this.initSettingsHandlers();
+        this.initShareModalHandlers();
     }
 
     // Инициализация обработчиков событий

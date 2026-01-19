@@ -24,6 +24,9 @@ class CoordinatesTrainer extends BaseTrainer {
         this.elements = {
             screen: document.getElementById('coordinates-screen'),
             backBtn: document.getElementById('coordinates-back-btn'),
+            settingsBtn: document.getElementById('coordinates-settings-btn'),
+            settingsScreen: document.getElementById('coordinates-settings-screen'),
+            settingsBackBtn: document.getElementById('coordinates-settings-back-btn'),
             checkBtn: document.getElementById('coordinates-check-btn'),
 
             levelText: document.getElementById('coordinates-level-text'),
@@ -36,18 +39,39 @@ class CoordinatesTrainer extends BaseTrainer {
             gridContainer: document.getElementById('coordinates-grid-container'),
             xInput: document.getElementById('coordinates-x-input'),
             yInput: document.getElementById('coordinates-y-input'),
-            inputsContainer: document.getElementById('coordinates-inputs-container')
+            inputsContainer: document.getElementById('coordinates-inputs-container'),
+
+            // Кнопка "Поделиться"
+            shareBtn: document.getElementById('coordinates-share-btn')
         };
 
         this.initEventHandlers();
+        this.initShareModalHandlers();
     }
 
-    // Переопределяем initEventHandlers, убираем кнопку настроек
+    // Переопределяем initEventHandlers
     initEventHandlers() {
+        // Вызываем базовый метод для кнопки "Поделиться"
+        super.initEventHandlers();
+
         // Кнопка назад
         this.elements.backBtn.addEventListener('click', () => {
             this.showScreen('main-menu');
         });
+
+        // Кнопка настроек
+        if (this.elements.settingsBtn) {
+            this.elements.settingsBtn.addEventListener('click', () => {
+                this.showSettingsScreen();
+            });
+        }
+
+        // Кнопка назад в настройках
+        if (this.elements.settingsBackBtn) {
+            this.elements.settingsBackBtn.addEventListener('click', () => {
+                this.hideSettingsScreen();
+            });
+        }
 
         // Кнопка проверки
         this.elements.checkBtn.addEventListener('click', () => {

@@ -8,6 +8,7 @@ class VectorOperationsComponent extends BaseTrainerComponent {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
+            ${this.getShareModalTemplate('vector-operations')}
         `;
     }
 
@@ -88,6 +89,12 @@ class VectorOperationsComponent extends BaseTrainerComponent {
                             <input type="checkbox" id="vo-multiplication" checked>
                             <span>Умножение вектора на число</span>
                         </label>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>Поделиться</h3>
+                        <p class="settings-description">Создайте челлендж с текущими настройками</p>
+                        <button id="vector-operations-share-btn" class="settings-button">🔗 Создать ссылку</button>
                     </div>
                 </div>
             </div>

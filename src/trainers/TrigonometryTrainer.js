@@ -43,12 +43,16 @@ class TrigonometryTrainer extends BaseTrainer {
             questionElem: document.getElementById('trigonometry-question'),
 
             // Контейнер для кнопок ответов
-            answersContainer: document.getElementById('trigonometry-answers-container')
+            answersContainer: document.getElementById('trigonometry-answers-container'),
+
+            // Кнопка "Поделиться"
+            shareBtn: document.getElementById('trigonometry-share-btn')
         };
 
         // Инициализация обработчиков
         this.initEventHandlers();
         this.initSettingsHandlers();
+        this.initShareModalHandlers();
     }
 
     // Инициализация обработчиков событий (переопределяем базовый метод)

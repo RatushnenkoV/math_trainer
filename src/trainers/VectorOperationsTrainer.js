@@ -47,13 +47,17 @@ class VectorOperationsTrainer extends BaseTrainer {
             byDrawingCheckbox: document.getElementById('by-drawing'),
             additionCheckbox: document.getElementById('vo-addition'),
             subtractionCheckbox: document.getElementById('vo-subtraction'),
-            multiplicationCheckbox: document.getElementById('vo-multiplication')
+            multiplicationCheckbox: document.getElementById('vo-multiplication'),
+
+            // Кнопка "Поделиться"
+            shareBtn: document.getElementById('vector-operations-share-btn')
         };
 
         this.initEventHandlers();
         this.loadSettings();
         this.updateGeneratorSettings();
         this.initSettingsHandlers();
+        this.initShareModalHandlers();
     }
 
     initSettingsHandlers() {

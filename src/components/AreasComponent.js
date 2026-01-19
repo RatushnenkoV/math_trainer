@@ -8,6 +8,7 @@ class AreasComponent extends BaseTrainerComponent {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
+            ${this.getShareModalTemplate('areas')}
         `;
     }
 
@@ -100,6 +101,12 @@ class AreasComponent extends BaseTrainerComponent {
                             <input type="checkbox" id="areas-use-diagonals" checked>
                             <span>Формулы с диагоналями</span>
                         </label>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>Поделиться</h3>
+                        <p class="settings-description">Создайте челлендж с текущими настройками</p>
+                        <button id="areas-share-btn" class="settings-button">🔗 Создать ссылку</button>
                     </div>
                 </div>
             </div>

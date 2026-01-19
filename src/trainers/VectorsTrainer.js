@@ -18,6 +18,9 @@ class VectorsTrainer extends BaseTrainer {
         this.elements = {
             screen: document.getElementById('vectors-screen'),
             backBtn: document.getElementById('vectors-back-btn'),
+            settingsBtn: document.getElementById('vectors-settings-btn'),
+            settingsScreen: document.getElementById('vectors-settings-screen'),
+            settingsBackBtn: document.getElementById('vectors-settings-back-btn'),
             checkBtn: document.getElementById('vectors-check-btn'),
 
             levelText: document.getElementById('vectors-level-text'),
@@ -30,18 +33,39 @@ class VectorsTrainer extends BaseTrainer {
             gridContainer: document.getElementById('vectors-grid-container'),
             xInput: document.getElementById('vectors-x-input'),
             yInput: document.getElementById('vectors-y-input'),
-            inputsContainer: document.getElementById('vectors-inputs-container')
+            inputsContainer: document.getElementById('vectors-inputs-container'),
+
+            // Кнопка "Поделиться"
+            shareBtn: document.getElementById('vectors-share-btn')
         };
 
         this.initEventHandlers();
+        this.initShareModalHandlers();
     }
 
-    // Переопределяем initEventHandlers, убираем кнопку настроек
+    // Переопределяем initEventHandlers
     initEventHandlers() {
+        // Вызываем базовый метод для кнопки "Поделиться"
+        super.initEventHandlers();
+
         // Кнопка назад
         this.elements.backBtn.addEventListener('click', () => {
             this.showScreen('main-menu');
         });
+
+        // Кнопка настроек
+        if (this.elements.settingsBtn) {
+            this.elements.settingsBtn.addEventListener('click', () => {
+                this.showSettingsScreen();
+            });
+        }
+
+        // Кнопка назад в настройках
+        if (this.elements.settingsBackBtn) {
+            this.elements.settingsBackBtn.addEventListener('click', () => {
+                this.hideSettingsScreen();
+            });
+        }
 
         // Кнопка проверки
         this.elements.checkBtn.addEventListener('click', () => {

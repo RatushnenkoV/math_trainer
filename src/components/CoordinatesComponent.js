@@ -8,6 +8,7 @@ class CoordinatesComponent extends BaseTrainerComponent {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
+            ${this.getShareModalTemplate('coordinates')}
         `;
     }
 
@@ -25,7 +26,7 @@ class CoordinatesComponent extends BaseTrainerComponent {
                             <div id="coordinates-progress-fill" class="progress-fill"></div>
                         </div>
                     </div>
-                    <div></div>
+                    <button id="coordinates-settings-btn" class="icon-button">⚙</button>
                 </div>
 
                 <div class="content">
@@ -51,7 +52,23 @@ class CoordinatesComponent extends BaseTrainerComponent {
     }
 
     getSettingsTemplate() {
-        return '';
+        return `
+            <div id="coordinates-settings-screen" class="screen">
+                <div class="header">
+                    <button id="coordinates-settings-back-btn" class="icon-button">←</button>
+                    <h2>Настройки</h2>
+                    <div></div>
+                </div>
+
+                <div class="settings-content">
+                    <div class="settings-group">
+                        <h3>Поделиться</h3>
+                        <p class="settings-description">Создайте челлендж с текущими настройками</p>
+                        <button id="coordinates-share-btn" class="settings-button">🔗 Создать ссылку</button>
+                    </div>
+                </div>
+            </div>
+        `;
     }
 
     initTrainer() {

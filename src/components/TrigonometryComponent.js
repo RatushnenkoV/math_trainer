@@ -8,6 +8,7 @@ class TrigonometryComponent extends BaseTrainerComponent {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
+            ${this.getShareModalTemplate('trigonometry')}
         `;
     }
 
@@ -96,6 +97,12 @@ class TrigonometryComponent extends BaseTrainerComponent {
                             <input type="radio" name="angle-units" id="trigonometry-radians">
                             <span>Радианы</span>
                         </label>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>Поделиться</h3>
+                        <p class="settings-description">Создайте челлендж с текущими настройками</p>
+                        <button id="trigonometry-share-btn" class="settings-button">🔗 Создать ссылку</button>
                     </div>
                 </div>
             </div>

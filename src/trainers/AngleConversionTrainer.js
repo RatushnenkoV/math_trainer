@@ -39,12 +39,16 @@ class AngleConversionTrainer extends BaseTrainer {
             questionElem: document.getElementById('angle-conversion-question'),
 
             // Контейнер для полей ввода
-            answerInput: document.getElementById('angle-conversion-answer-input')
+            answerInput: document.getElementById('angle-conversion-answer-input'),
+
+            // Кнопка "Поделиться"
+            shareBtn: document.getElementById('angle-conversion-share-btn')
         };
 
         // Инициализация обработчиков
         this.initEventHandlers();
         this.initSettingsHandlers();
+        this.initShareModalHandlers();
     }
 
     // Инициализация обработчиков событий

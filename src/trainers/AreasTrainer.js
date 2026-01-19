@@ -93,12 +93,16 @@ class AreasTrainer extends BaseTrainer {
             trapezoidCheck: document.getElementById('areas-trapezoid'),
             circleCheck: document.getElementById('areas-circle'),
             useTrigonometryCheck: document.getElementById('areas-use-trigonometry'),
-            useDiagonalsCheck: document.getElementById('areas-use-diagonals')
+            useDiagonalsCheck: document.getElementById('areas-use-diagonals'),
+
+            // Кнопка "Поделиться"
+            shareBtn: document.getElementById('areas-share-btn')
         };
 
         this.loadSettings();
         this.updateSettingsUI();
         this.initEventHandlers();
+        this.initShareModalHandlers();
     }
 
     initEventHandlers() {

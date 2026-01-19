@@ -8,6 +8,7 @@ class VectorsComponent extends BaseTrainerComponent {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
+            ${this.getShareModalTemplate('vectors')}
         `;
     }
 
@@ -25,7 +26,7 @@ class VectorsComponent extends BaseTrainerComponent {
                             <div id="vectors-progress-fill" class="progress-fill"></div>
                         </div>
                     </div>
-                    <div></div>
+                    <button id="vectors-settings-btn" class="icon-button">⚙</button>
                 </div>
 
                 <div class="content">
@@ -51,7 +52,23 @@ class VectorsComponent extends BaseTrainerComponent {
     }
 
     getSettingsTemplate() {
-        return '';
+        return `
+            <div id="vectors-settings-screen" class="screen">
+                <div class="header">
+                    <button id="vectors-settings-back-btn" class="icon-button">←</button>
+                    <h2>Настройки</h2>
+                    <div></div>
+                </div>
+
+                <div class="settings-content">
+                    <div class="settings-group">
+                        <h3>Поделиться</h3>
+                        <p class="settings-description">Создайте челлендж с текущими настройками</p>
+                        <button id="vectors-share-btn" class="settings-button">🔗 Создать ссылку</button>
+                    </div>
+                </div>
+            </div>
+        `;
     }
 
     initTrainer() {
