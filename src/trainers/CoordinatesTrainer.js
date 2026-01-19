@@ -79,6 +79,18 @@ class CoordinatesTrainer extends BaseTrainer {
         });
     }
 
+    // Показать экран настроек
+    showSettingsScreen() {
+        this.elements.screen.classList.remove('active');
+        this.elements.settingsScreen.classList.add('active');
+    }
+
+    // Скрыть экран настроек
+    hideSettingsScreen() {
+        this.elements.settingsScreen.classList.remove('active');
+        this.elements.screen.classList.add('active');
+    }
+
     // Переопределяем проверку операций, т.к. у нас нет операций
     hasOperationsSelected() {
         return true;

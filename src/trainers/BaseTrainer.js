@@ -289,7 +289,10 @@ class BaseTrainer {
         const tasksValue = document.getElementById(`${this.name}-share-tasks-value`);
         const successMessage = document.getElementById(`${this.name}-share-success`);
 
-        if (!modal) return;
+        if (!modal) {
+            console.warn(`Share modal not found for trainer: ${this.name}`);
+            return;
+        }
 
         // Обновление значения слайдера
         const updateSliderGradient = (value) => {
