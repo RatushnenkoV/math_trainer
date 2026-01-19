@@ -106,6 +106,9 @@ class AreasTrainer extends BaseTrainer {
     }
 
     initEventHandlers() {
+        // Вызываем базовый метод для инициализации кнопки "Поделиться"
+        super.initEventHandlers();
+
         // Кнопка назад
         this.elements.backBtn.addEventListener('click', () => {
             this.showScreen('main-menu');

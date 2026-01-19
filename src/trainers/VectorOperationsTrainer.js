@@ -60,6 +60,11 @@ class VectorOperationsTrainer extends BaseTrainer {
         this.initShareModalHandlers();
     }
 
+    initEventHandlers() {
+        // Вызываем базовый метод для инициализации кнопки "Поделиться"
+        super.initEventHandlers();
+    }
+
     initSettingsHandlers() {
         // Обработчики для настроек
         this.elements.byCoordinatesCheckbox.addEventListener('change', (e) => {
