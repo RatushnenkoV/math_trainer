@@ -7,6 +7,7 @@ class PolynomialExpandComponent extends BaseTrainerComponent {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
+            ${this.getShareModalTemplate('polynomial-expand')}
         `;
     }
 
@@ -67,6 +68,12 @@ class PolynomialExpandComponent extends BaseTrainerComponent {
                             <input type="checkbox" id="expand-type-polynomial" value="polynomialByPolynomial">
                             <span>Многочлен на многочлен</span>
                         </label>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>Поделиться</h3>
+                        <p class="settings-description">Создайте челлендж с текущими настройками</p>
+                        <button id="polynomial-expand-share-btn" class="settings-button">🔗 Создать ссылку</button>
                     </div>
                 </div>
             </div>

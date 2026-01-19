@@ -60,11 +60,15 @@ class DefinitionsTrainer extends BaseTrainer {
             answersContainer: document.getElementById('definitions-answers-container'),
 
             // Элементы настроек
-            sectionsContainer: document.getElementById('definitions-sections-container')
+            sectionsContainer: document.getElementById('definitions-sections-container'),
+
+            // Кнопка "Поделиться"
+            shareBtn: document.getElementById('definitions-share-btn')
         };
 
         // Инициализация обработчиков
         this.initEventHandlers();
+        this.initShareModalHandlers();
 
         // Загружаем определения асинхронно
         this.initSettingsUI();
@@ -74,7 +78,7 @@ class DefinitionsTrainer extends BaseTrainer {
     initEventHandlers() {
         // Кнопка назад
         this.elements.backBtn.addEventListener('click', () => {
-            this.showScreen('main-menu');
+            this.handleBackButtonClick();
         });
 
         // Кнопка настроек

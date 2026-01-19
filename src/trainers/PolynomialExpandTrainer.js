@@ -7,7 +7,7 @@ class PolynomialExpandTrainer extends BaseTrainer {
         };
 
         super({
-            name: 'polynomialExpand',
+            name: 'polynomial-expand',
             generator: new PolynomialExpandGenerator(settings),
             progressTracker: new ProgressTracker('polynomialExpandProgress'),
             settings: settings,
@@ -41,12 +41,16 @@ class PolynomialExpandTrainer extends BaseTrainer {
 
             answerContainer: document.getElementById('polynomial-expand-answer-container'),
             addMonomialBtn: document.getElementById('add-monomial-btn'),
-            variablesPanel: document.getElementById('variables-panel')
+            variablesPanel: document.getElementById('variables-panel'),
+
+            // Кнопка "Поделиться"
+            shareBtn: document.getElementById('polynomial-expand-share-btn')
         };
 
         this.initEventHandlers();
         this.initSettingsHandlers();
         this.initVariablesPanel();
+        this.initShareModalHandlers();
     }
 
     initEventHandlers() {

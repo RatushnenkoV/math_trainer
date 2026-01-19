@@ -7,6 +7,7 @@ class AlgebraicIdentitiesComponent extends BaseTrainerComponent {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
+            ${this.getShareModalTemplate('algebraic-identities')}
         `;
     }
 
@@ -119,6 +120,12 @@ class AlgebraicIdentitiesComponent extends BaseTrainerComponent {
                                 <span>Сложная<br>(2a²+3xy)</span>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>Поделиться</h3>
+                        <p class="settings-description">Создайте челлендж с текущими настройками</p>
+                        <button id="algebraic-identities-share-btn" class="settings-button">🔗 Создать ссылку</button>
                     </div>
                 </div>
             </div>

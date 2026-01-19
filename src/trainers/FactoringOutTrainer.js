@@ -2,7 +2,7 @@
 class FactoringOutTrainer extends BaseTrainer {
     constructor() {
         super({
-            name: 'factoringOut',
+            name: 'factoring-out',
             generator: new FactoringOutGenerator(),
             progressTracker: new ProgressTracker('factoringOutProgress'),
             settings: {},
@@ -28,6 +28,9 @@ class FactoringOutTrainer extends BaseTrainer {
         this.elements = {
             screen: document.getElementById('factoring-out-screen'),
             backBtn: document.getElementById('factoring-out-back-btn'),
+            settingsBtn: document.getElementById('factoring-out-settings-btn'),
+            settingsScreen: document.getElementById('factoring-out-settings-screen'),
+            settingsBackBtn: document.getElementById('factoring-out-settings-back-btn'),
             checkBtn: document.getElementById('factoring-out-check-btn'),
 
             levelText: document.getElementById('factoring-out-level-text'),
@@ -37,23 +40,49 @@ class FactoringOutTrainer extends BaseTrainer {
             problemDisplay: document.getElementById('factoring-out-problem-display'),
 
             factorizationContainer: document.getElementById('factoring-out-factorization-container'),
-            variablesPanel: document.getElementById('variables-panel-fo')
+            variablesPanel: document.getElementById('variables-panel-fo'),
+
+            // Кнопка "Поделиться"
+            shareBtn: document.getElementById('factoring-out-share-btn')
         };
 
         this.initEventHandlers();
         this.initVariablesPanel();
+        this.initShareModalHandlers();
     }
 
     initEventHandlers() {
         // Кнопка назад
         this.elements.backBtn.addEventListener('click', () => {
-            this.showScreen('main-menu');
+            this.handleBackButtonClick();
+        });
+
+        // Кнопка настроек
+        this.elements.settingsBtn.addEventListener('click', () => {
+            this.showSettingsScreen();
+        });
+
+        // Кнопка назад в настройках
+        this.elements.settingsBackBtn.addEventListener('click', () => {
+            this.hideSettingsScreen();
         });
 
         // Кнопка проверки
         this.elements.checkBtn.addEventListener('click', () => {
             this.checkAnswer();
         });
+    }
+
+    // Показать экран настроек
+    showSettingsScreen() {
+        this.elements.screen.classList.remove('active');
+        this.elements.settingsScreen.classList.add('active');
+    }
+
+    // Скрыть экран настроек
+    hideSettingsScreen() {
+        this.elements.settingsScreen.classList.remove('active');
+        this.elements.screen.classList.add('active');
     }
 
     initVariablesPanel() {

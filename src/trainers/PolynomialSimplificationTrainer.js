@@ -10,7 +10,7 @@ class PolynomialSimplificationTrainer extends BaseTrainer {
         };
 
         super({
-            name: 'polynomialSimplification',
+            name: 'polynomial-simplification',
             generator: new PolynomialSimplificationGenerator(settings),
             progressTracker: new ProgressTracker('mathTrainerPolynomialSimplificationProgress'),
             settings: settings,
@@ -33,6 +33,9 @@ class PolynomialSimplificationTrainer extends BaseTrainer {
         this.elements = {
             screen: document.getElementById('polynomial-simplification-screen'),
             backBtn: document.getElementById('polynomial-simplification-back-btn'),
+            settingsBtn: document.getElementById('polynomial-simplification-settings-btn'),
+            settingsScreen: document.getElementById('polynomial-simplification-settings-screen'),
+            settingsBackBtn: document.getElementById('polynomial-simplification-settings-back-btn'),
             checkBtn: document.getElementById('polynomial-simplification-check-btn'),
 
             levelText: document.getElementById('polynomial-simplification-level-text'),
@@ -48,23 +51,49 @@ class PolynomialSimplificationTrainer extends BaseTrainer {
             modalCoefficientInput: document.getElementById('polynomial-modal-coefficient-input'),
             modalLiteralPart: document.getElementById('polynomial-modal-literal-part'),
             modalOkBtn: document.getElementById('polynomial-modal-ok-btn'),
-            modalCancelBtn: document.getElementById('polynomial-modal-cancel-btn')
+            modalCancelBtn: document.getElementById('polynomial-modal-cancel-btn'),
+
+            // Кнопка "Поделиться"
+            shareBtn: document.getElementById('polynomial-simplification-share-btn')
         };
 
         this.initEventHandlers();
         this.initModalHandlers();
+        this.initShareModalHandlers();
     }
 
     initEventHandlers() {
         // Кнопка назад
         this.elements.backBtn.addEventListener('click', () => {
-            this.showScreen('main-menu');
+            this.handleBackButtonClick();
+        });
+
+        // Кнопка настроек
+        this.elements.settingsBtn.addEventListener('click', () => {
+            this.showSettingsScreen();
+        });
+
+        // Кнопка назад в настройках
+        this.elements.settingsBackBtn.addEventListener('click', () => {
+            this.hideSettingsScreen();
         });
 
         // Кнопка проверки
         this.elements.checkBtn.addEventListener('click', () => {
             this.checkAnswer();
         });
+    }
+
+    // Показать экран настроек
+    showSettingsScreen() {
+        this.elements.screen.classList.remove('active');
+        this.elements.settingsScreen.classList.add('active');
+    }
+
+    // Скрыть экран настроек
+    hideSettingsScreen() {
+        this.elements.settingsScreen.classList.remove('active');
+        this.elements.screen.classList.add('active');
     }
 
     initModalHandlers() {

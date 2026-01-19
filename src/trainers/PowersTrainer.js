@@ -37,13 +37,17 @@ class PowersTrainer extends BaseTrainer {
             problemDisplay: document.getElementById('powers-problem-display'),
 
             // Элементы ввода
-            answerInput: document.getElementById('powers-answer-input')
+            answerInput: document.getElementById('powers-answer-input'),
+
+            // Кнопка "Поделиться"
+            shareBtn: document.getElementById('powers-share-btn')
         };
 
         // Инициализация обработчиков
         this.initEventHandlers();
         this.initSettingsHandlers();
         this.initInputHandlers();
+        this.initShareModalHandlers();
     }
 
     // Инициализация обработчиков для полей ввода

@@ -20,7 +20,7 @@ class AlgebraicIdentitiesTrainer extends BaseTrainer {
         };
 
         super({
-            name: 'algebraicIdentities',
+            name: 'algebraic-identities',
             generator: new AlgebraicIdentitiesGenerator(settings),
             progressTracker: new ProgressTracker('algebraicIdentitiesProgress'),
             settings: settings,
@@ -63,12 +63,16 @@ class AlgebraicIdentitiesTrainer extends BaseTrainer {
 
             addMonomialBtn: document.getElementById('add-monomial-btn-ai'),
             addFactorBtn: document.getElementById('add-factor-btn'),
-            variablesPanel: document.getElementById('variables-panel-ai')
+            variablesPanel: document.getElementById('variables-panel-ai'),
+
+            // Кнопка "Поделиться"
+            shareBtn: document.getElementById('algebraic-identities-share-btn')
         };
 
         this.initEventHandlers();
         this.initSettingsHandlers();
         this.initVariablesPanel();
+        this.initShareModalHandlers();
     }
 
     initEventHandlers() {

@@ -8,6 +8,7 @@ class DefinitionsComponent extends BaseTrainerComponent {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
+            ${this.getShareModalTemplate('definitions')}
         `;
     }
 
@@ -61,6 +62,12 @@ class DefinitionsComponent extends BaseTrainerComponent {
                     </div>
                     <div id="definitions-sections-container">
                         <!-- Разделы будут добавлены динамически -->
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>Поделиться</h3>
+                        <p class="settings-description">Создайте челлендж с текущими настройками</p>
+                        <button id="definitions-share-btn" class="settings-button">🔗 Создать ссылку</button>
                     </div>
                 </div>
             </div>

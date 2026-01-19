@@ -7,6 +7,8 @@ class PolynomialSimplificationComponent extends BaseTrainerComponent {
     render() {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
+            ${this.getSettingsTemplate()}
+            ${this.getShareModalTemplate('polynomial-simplification')}
         `;
     }
 
@@ -24,7 +26,7 @@ class PolynomialSimplificationComponent extends BaseTrainerComponent {
                             <div id="polynomial-simplification-progress-fill" class="progress-fill"></div>
                         </div>
                     </div>
-                    <div></div>
+                    <button id="polynomial-simplification-settings-btn" class="icon-button">⚙</button>
                 </div>
 
                 <div class="content">
@@ -57,6 +59,26 @@ class PolynomialSimplificationComponent extends BaseTrainerComponent {
                             <button id="polynomial-modal-cancel-btn" class="polynomial-modal-cancel">Отмена</button>
                             <button id="polynomial-modal-ok-btn" class="polynomial-modal-ok">ОК</button>
                         </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    getSettingsTemplate() {
+        return `
+            <div id="polynomial-simplification-settings-screen" class="screen">
+                <div class="header">
+                    <button id="polynomial-simplification-settings-back-btn" class="icon-button">←</button>
+                    <h2>Настройки</h2>
+                    <div></div>
+                </div>
+
+                <div class="settings-content">
+                    <div class="settings-group">
+                        <h3>Поделиться</h3>
+                        <p class="settings-description">Создайте челлендж с текущими настройками</p>
+                        <button id="polynomial-simplification-share-btn" class="settings-button">🔗 Создать ссылку</button>
                     </div>
                 </div>
             </div>
