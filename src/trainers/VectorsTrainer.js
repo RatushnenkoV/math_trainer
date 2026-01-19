@@ -75,14 +75,12 @@ class VectorsTrainer extends BaseTrainer {
 
     // Показать экран настроек
     showSettingsScreen() {
-        this.elements.screen.classList.remove('active');
-        this.elements.settingsScreen.classList.add('active');
+        this.showScreen('vectors-settings-screen');
     }
 
     // Скрыть экран настроек
     hideSettingsScreen() {
-        this.elements.settingsScreen.classList.remove('active');
-        this.elements.screen.classList.add('active');
+        this.showScreen('vectors-screen');
     }
 
     // Переопределяем проверку операций, т.к. у нас нет операций

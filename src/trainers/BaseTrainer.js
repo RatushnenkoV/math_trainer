@@ -294,6 +294,16 @@ class BaseTrainer {
             return;
         }
 
+        console.log(`[${this.name}] Modal elements:`, {
+            modal: !!modal,
+            closeBtn: !!closeBtn,
+            cancelBtn: !!cancelBtn,
+            copyBtn: !!copyBtn,
+            tasksSlider: !!tasksSlider,
+            tasksValue: !!tasksValue,
+            successMessage: !!successMessage
+        });
+
         // Обновление значения слайдера
         const updateSliderGradient = (value) => {
             const min = parseInt(tasksSlider.min);
@@ -313,12 +323,21 @@ class BaseTrainer {
 
         // Закрытие модального окна
         const closeModal = () => {
+            console.log(`[${this.name}] Closing modal`);
             modal.classList.remove('active');
-            successMessage.classList.remove('show');
+            successMessage?.classList.remove('show');
         };
 
-        closeBtn?.addEventListener('click', closeModal);
-        cancelBtn?.addEventListener('click', closeModal);
+        closeBtn?.addEventListener('click', (e) => {
+            console.log(`[${this.name}] Close button clicked`);
+            e.stopPropagation();
+            closeModal();
+        });
+        cancelBtn?.addEventListener('click', (e) => {
+            console.log(`[${this.name}] Cancel button clicked`);
+            e.stopPropagation();
+            closeModal();
+        });
 
         // Закрытие по клику на overlay
         modal.addEventListener('click', (e) => {
@@ -328,15 +347,17 @@ class BaseTrainer {
         });
 
         // Копирование/Шаринг ссылки
-        copyBtn?.addEventListener('click', async () => {
+        copyBtn?.addEventListener('click', async (e) => {
+            console.log(`[${this.name}] Copy/Share button clicked`);
+            e.stopPropagation();
             const taskCount = parseInt(tasksSlider.value, 10);
             const shareParams = ShareLinkUtil.encodeSettings(this.name, this.settings, taskCount);
             const success = await ShareLinkUtil.shareChallenge(shareParams, this.name, taskCount);
 
             if (success) {
-                successMessage.classList.add('show');
+                successMessage?.classList.add('show');
                 setTimeout(() => {
-                    successMessage.classList.remove('show');
+                    successMessage?.classList.remove('show');
                     closeModal();
                 }, 2000);
             }
