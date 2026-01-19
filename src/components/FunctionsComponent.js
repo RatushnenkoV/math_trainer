@@ -8,7 +8,8 @@ class FunctionsComponent extends BaseTrainerComponent {
         this.innerHTML = `
             ${this.getMainScreenTemplate()}
             ${this.getSettingsTemplate()}
-        `; 
+            ${this.getShareModalTemplate('functions')}
+        `;
     }
 
     getMainScreenTemplate() {
@@ -87,6 +88,12 @@ class FunctionsComponent extends BaseTrainerComponent {
                             <input type="checkbox" id="functions-parabola" checked>
                             <span>Параболы (квадратичные функции)</span>
                         </label>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>Поделиться</h3>
+                        <p class="settings-description">Создайте челлендж с текущими настройками</p>
+                        <button id="functions-share-btn" class="settings-button">🔗 Создать ссылку</button>
                     </div>
                 </div>
             </div>

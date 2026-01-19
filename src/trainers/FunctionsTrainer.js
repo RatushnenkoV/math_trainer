@@ -49,12 +49,16 @@ class FunctionsTrainer extends BaseTrainer {
 
             // График
             plotContainer: document.getElementById('functions-plot-container'),
-            plot: document.getElementById('functions-plot')
+            plot: document.getElementById('functions-plot'),
+
+            // Кнопка "Поделиться"
+            shareBtn: document.getElementById('functions-share-btn')
         };
 
         // Инициализация обработчиков
         this.initEventHandlers();
         this.initSettingsHandlers();
+        this.initShareModalHandlers();
     }
 
     // Инициализация обработчиков настроек

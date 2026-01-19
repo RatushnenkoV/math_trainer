@@ -64,24 +64,32 @@ class PolynomialSimplificationTrainer extends BaseTrainer {
 
     initEventHandlers() {
         // Кнопка назад
-        this.elements.backBtn.addEventListener('click', () => {
-            this.handleBackButtonClick();
-        });
+        if (this.elements.backBtn) {
+            this.elements.backBtn.addEventListener('click', () => {
+                this.handleBackButtonClick();
+            });
+        }
 
         // Кнопка настроек
-        this.elements.settingsBtn.addEventListener('click', () => {
-            this.showSettingsScreen();
-        });
+        if (this.elements.settingsBtn) {
+            this.elements.settingsBtn.addEventListener('click', () => {
+                this.showSettingsScreen();
+            });
+        }
 
         // Кнопка назад в настройках
-        this.elements.settingsBackBtn.addEventListener('click', () => {
-            this.hideSettingsScreen();
-        });
+        if (this.elements.settingsBackBtn) {
+            this.elements.settingsBackBtn.addEventListener('click', () => {
+                this.hideSettingsScreen();
+            });
+        }
 
         // Кнопка проверки
-        this.elements.checkBtn.addEventListener('click', () => {
-            this.checkAnswer();
-        });
+        if (this.elements.checkBtn) {
+            this.elements.checkBtn.addEventListener('click', () => {
+                this.checkAnswer();
+            });
+        }
     }
 
     // Показать экран настроек
