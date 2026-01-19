@@ -52,6 +52,9 @@ class FactoringOutTrainer extends BaseTrainer {
     }
 
     initEventHandlers() {
+        // Вызываем базовый метод для инициализации кнопки "Поделиться"
+        super.initEventHandlers();
+
         // Кнопка назад
         if (this.elements.backBtn) {
             this.elements.backBtn.addEventListener('click', () => {
