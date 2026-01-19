@@ -668,12 +668,4 @@ class FactoringOutTrainer extends BaseTrainer {
             this.elements.problemDisplay.innerHTML = '';
         }
     }
-
-    showSettingsScreen() {
-        // Настроек нет
-    }
-
-    hideSettingsScreen() {
-        // Настроек нет
-    }
 }
