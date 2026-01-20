@@ -59,10 +59,8 @@ class SystemOfInequalitiesTrainer extends BaseTrainer {
 
     // Переопределение initEventHandlers
     initEventHandlers() {
-        // Кнопка назад
-        this.elements.backBtn.addEventListener('click', () => {
-            this.handleBackButtonClick();
-        });
+        // Вызываем базовый метод для инициализации кнопки "Поделиться"
+        super.initEventHandlers();
 
         // Кнопка настроек
         this.elements.settingsBtn.addEventListener('click', () => {

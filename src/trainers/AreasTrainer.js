@@ -111,7 +111,7 @@ class AreasTrainer extends BaseTrainer {
 
         // Кнопка назад
         this.elements.backBtn.addEventListener('click', () => {
-            this.showScreen('main-menu');
+            this.handleBackButtonClick();
         });
 
         // Кнопка настроек
