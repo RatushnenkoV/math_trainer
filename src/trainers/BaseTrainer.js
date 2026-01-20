@@ -24,15 +24,19 @@ class BaseTrainer {
 
     // Инициализация обработчиков событий
     initEventHandlers() {
-        // Кнопка назад
-        this.elements.backBtn.addEventListener('click', () => {
-            this.handleBackButtonClick();
-        });
+        // Кнопка назад (если есть)
+        if (this.elements.backBtn) {
+            this.elements.backBtn.addEventListener('click', () => {
+                this.handleBackButtonClick();
+            });
+        }
 
-        // Кнопка настроек
-        this.elements.settingsBtn.addEventListener('click', () => {
-            this.showSettingsScreen();
-        });
+        // Кнопка настроек (если есть)
+        if (this.elements.settingsBtn) {
+            this.elements.settingsBtn.addEventListener('click', () => {
+                this.showSettingsScreen();
+            });
+        }
 
         // Кнопка "Поделиться" (если есть)
         if (this.elements.shareBtn) {
@@ -41,16 +45,20 @@ class BaseTrainer {
             });
         }
 
-        // Кнопка проверки
-        this.elements.checkBtn.addEventListener('click', () => {
-            this.checkAnswer();
-        });
+        // Кнопка проверки (если есть)
+        if (this.elements.checkBtn) {
+            this.elements.checkBtn.addEventListener('click', () => {
+                this.checkAnswer();
+            });
+        }
 
-        // Кнопка назад из настроек
-        this.elements.settingsBackBtn.addEventListener('click', () => {
-            this.hideSettingsScreen();
-            this.generateNewProblem();
-        });
+        // Кнопка назад из настроек (если есть)
+        if (this.elements.settingsBackBtn) {
+            this.elements.settingsBackBtn.addEventListener('click', () => {
+                this.hideSettingsScreen();
+                this.generateNewProblem();
+            });
+        }
     }
 
     // Обработка нажатия кнопки "Назад"

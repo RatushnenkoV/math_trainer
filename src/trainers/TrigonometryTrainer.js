@@ -57,24 +57,8 @@ class TrigonometryTrainer extends BaseTrainer {
 
     // Инициализация обработчиков событий (переопределяем базовый метод)
     initEventHandlers() {
-        // Вызываем базовый метод для инициализации кнопки "Поделиться"
+        // Вызываем базовый метод (кнопки назад, настроек, поделиться)
         super.initEventHandlers();
-
-        // Кнопка назад
-        this.elements.backBtn.addEventListener('click', () => {
-            this.showScreen('main-menu');
-        });
-
-        // Кнопка настроек
-        this.elements.settingsBtn.addEventListener('click', () => {
-            this.showSettingsScreen();
-        });
-
-        // Кнопка назад из настроек
-        this.elements.settingsBackBtn.addEventListener('click', () => {
-            this.hideSettingsScreen();
-            this.generateNewProblem();
-        });
     }
 
     // Инициализация обработчиков настроек

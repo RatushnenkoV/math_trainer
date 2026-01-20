@@ -32,6 +32,7 @@ class DefinitionsTrainer extends BaseTrainer {
         this.isAnswering = false; // Флаг для предотвращения множественных кликов
         this.allSections = []; // Все доступные разделы
         this.definitionsLoaded = false; // Флаг загрузки определений
+        this.settingsUIRendered = false; // Флаг рендеринга UI настроек
 
         // Для режима сопоставления
         this.selectedTerm = null;
@@ -106,15 +107,15 @@ class DefinitionsTrainer extends BaseTrainer {
 
     // Инициализация UI настроек
     async initSettingsUI() {
-        if (this.definitionsLoaded) {
-            return; // Уже загружено
+        if (this.settingsUIRendered) {
+            return; // UI уже отрендерен
         }
 
         // Показываем сообщение о загрузке
         this.elements.sectionsContainer.innerHTML = '<div class="settings-group"><p>Загрузка разделов...</p></div>';
 
         try {
-            // Ждём загрузки определений
+            // Ждём загрузки определений (если ещё не загружены)
             await this.generator.loadDefinitions();
 
             // Получаем все разделы
@@ -131,7 +132,7 @@ class DefinitionsTrainer extends BaseTrainer {
 
             // Создаём UI для выбора разделов
             this.renderSectionsUI(sectionsByClass);
-            this.definitionsLoaded = true;
+            this.settingsUIRendered = true;
         } catch (error) {
             console.error('Ошибка загрузки определений:', error);
             this.elements.sectionsContainer.innerHTML = '<div class="settings-group"><p>Ошибка загрузки разделов. Попробуйте перезагрузить страницу.</p></div>';
@@ -646,8 +647,8 @@ class DefinitionsTrainer extends BaseTrainer {
     async showSettingsScreen() {
         this.showScreen('definitions-settings-screen');
 
-        // Убеждаемся, что настройки UI инициализированы
-        if (!this.definitionsLoaded) {
+        // Убеждаемся, что UI настроек инициализирован
+        if (!this.settingsUIRendered) {
             await this.initSettingsUI();
         }
     }

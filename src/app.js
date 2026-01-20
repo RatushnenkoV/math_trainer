@@ -826,6 +826,12 @@ function handleBackButton() {
             trainers.areas.generateNewProblem();
             break;
 
+        case 'system-of-inequalities-settings-screen':
+            // Из настроек площадей возвращаемся к тренажёру
+            showScreen('system-of-inequalities-screen');
+            trainers.areas.generateNewProblem();
+            break;
+
         case 'main-menu':
             // Из главного меню закрываем приложение
             if (tg) {
