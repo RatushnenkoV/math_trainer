@@ -820,7 +820,7 @@ function handleBackButton() {
             trainers.vectorOperations.generateNewProblem();
             break;
 
-        case 'areas-settings':
+        case 'areas-settings-screen':
             // Из настроек площадей возвращаемся к тренажёру
             showScreen('areas-screen');
             trainers.areas.generateNewProblem();
