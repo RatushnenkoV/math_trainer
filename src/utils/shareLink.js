@@ -103,68 +103,29 @@ class ShareLinkUtil {
     }
 
     /**
-     * Открывает меню шаринга в Telegram или копирует ссылку
+     * Копирует ссылку на челлендж в буфер обмена
      * @param {string} shareParams - Параметры для шаринга (startapp параметр или полная ссылка)
-     * @param {string} trainerName - Название тренажёра для сообщения
-     * @param {number} taskCount - Количество задач для сообщения
      * @returns {Promise<boolean>} - true если успешно
      */
-    static async shareChallenge(shareParams, trainerName, taskCount) {
+    static async shareChallenge(shareParams) {
         const tg = window.Telegram?.WebApp;
 
         if (tg) {
-            try {
-                // Получаем имя бота из initData
-                const botUsername = 'rat_math_trainer_bot'; // Замените на ваше имя бота
+            // Для Telegram Mini App: создаём полную ссылку и копируем в буфер
+            const botUsername = 'rat_math_trainer_bot';
+            const shareUrl = `https://t.me/${botUsername}?startapp=${shareParams}`;
 
-                // Создаём сообщение для шаринга
-                const trainerNames = {
-                    'multiplication-table': 'таблице умножения',
-                    'divisibility': 'делимости',
-                    'square-roots': 'квадратным корням',
-                    'percentages': 'процентам',
-                    'negatives': 'отрицательным числам',
-                    'fractions': 'дробям',
-                    'decimals': 'десятичным дробям',
-                    'linear-equations': 'линейным уравнениям',
-                    'quadratic-equations': 'квадратным уравнениям',
-                    'powers': 'степеням',
-                    // Добавьте остальные тренажёры по необходимости
-                };
+            const success = await this.copyToClipboard(shareUrl);
 
-                const trainerTitle = trainerNames[trainerName] || trainerName;
-                const message = `Челлендж по ${trainerTitle}: реши ${taskCount} задач без ошибок! 🎯`;
-
-                // Создаём полную ссылку для Telegram
-                const shareUrl = `https://t.me/${botUsername}?startapp=${encodeURIComponent(shareParams)}`;
-
-                // Используем Telegram API для шаринга
-                // Проверяем доступность метода switchInlineQuery (для новых версий)
-                if (tg.switchInlineQuery) {
-                    // Новый способ - через inline режим бота
-                    tg.switchInlineQuery(shareUrl, ['users', 'groups', 'channels']);
-                } else {
-                    // Альтернативный способ - открываем диалог выбора чата
-                    const fullMessage = `${message}\n${shareUrl}`;
-
-                    // Копируем ссылку и показываем нотификацию
-                    await this.copyToClipboard(shareUrl);
-
-                    if (tg.showPopup) {
-                        tg.showPopup({
-                            title: 'Ссылка скопирована!',
-                            message: 'Ссылка на челлендж скопирована. Отправьте её другу в Telegram.',
-                            buttons: [{type: 'ok'}]
-                        });
-                    }
-                }
-
-                return true;
-            } catch (error) {
-                console.error('Ошибка шаринга в Telegram:', error);
-                // Fallback - копируем в буфер обмена
-                return await this.copyToClipboard(`https://t.me/rat_math_trainer_bot?startapp=${encodeURIComponent(shareParams)}`);
+            if (success && tg.showPopup) {
+                tg.showPopup({
+                    title: 'Ссылка скопирована!',
+                    message: 'Ссылка на челлендж скопирована в буфер обмена.',
+                    buttons: [{type: 'ok'}]
+                });
             }
+
+            return success;
         } else {
             // Для обычного браузера - просто копируем ссылку
             return await this.copyToClipboard(shareParams);
