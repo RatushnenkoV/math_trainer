@@ -64,10 +64,10 @@ class BaseTrainerComponent extends HTMLElement {
                                 <input type="range"
                                        class="share-modal-range"
                                        id="${trainerName}-share-tasks"
-                                       min="5"
+                                       min="1"
                                        max="50"
                                        value="10"
-                                       step="5">
+                                       step="1">
                                 <span class="share-modal-value" id="${trainerName}-share-tasks-value">10</span>
                             </div>
                         </div>

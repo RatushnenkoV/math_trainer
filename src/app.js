@@ -621,6 +621,14 @@ function getTrainerNameByScreen(screenId) {
 
 // Обработка нажатия кнопки "Назад"
 function handleBackButton() {
+    // Проверяем, открыто ли модальное окно "Поделиться"
+    const activeModal = document.querySelector('.share-modal-overlay.active');
+    if (activeModal) {
+        // Закрываем модальное окно
+        activeModal.classList.remove('active');
+        return;
+    }
+
     const activeScreen = document.querySelector('.screen.active');
     if (!activeScreen) return;
 
