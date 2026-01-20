@@ -69,9 +69,17 @@ class DefinitionsTrainer extends BaseTrainer {
         // Инициализация обработчиков
         this.initEventHandlers();
         this.initShareModalHandlers();
+    }
 
-        // Загружаем определения асинхронно
-        this.initSettingsUI();
+    // Переопределяем startTest, чтобы дождаться загрузки определений
+    async startTest() {
+        // Загружаем определения перед первым запуском
+        await this.generator.loadDefinitions();
+        this.definitionsLoaded = true;
+
+        // Вызываем базовый метод
+        this.updateProgressDisplay();
+        this.generateNewProblem();
     }
 
     // Инициализация обработчиков событий
