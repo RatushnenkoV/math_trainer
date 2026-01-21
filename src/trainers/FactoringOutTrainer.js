@@ -52,36 +52,8 @@ class FactoringOutTrainer extends BaseTrainer {
     }
 
     initEventHandlers() {
-        // Вызываем базовый метод для инициализации кнопки "Поделиться"
+        // Вызываем базовый метод (обрабатывает backBtn, settingsBtn, shareBtn, checkBtn, settingsBackBtn)
         super.initEventHandlers();
-
-        // Кнопка назад
-        if (this.elements.backBtn) {
-            this.elements.backBtn.addEventListener('click', () => {
-                this.handleBackButtonClick();
-            });
-        }
-
-        // Кнопка настроек
-        if (this.elements.settingsBtn) {
-            this.elements.settingsBtn.addEventListener('click', () => {
-                this.showSettingsScreen();
-            });
-        }
-
-        // Кнопка назад в настройках
-        if (this.elements.settingsBackBtn) {
-            this.elements.settingsBackBtn.addEventListener('click', () => {
-                this.hideSettingsScreen();
-            });
-        }
-
-        // Кнопка проверки
-        if (this.elements.checkBtn) {
-            this.elements.checkBtn.addEventListener('click', () => {
-                this.checkAnswer();
-            });
-        }
     }
 
     // Показать экран настроек

@@ -106,23 +106,28 @@ class AreasTrainer extends BaseTrainer {
     }
 
     initEventHandlers() {
-        // Вызываем базовый метод для инициализации кнопки "Поделиться"
-        super.initEventHandlers();
-
-        // Кнопка назад
-        this.elements.backBtn.addEventListener('click', () => {
-            this.handleBackButtonClick();
-        });
-
-        // Кнопка настроек
-        this.elements.settingsBtn.addEventListener('click', () => {
-            this.showSettingsScreen();
-        });
-
-        // Кнопка проверки
-        this.elements.checkBtn.addEventListener('click', () => {
-            this.checkAnswer();
-        });
+        // Вызываем базовый метод (обрабатывает backBtn, settingsBtn, shareBtn, checkBtn)
+        // НЕ используем базовый settingsBackBtn, т.к. нужна кастомная логика
+        if (this.elements.backBtn) {
+            this.elements.backBtn.addEventListener('click', () => {
+                this.handleBackButtonClick();
+            });
+        }
+        if (this.elements.settingsBtn) {
+            this.elements.settingsBtn.addEventListener('click', () => {
+                this.showSettingsScreen();
+            });
+        }
+        if (this.elements.shareBtn) {
+            this.elements.shareBtn.addEventListener('click', () => {
+                this.showShareModal();
+            });
+        }
+        if (this.elements.checkBtn) {
+            this.elements.checkBtn.addEventListener('click', () => {
+                this.checkAnswer();
+            });
+        }
 
         // Enter в поле ввода
         this.elements.answerInput.addEventListener('keypress', (e) => {

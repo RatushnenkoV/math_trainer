@@ -45,32 +45,8 @@ class VectorsTrainer extends BaseTrainer {
 
     // Переопределяем initEventHandlers
     initEventHandlers() {
-        // Вызываем базовый метод для кнопки "Поделиться"
+        // Вызываем базовый метод (обрабатывает backBtn, settingsBtn, shareBtn, checkBtn, settingsBackBtn)
         super.initEventHandlers();
-
-        // Кнопка назад
-        this.elements.backBtn.addEventListener('click', () => {
-            this.showScreen('main-menu');
-        });
-
-        // Кнопка настроек
-        if (this.elements.settingsBtn) {
-            this.elements.settingsBtn.addEventListener('click', () => {
-                this.showSettingsScreen();
-            });
-        }
-
-        // Кнопка назад в настройках
-        if (this.elements.settingsBackBtn) {
-            this.elements.settingsBackBtn.addEventListener('click', () => {
-                this.hideSettingsScreen();
-            });
-        }
-
-        // Кнопка проверки
-        this.elements.checkBtn.addEventListener('click', () => {
-            this.checkAnswer();
-        });
     }
 
     // Показать экран настроек

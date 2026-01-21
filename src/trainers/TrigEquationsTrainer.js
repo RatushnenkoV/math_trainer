@@ -54,29 +54,8 @@ class TrigEquationsTrainer extends BaseTrainer {
 
     // Инициализация обработчиков событий
     initEventHandlers() {
-        // Вызываем базовый метод для инициализации кнопки "Поделиться"
+        // Вызываем базовый метод (обрабатывает backBtn, settingsBtn, shareBtn, checkBtn, settingsBackBtn)
         super.initEventHandlers();
-
-        // Кнопка назад
-        this.elements.backBtn.addEventListener('click', () => {
-            this.showScreen('main-menu');
-        });
-
-        // Кнопка настроек
-        this.elements.settingsBtn.addEventListener('click', () => {
-            this.showSettingsScreen();
-        });
-
-        // Кнопка назад из настроек
-        this.elements.settingsBackBtn.addEventListener('click', () => {
-            this.hideSettingsScreen();
-            this.generateNewProblem();
-        });
-
-        // Кнопка проверки ответа
-        this.elements.checkBtn.addEventListener('click', () => {
-            this.checkAnswer();
-        });
     }
 
     // Инициализация обработчиков настроек
