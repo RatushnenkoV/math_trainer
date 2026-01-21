@@ -1092,6 +1092,7 @@ async function loadChallengeMode(params) {
         'system-of-inequalities': 'systemOfInequalities',
         'trigonometry': 'trigonometry',
         'trig-equations': 'trigEquations',
+        'angle-conversion': 'angleConversion',
         'powers': 'powers',
         'polynomial-simplification': 'polynomialSimplification',
         'polynomial-expand': 'polynomialExpand',

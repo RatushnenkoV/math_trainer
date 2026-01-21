@@ -517,6 +517,11 @@ class TrigEquationsTrainer extends BaseTrainer {
 
     // Переопределяем обработку неправильного ответа
     handleWrongAnswer() {
+        if (this.challengeMode) {
+            super.handleWrongAnswer();
+            return;
+        }
+
         this.progressTracker.wrongAnswer();
         this.showResultMessage(false);
         this.showEmoji(false);
