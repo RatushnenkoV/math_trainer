@@ -274,6 +274,11 @@ class AngleConversionTrainer extends BaseTrainer {
 
     // Обработка неправильного ответа
     handleWrongAnswer() {
+        if (this.challengeMode) {
+            super.handleWrongAnswer();
+            return;
+        }
+
         this.progressTracker.wrongAnswer();
         this.showResultMessage(false);
         this.showEmoji(false);
@@ -287,6 +292,11 @@ class AngleConversionTrainer extends BaseTrainer {
 
     // Обработка правильного ответа
     handleCorrectAnswer() {
+        if (this.challengeMode) {
+            super.handleCorrectAnswer();
+            return;
+        }
+
         const result = this.progressTracker.correctAnswer();
         this.showResultMessage(true);
         this.showEmoji(true);
