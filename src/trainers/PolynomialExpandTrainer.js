@@ -336,6 +336,31 @@ class PolynomialExpandTrainer extends BaseTrainer {
     }
 
     handleCorrectAnswer() {
+        if (this.challengeMode) {
+            this.showResultMessage('Правильно!', 'success');
+            this.disableInputs();
+            this.showEmoji(true);
+
+            this.challengeTasksCompleted++;
+            this.updateProgressDisplay();
+
+            if (this.challengeTasksCompleted >= this.challengeTasksTotal) {
+                setTimeout(() => {
+                    alert(`Поздравляем! Вы успешно решили все ${this.challengeTasksTotal} задач!`);
+                    this.deactivateChallengeMode();
+                    this.showScreen('main-menu');
+                }, 1000);
+            } else {
+                setTimeout(() => {
+                    this.clearInputs();
+                    this.generateNewProblem();
+                    this.enableInputs();
+                    this.hideResultMessage();
+                }, 1500);
+            }
+            return;
+        }
+
         this.showResultMessage('Правильно!', 'success');
         this.disableInputs();
         this.showEmoji(true);
@@ -356,6 +381,23 @@ class PolynomialExpandTrainer extends BaseTrainer {
     }
 
     handleWrongAnswer() {
+        if (this.challengeMode) {
+            this.challengeTasksCompleted = 0;
+            this.showResultMessage('Неправильно', 'error');
+            this.disableInputs();
+            this.showEmoji(false);
+            this.updateProgressDisplay();
+
+            setTimeout(() => {
+                alert('К сожалению, вы ошиблись. Прогресс челленджа сброшен. Попробуйте снова!');
+                this.clearInputs();
+                this.generateNewProblem();
+                this.enableInputs();
+                this.hideResultMessage();
+            }, 1000);
+            return;
+        }
+
         this.showResultMessage('Неправильно', 'error');
         this.disableInputs();
         this.showEmoji(false);
@@ -409,11 +451,17 @@ class PolynomialExpandTrainer extends BaseTrainer {
     }
 
     updateProgressDisplay() {
-        this.elements.levelText.textContent = this.progressTracker.getLevelName();
-        this.elements.progressText.textContent = this.progressTracker.getProgressText();
-
-        const percentage = this.progressTracker.getProgressPercent();
-        this.elements.progressFill.style.width = `${percentage}%`;
+        if (this.challengeMode) {
+            this.elements.levelText.textContent = 'Челлендж';
+            this.elements.progressText.textContent = `${this.challengeTasksCompleted}/${this.challengeTasksTotal}`;
+            const percent = (this.challengeTasksCompleted / this.challengeTasksTotal) * 100;
+            this.elements.progressFill.style.width = percent + '%';
+        } else {
+            this.elements.levelText.textContent = this.progressTracker.getLevelName();
+            this.elements.progressText.textContent = this.progressTracker.getProgressText();
+            const percentage = this.progressTracker.getProgressPercent();
+            this.elements.progressFill.style.width = `${percentage}%`;
+        }
     }
 
     showSettingsScreen() {
