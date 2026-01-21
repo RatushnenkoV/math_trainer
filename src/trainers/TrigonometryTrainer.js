@@ -228,6 +228,11 @@ class TrigonometryTrainer extends BaseTrainer {
 
     // Обработка неправильного ответа (переопределяем метод из BaseTrainer)
     handleWrongAnswer() {
+        if (this.challengeMode) {
+            super.handleWrongAnswer();
+            return;
+        }
+
         this.progressTracker.wrongAnswer();
         this.showResultMessage(false);
         this.showEmoji(false);
@@ -241,6 +246,11 @@ class TrigonometryTrainer extends BaseTrainer {
 
     // Переопределяем обработку правильного ответа для сброса флага
     handleCorrectAnswer() {
+        if (this.challengeMode) {
+            super.handleCorrectAnswer();
+            return;
+        }
+
         const result = this.progressTracker.correctAnswer();
         this.showResultMessage(true);
         this.showEmoji(true);

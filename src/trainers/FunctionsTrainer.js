@@ -453,10 +453,15 @@ class FunctionsTrainer extends BaseTrainer {
 
     // Переход к следующей задаче (вызывается кнопкой)
     nextProblem() {
-        // Обновляем прогресс только здесь
-        this.progressTracker.correctAnswer();
-        this.updateProgressDisplay();
-        this.generateNewProblem();
+        if (this.challengeMode) {
+            // В режиме челленджа используем базовую логику
+            this.handleCorrectAnswerChallenge();
+        } else {
+            // Обновляем прогресс только здесь
+            this.progressTracker.correctAnswer();
+            this.updateProgressDisplay();
+            this.generateNewProblem();
+        }
     }
 
     // Проверка ответа (не используется напрямую)

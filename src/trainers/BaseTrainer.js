@@ -437,6 +437,7 @@ class BaseTrainer {
             alert('К сожалению, вы ошиблись. Прогресс челленджа сброшен. Попробуйте снова!');
             // Обновляем прогресс и генерируем новую задачу
             this.updateProgressDisplay();
+            this.enableInputs();
             this.generateNewProblem();
         }, 1000);
     }
