@@ -201,12 +201,22 @@ class TrigEquationsTrainer extends BaseTrainer {
     // Создание поля для ввода множителя
     createMultiplierInput(name) {
         const input = document.createElement('input');
-        input.type = 'number';
+        input.type = 'text';
+        input.inputMode = 'numeric';
         input.className = 'constructor-input multiplier-input';
         input.dataset.name = name;
         input.placeholder = '1';
         input.value = '1';
-        input.step = '1';
+
+        // Разрешаем вводить только цифры, минус и пустую строку
+        input.addEventListener('input', (e) => {
+            const value = e.target.value;
+            // Разрешаем: пустую строку, минус, минус с цифрами, просто цифры
+            if (!/^-?\d*$/.test(value)) {
+                e.target.value = value.replace(/[^\d-]/g, '').replace(/(?!^)-/g, '');
+            }
+        });
+
         return input;
     }
 

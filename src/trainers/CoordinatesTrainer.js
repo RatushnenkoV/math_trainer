@@ -172,8 +172,11 @@ class CoordinatesTrainer extends BaseTrainer {
             svg.style.cursor = 'crosshair';
             svg.addEventListener('click', (e) => {
                 const rect = svg.getBoundingClientRect();
-                const clickX = e.clientX - rect.left;
-                const clickY = e.clientY - rect.top;
+                // Учитываем масштаб между фактическим размером SVG и его viewBox
+                const scaleX = width / rect.width;
+                const scaleY = height / rect.height;
+                const clickX = (e.clientX - rect.left) * scaleX;
+                const clickY = (e.clientY - rect.top) * scaleY;
 
                 // Переводим координаты клика в координаты сетки
                 const gridX = Math.round((clickX - padding) / cellWidth) + minX;

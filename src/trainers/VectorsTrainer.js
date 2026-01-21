@@ -161,15 +161,18 @@ class VectorsTrainer extends BaseTrainer {
 
             const getCoordinates = (e) => {
                 const rect = svg.getBoundingClientRect();
+                // Учитываем масштаб между фактическим размером SVG и его viewBox
+                const scaleX = width / rect.width;
+                const scaleY = height / rect.height;
                 let clickX, clickY;
 
                 if (e.type.startsWith('touch')) {
                     const touch = e.touches[0] || e.changedTouches[0];
-                    clickX = touch.clientX - rect.left;
-                    clickY = touch.clientY - rect.top;
+                    clickX = (touch.clientX - rect.left) * scaleX;
+                    clickY = (touch.clientY - rect.top) * scaleY;
                 } else {
-                    clickX = e.clientX - rect.left;
-                    clickY = e.clientY - rect.top;
+                    clickX = (e.clientX - rect.left) * scaleX;
+                    clickY = (e.clientY - rect.top) * scaleY;
                 }
 
                 return { clickX, clickY };
