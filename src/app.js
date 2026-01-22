@@ -14,6 +14,17 @@ const loadedTrainers = new Set();
 // Реестр загруженных CSS файлов
 const loadedStyles = new Set();
 
+// Реестр загруженных внешних библиотек
+const loadedLibraries = new Set();
+
+// Внешние библиотеки, которые нужны для конкретных тренажёров
+const trainerLibraries = {
+    'functions': [
+        'https://unpkg.com/d3@3/d3.min.js',
+        'https://unpkg.com/function-plot@1/dist/function-plot.js'
+    ]
+};
+
 // Конфигурация тренажёров - единый источник информации
 const trainerConfig = {
     'multiplication-table-btn': {
@@ -208,8 +219,7 @@ function loadCSS(href) {
     return new Promise((resolve, reject) => {
         const link = document.createElement('link');
         link.rel = 'stylesheet';
-        // Добавляем версию для предотвращения кеширования
-        link.href = href + '?v=' + Date.now();
+        link.href = href;
         link.onload = () => {
             loadedStyles.add(href);
             resolve();
@@ -429,15 +439,39 @@ async function loadTrainer(trainerName, showLoader = true) {
     }
 
     try {
-        // Загружаем CSS стили для тренажера (если есть)
-        const styleFile = trainerStyles[trainerName];
-        if (styleFile) {
-            await loadCSS(styleFile);
+        // Загружаем внешние библиотеки, если нужны для этого тренажёра
+        const libraries = trainerLibraries[trainerName];
+        if (libraries) {
+            for (const libUrl of libraries) {
+                if (!loadedLibraries.has(libUrl)) {
+                    await loadScript(libUrl);
+                    loadedLibraries.add(libUrl);
+                }
+            }
         }
 
-        // Загружаем скрипты последовательно
-        for (const scriptPath of scripts) {
-            await loadScript(scriptPath);
+        // Загружаем CSS стили параллельно со скриптами
+        const styleFile = trainerStyles[trainerName];
+        const cssPromise = styleFile ? loadCSS(styleFile) : Promise.resolve();
+
+        // Оптимизированная загрузка скриптов:
+        // - Все скрипты кроме последнего (Component) загружаем параллельно
+        // - Component загружаем после них (он зависит от Trainer)
+        if (scripts.length > 1) {
+            const dependencyScripts = scripts.slice(0, -1);
+            const componentScript = scripts[scripts.length - 1];
+
+            // Загружаем CSS и зависимости параллельно
+            await Promise.all([
+                cssPromise,
+                ...dependencyScripts.map(src => loadScript(src))
+            ]);
+
+            // Теперь загружаем Component
+            await loadScript(componentScript);
+        } else {
+            // Если только один скрипт - загружаем его с CSS параллельно
+            await Promise.all([cssPromise, loadScript(scripts[0])]);
         }
 
         // Отмечаем тренажёр как загруженный
@@ -561,12 +595,30 @@ window.showScreen = function showScreen(screenId, addToHistory = true) {
     updateTelegramBackButton(screenId);
 }
 
+// Предзагрузка тренажёра (без показа индикатора)
+function preloadTrainer(trainerName) {
+    // Если уже загружен или загружается - не делаем ничего
+    if (loadedTrainers.has(trainerName)) return;
+    // Запускаем загрузку в фоне без индикатора
+    loadTrainer(trainerName, false);
+}
+
 // Инициализация главного меню
 function initMainMenu() {
     // Используем конфигурацию для инициализации кнопок
     Object.entries(trainerConfig).forEach(([id, config]) => {
         const button = document.getElementById(id);
         if (!button) return;
+
+        // Предзагрузка при касании (мобильные) - начинается до отпускания пальца
+        button.addEventListener('touchstart', () => {
+            preloadTrainer(config.trainer);
+        }, { passive: true });
+
+        // Предзагрузка при наведении (десктоп)
+        button.addEventListener('mouseenter', () => {
+            preloadTrainer(config.trainer);
+        }, { passive: true });
 
         button.addEventListener('click', async () => {
             // Добавляем тренажёр в список недавних

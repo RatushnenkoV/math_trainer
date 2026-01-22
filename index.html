@@ -4,12 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Дроби - Тренажер</title>
+    <!-- Предварительное соединение с CDN для ускорения загрузки -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://unpkg.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://unpkg.com">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <!-- Библиотеки для построения графиков -->
-    <script src="https://unpkg.com/d3@3/d3.min.js"></script>
-    <script src="https://unpkg.com/function-plot@1/dist/function-plot.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <!-- Библиотеки для построения графиков загружаются динамически для тренажёра функций -->
     <!-- Базовые стили -->
     <link rel="stylesheet" href="src/styles/main.css">
     <!-- Общие компоненты -->
