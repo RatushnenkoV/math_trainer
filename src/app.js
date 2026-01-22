@@ -17,162 +17,120 @@ const loadedStyles = new Set();
 // Реестр загруженных внешних библиотек
 const loadedLibraries = new Set();
 
-// Внешние библиотеки, которые нужны для конкретных тренажёров
-const trainerLibraries = {
-    'functions': [
-        'https://unpkg.com/d3@3/d3.min.js',
-        'https://unpkg.com/function-plot@1/dist/function-plot.js'
-    ]
-};
+// ============================================================================
+// CONVENTION-BASED CONFIGURATION
+// ============================================================================
+// Все пути генерируются автоматически из имени тренажёра:
+//   trainerName: 'linearEquations'
+//   → screen: 'linear-equations-screen'
+//   → settingsScreen: 'linear-equations-settings-screen'
+//   → style: 'src/styles/trainers/linear-equations.css'
+//   → scripts: [
+//       'src/utils/generators/LinearEquationsGenerator.js',
+//       'src/trainers/LinearEquationsTrainer.js',
+//       'src/components/LinearEquationsComponent.js'
+//     ]
+// ============================================================================
 
-// Конфигурация тренажёров - единый источник информации
-const trainerConfig = {
-    'multiplication-table-btn': {
-        name: 'Таблица умножения',
-        screen: 'multiplication-table-screen',
-        trainer: 'multiplicationTable'
+// Утилита: camelCase → kebab-case (linearEquations → linear-equations)
+function toKebabCase(str) {
+    return str.replace(/([A-Z])/g, '-$1').toLowerCase().replace(/^-/, '');
+}
+
+// Утилита: kebab-case → camelCase (linear-equations → linearEquations)
+function toCamelCase(str) {
+    return str.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+}
+
+// Утилита: camelCase → PascalCase (linearEquations → LinearEquations)
+function toPascalCase(str) {
+    return str[0].toUpperCase() + str.slice(1);
+}
+
+// Генерация путей по конвенции
+function getTrainerPaths(trainerName) {
+    const kebab = toKebabCase(trainerName);
+    const pascal = toPascalCase(trainerName);
+
+    return {
+        screen: `${kebab}-screen`,
+        settingsScreen: `${kebab}-settings-screen`,
+        style: `src/styles/trainers/${kebab}.css`,
+        scripts: [
+            `src/utils/generators/${pascal}Generator.js`,
+            `src/trainers/${pascal}Trainer.js`,
+            `src/components/${pascal}Component.js`
+        ]
+    };
+}
+
+// Только исключения из конвенции
+const trainerOverrides = {
+    // Тренажёры без своего CSS файла
+    squareRoots: { noStyle: true },
+    fractions: { noStyle: true },
+    percentages: { noStyle: true },
+    powers: { noStyle: true },
+
+    // Тренажёры с дополнительными скриптами (добавляются ПЕРЕД стандартными)
+    systemOfInequalities: {
+        extraScripts: [
+            'src/utils/generators/LinearInequalitiesGenerator.js',
+            'src/utils/generators/QuadraticInequalitiesGenerator.js'
+        ]
     },
-    'divisibility-btn': {
-        name: 'Делимость',
-        screen: 'divisibility-screen',
-        trainer: 'divisibility'
+    polynomialExpand: {
+        extraScripts: ['src/components/MonomialInput.js']
     },
-    'square-roots-btn': {
-        name: 'Квадратные корни',
-        screen: 'square-roots-screen',
-        trainer: 'squareRoots'
+    algebraicIdentities: {
+        extraScripts: [
+            'src/components/MonomialInput.js',
+            'src/components/FactorInput.js'
+        ]
     },
-    'percentages-btn': {
-        name: 'Проценты',
-        screen: 'percentages-screen',
-        trainer: 'percentages'
+    factoringOut: {
+        extraScripts: ['src/components/MonomialInputFactoringOut.js']
     },
-    'negatives-btn': {
-        name: 'Отрицательные числа',
-        screen: 'negatives-screen',
-        trainer: 'negatives'
+    definitions: {
+        extraScripts: ['src/utils/data/definitionsData.js']
     },
-    'fraction-visual-btn': {
-        name: 'Определение дроби',
-        screen: 'fraction-visual-screen',
-        trainer: 'fractionVisual'
+    areas: {
+        extraScripts: [
+            'src/utils/ShapeDrawer.js',
+            'src/utils/TriangleDrawer.js',
+            'src/utils/ParallelogramDrawer.js'
+        ]
     },
-    'fraction-sense-btn': {
-        name: 'Чувство дроби',
-        screen: 'fraction-sense-screen',
-        trainer: 'fractionSense',
-    },
-    'fractions-btn': {
-        name: 'Обыкновенные дроби',
-        screen: 'fractions-screen',
-        trainer: 'fractions'
-    },
-    'decimals-btn': {
-        name: 'Десятичные дроби',
-        screen: 'decimals-screen',
-        trainer: 'decimals'
-    },
-    'linear-equations-btn': {
-        name: 'Линейные уравнения',
-        screen: 'linear-equations-screen',
-        trainer: 'linearEquations'
-    },
-    'linear-inequalities-btn': {
-        name: 'Линейные неравенства',
-        screen: 'linear-inequalities-screen',
-        trainer: 'linearInequalities'
-    },
-    'quadratic-equations-btn': {
-        name: 'Квадратные уравнения',
-        screen: 'quadratic-equations-screen',
-        trainer: 'quadraticEquations'
-    },
-    'quadratic-inequalities-btn': {
-        name: 'Квадратные неравенства',
-        screen: 'quadratic-inequalities-screen',
-        trainer: 'quadraticInequalities'
-    },
-    'system-of-equations-btn': {
-        name: 'Системы линейных уравнений',
-        screen: 'system-of-equations-screen',
-        trainer: 'systemOfEquations'
-    },
-    'system-of-inequalities-btn': {
-        name: 'Системы неравенств',
-        screen: 'system-of-inequalities-screen',
-        trainer: 'systemOfInequalities'
-    },
-    'trigonometry-btn': {
-        name: 'Табличные значения',
-        screen: 'trigonometry-screen',
-        trainer: 'trigonometry'
-    },
-    'trig-equations-btn': {
-        name: 'Простейшие уравнения',
-        screen: 'trig-equations-screen',
-        trainer: 'trigEquations'
-    },
-    'angle-conversion-btn': {
-        name: 'Перевод градусов в радианы',
-        screen: 'angle-conversion-screen',
-        trainer: 'angleConversion'
-    },
-    'powers-btn': {
-        name: 'Свойства степеней',
-        screen: 'powers-screen',
-        trainer: 'powers'
-    },
-    'polynomial-simplification-btn': {
-        name: 'Приведение подобных',
-        screen: 'polynomial-simplification-screen',
-        trainer: 'polynomialSimplification'
-    },
-    'polynomial-expand-btn': {
-        name: 'Раскрытие скобок',
-        screen: 'polynomial-expand-screen',
-        trainer: 'polynomialExpand'
-    },
-    'algebraic-identities-btn': {
-        name: 'Формулы сокращённого умножения',
-        screen: 'algebraic-identities-screen',
-        trainer: 'algebraicIdentities'
-    },
-    'factoring-out-btn': {
-        name: 'Вынесение множителя за скобки',
-        screen: 'factoring-out-screen',
-        trainer: 'factoringOut'
-    },
-    'definitions-btn': {
-        name: 'Определения',
-        screen: 'definitions-screen',
-        trainer: 'definitions'
-    },
-    'functions-btn': {
-        name: 'Графики функций',
-        screen: 'functions-screen',
-        trainer: 'functions'
-    },
-    'coordinates-btn': {
-        name: 'Координаты',
-        screen: 'coordinates-screen',
-        trainer: 'coordinates'
-    },
-    'vectors-btn': {
-        name: 'Векторы',
-        screen: 'vectors-screen',
-        trainer: 'vectors'
-    },
-    'vector-operations-btn': {
-        name: 'Действия над векторами',
-        screen: 'vector-operations-screen',
-        trainer: 'vectorOperations'
-    },
-    'areas-btn': {
-        name: 'Площади фигур',
-        screen: 'areas-screen',
-        trainer: 'areas'
+
+    // Внешние библиотеки (CDN)
+    functions: {
+        libraries: [
+            'https://unpkg.com/d3@3/d3.min.js',
+            'https://unpkg.com/function-plot@1/dist/function-plot.js'
+        ]
     }
 };
+
+// ============================================================================
+// АВТОМАТИЧЕСКОЕ ОПРЕДЕЛЕНИЕ ТРЕНАЖЁРОВ ИЗ HTML
+// ============================================================================
+// Все кнопки тренажёров имеют id вида "{kebab-name}-btn"
+// Из этого вычисляется:
+//   btnId: 'linear-equations-btn'
+//   → trainer: 'linearEquations'
+//   → name: текст кнопки из HTML
+//   → screen: 'linear-equations-screen'
+// ============================================================================
+
+// Получить имя тренажёра из id кнопки
+function getTrainerFromBtnId(btnId) {
+    return toCamelCase(btnId.replace('-btn', ''));
+}
+
+// Получить id кнопки из имени тренажёра
+function getBtnIdFromTrainer(trainerName) {
+    return toKebabCase(trainerName) + '-btn';
+}
 
 // Telegram WebApp API
 let tg = null;
@@ -241,208 +199,20 @@ async function loadTrainer(trainerName, showLoader = true) {
         LoadingIndicator.show();
     }
 
-    // Маппинг CSS файлов для тренажеров
-    const trainerStyles = {
-        'multiplicationTable': 'src/styles/trainers/multiplication-table.css',
-        'squareRoots': null, // использует только общие стили
-        'fractions': null, // использует только общие стили
-        'fractionVisual': 'src/styles/trainers/fraction-visual.css',
-        'fractionSense': 'src/styles/trainers/fraction-sense.css',
-        'decimals': 'src/styles/trainers/decimals.css',
-        'negatives': 'src/styles/trainers/negatives.css',
-        'divisibility': 'src/styles/trainers/divisibility.css',
-        'linearEquations': 'src/styles/trainers/linear-equations.css',
-        'linearInequalities': 'src/styles/trainers/linear-inequalities.css',
-        'quadraticEquations': 'src/styles/trainers/quadratic-equations.css',
-        'quadraticInequalities': 'src/styles/trainers/quadratic-inequalities.css',
-        'trigonometry': 'src/styles/trainers/trigonometry.css',
-        'trigEquations': 'src/styles/trainers/trig-equations.css',
-        'angleConversion': 'src/styles/trainers/angle-conversion.css',
-        'percentages': null, // использует только общие стили
-        'systemOfEquations': 'src/styles/trainers/system-of-equations.css',
-        'systemOfInequalities': 'src/styles/trainers/system-of-inequalities.css',
-        'powers': null, // использует только общие стили
-        'polynomialSimplification': 'src/styles/trainers/polynomial-simplification.css',
-        'polynomialExpand': 'src/styles/trainers/polynomial-expand.css',
-        'algebraicIdentities': 'src/styles/trainers/algebraic-identities.css',
-        'factoringOut': 'src/styles/trainers/factoring-out.css',
-        'definitions': 'src/styles/trainers/definitions.css',
-        'functions': 'src/styles/trainers/functions.css',
-        'coordinates': 'src/styles/trainers/coordinates.css',
-        'vectors': 'src/styles/trainers/vectors.css',
-        'vectorOperations': 'src/styles/trainers/vector-operations.css',
-        'areas': 'src/styles/trainers/areas.css'
-    };
+    // Получаем пути по конвенции
+    const paths = getTrainerPaths(trainerName);
+    const overrides = trainerOverrides[trainerName] || {};
 
-    const trainerScripts = {
-        'multiplicationTable': [
-            'src/utils/generators/MultiplicationTableGenerator.js',
-            'src/trainers/MultiplicationTableTrainer.js',
-            'src/components/MultiplicationTableComponent.js'
-        ],
-        'squareRoots': [
-            'src/utils/generators/SquareRootsGenerator.js',
-            'src/trainers/SquareRootsTrainer.js',
-            'src/components/SquareRootsComponent.js'
-        ],
-        'fractions': [
-            'src/utils/generators/FractionsGenerator.js',
-            'src/trainers/FractionsTrainer.js',
-            'src/components/FractionsComponent.js'
-        ],
-        'fractionVisual': [
-            'src/utils/generators/FractionVisualGenerator.js',
-            'src/trainers/FractionVisualTrainer.js',
-            'src/components/FractionVisualComponent.js'
-        ],
-        'fractionSense': [
-            'src/utils/generators/FractionSenseGenerator.js',
-            'src/trainers/FractionSenseTrainer.js',
-            'src/components/FractionSenseComponent.js'
-        ],
-        'decimals': [
-            'src/utils/generators/DecimalsGenerator.js',
-            'src/trainers/DecimalsTrainer.js',
-            'src/components/DecimalsComponent.js'
-        ],
-        'negatives': [
-            'src/utils/generators/NegativesGenerator.js',
-            'src/trainers/NegativesTrainer.js',
-            'src/components/NegativesComponent.js'
-        ],
-        'divisibility': [
-            'src/utils/generators/DivisibilityGenerator.js',
-            'src/trainers/DivisibilityTrainer.js',
-            'src/components/DivisibilityComponent.js'
-        ],
-        'linearEquations': [
-            'src/utils/generators/LinearEquationsGenerator.js',
-            'src/trainers/LinearEquationsTrainer.js',
-            'src/components/LinearEquationsComponent.js'
-        ],
-        'linearInequalities': [
-            'src/utils/generators/LinearInequalitiesGenerator.js',
-            'src/trainers/LinearInequalitiesTrainer.js',
-            'src/components/LinearInequalitiesComponent.js'
-        ],
-        'quadraticEquations': [
-            'src/utils/generators/QuadraticEquationsGenerator.js',
-            'src/trainers/QuadraticEquationsTrainer.js',
-            'src/components/QuadraticEquationsComponent.js'
-        ],
-        'quadraticInequalities': [
-            'src/utils/generators/QuadraticInequalitiesGenerator.js',
-            'src/trainers/QuadraticInequalitiesTrainer.js',
-            'src/components/QuadraticInequalitiesComponent.js'
-        ],
-        'trigonometry': [
-            'src/utils/generators/TrigonometryGenerator.js',
-            'src/trainers/TrigonometryTrainer.js',
-            'src/components/TrigonometryComponent.js'
-        ],
-        'trigEquations': [
-            'src/utils/generators/TrigEquationsGenerator.js',
-            'src/trainers/TrigEquationsTrainer.js',
-            'src/components/TrigEquationsComponent.js'
-        ],
-        'angleConversion': [
-            'src/utils/generators/AngleConversionGenerator.js',
-            'src/trainers/AngleConversionTrainer.js',
-            'src/components/AngleConversionComponent.js'
-        ],
-        'percentages': [
-            'src/utils/generators/PercentagesGenerator.js',
-            'src/trainers/PercentagesTrainer.js',
-            'src/components/PercentagesComponent.js'
-        ],
-        'systemOfEquations': [
-            'src/utils/generators/SystemOfEquationsGenerator.js',
-            'src/trainers/SystemOfEquationsTrainer.js',
-            'src/components/SystemOfEquationsComponent.js'
-        ],
-        'systemOfInequalities': [
-            'src/utils/generators/LinearInequalitiesGenerator.js',
-            'src/utils/generators/QuadraticInequalitiesGenerator.js',
-            'src/utils/generators/SystemOfInequalitiesGenerator.js',
-            'src/trainers/SystemOfInequalitiesTrainer.js',
-            'src/components/SystemOfInequalitiesComponent.js'
-        ],
-        'powers': [
-            'src/utils/generators/PowersGenerator.js',
-            'src/trainers/PowersTrainer.js',
-            'src/components/PowersComponent.js'
-        ],
-        'polynomialSimplification': [
-            'src/utils/generators/PolynomialSimplificationGenerator.js',
-            'src/trainers/PolynomialSimplificationTrainer.js',
-            'src/components/PolynomialSimplificationComponent.js'
-        ],
-        'polynomialExpand': [
-            'src/components/MonomialInput.js',
-            'src/utils/generators/PolynomialExpandGenerator.js',
-            'src/trainers/PolynomialExpandTrainer.js',
-            'src/components/PolynomialExpandComponent.js'
-        ],
-        'algebraicIdentities': [
-            'src/components/MonomialInput.js',
-            'src/components/FactorInput.js',
-            'src/utils/generators/AlgebraicIdentitiesGenerator.js',
-            'src/trainers/AlgebraicIdentitiesTrainer.js',
-            'src/components/AlgebraicIdentitiesComponent.js'
-        ],
-        'factoringOut': [
-            'src/components/MonomialInputFactoringOut.js',
-            'src/utils/generators/FactoringOutGenerator.js',
-            'src/trainers/FactoringOutTrainer.js',
-            'src/components/FactoringOutComponent.js'
-        ],
-        'definitions': [
-            'src/utils/data/definitionsData.js',
-            'src/utils/generators/DefinitionsGenerator.js',
-            'src/trainers/DefinitionsTrainer.js',
-            'src/components/DefinitionsComponent.js'
-        ],
-        'functions': [
-            'src/utils/generators/FunctionsGenerator.js',
-            'src/trainers/FunctionsTrainer.js',
-            'src/components/FunctionsComponent.js'
-        ],
-        'coordinates': [
-            'src/utils/generators/CoordinatesGenerator.js',
-            'src/trainers/CoordinatesTrainer.js',
-            'src/components/CoordinatesComponent.js'
-        ],
-        'vectors': [
-            'src/utils/generators/VectorsGenerator.js',
-            'src/trainers/VectorsTrainer.js',
-            'src/components/VectorsComponent.js'
-        ],
-        'vectorOperations': [
-            'src/utils/generators/VectorOperationsGenerator.js',
-            'src/trainers/VectorOperationsTrainer.js',
-            'src/components/VectorOperationsComponent.js'
-        ],
-        'areas': [
-            'src/utils/ShapeDrawer.js',
-            'src/utils/TriangleDrawer.js',
-            'src/utils/ParallelogramDrawer.js',
-            'src/utils/generators/AreasGenerator.js',
-            'src/trainers/AreasTrainer.js',
-            'src/components/AreasComponent.js'
-        ]
-    };
+    // Собираем список скриптов: extraScripts + стандартные
+    const scripts = [...(overrides.extraScripts || []), ...paths.scripts];
 
-    const scripts = trainerScripts[trainerName];
-    if (!scripts) {
-        console.error(`Unknown trainer: ${trainerName}`);
-        return false;
-    }
+    // CSS файл (если не отключён)
+    const styleFile = overrides.noStyle ? null : paths.style;
 
     try {
-        // Загружаем внешние библиотеки, если нужны для этого тренажёра
-        const libraries = trainerLibraries[trainerName];
-        if (libraries) {
-            for (const libUrl of libraries) {
+        // Загружаем внешние библиотеки, если нужны
+        if (overrides.libraries) {
+            for (const libUrl of overrides.libraries) {
                 if (!loadedLibraries.has(libUrl)) {
                     await loadScript(libUrl);
                     loadedLibraries.add(libUrl);
@@ -451,28 +221,22 @@ async function loadTrainer(trainerName, showLoader = true) {
         }
 
         // Загружаем CSS стили параллельно со скриптами
-        const styleFile = trainerStyles[trainerName];
         const cssPromise = styleFile ? loadCSS(styleFile) : Promise.resolve();
 
         // Оптимизированная загрузка скриптов:
         // - Все скрипты кроме последнего (Component) загружаем параллельно
         // - Component загружаем после них (он зависит от Trainer)
-        if (scripts.length > 1) {
-            const dependencyScripts = scripts.slice(0, -1);
-            const componentScript = scripts[scripts.length - 1];
+        const dependencyScripts = scripts.slice(0, -1);
+        const componentScript = scripts[scripts.length - 1];
 
-            // Загружаем CSS и зависимости параллельно
-            await Promise.all([
-                cssPromise,
-                ...dependencyScripts.map(src => loadScript(src))
-            ]);
+        // Загружаем CSS и зависимости параллельно
+        await Promise.all([
+            cssPromise,
+            ...dependencyScripts.map(src => loadScript(src))
+        ]);
 
-            // Теперь загружаем Component
-            await loadScript(componentScript);
-        } else {
-            // Если только один скрипт - загружаем его с CSS параллельно
-            await Promise.all([cssPromise, loadScript(scripts[0])]);
-        }
+        // Теперь загружаем Component
+        await loadScript(componentScript);
 
         // Отмечаем тренажёр как загруженный
         loadedTrainers.add(trainerName);
@@ -494,8 +258,9 @@ async function loadAllTrainers() {
     LoadingIndicator.show();
 
     try {
-        // Получаем список всех уникальных тренажёров
-        const allTrainers = [...new Set(Object.values(trainerConfig).map(config => config.trainer))];
+        // Получаем список всех тренажёров из кнопок в HTML
+        const buttons = document.querySelectorAll('.menu-button[id$="-btn"]');
+        const allTrainers = [...buttons].map(btn => getTrainerFromBtnId(btn.id));
 
         // Загружаем все тренажёры последовательно
         for (const trainerName of allTrainers) {
@@ -605,34 +370,35 @@ function preloadTrainer(trainerName) {
 
 // Инициализация главного меню
 function initMainMenu() {
-    // Используем конфигурацию для инициализации кнопок
-    Object.entries(trainerConfig).forEach(([id, config]) => {
-        const button = document.getElementById(id);
-        if (!button) return;
+    // Находим все кнопки тренажёров в HTML (id заканчивается на -btn)
+    document.querySelectorAll('.menu-button[id$="-btn"]').forEach(button => {
+        const btnId = button.id;
+        const trainerName = getTrainerFromBtnId(btnId);
+        const paths = getTrainerPaths(trainerName);
 
         // Предзагрузка при касании (мобильные) - начинается до отпускания пальца
         button.addEventListener('touchstart', () => {
-            preloadTrainer(config.trainer);
+            preloadTrainer(trainerName);
         }, { passive: true });
 
         // Предзагрузка при наведении (десктоп)
         button.addEventListener('mouseenter', () => {
-            preloadTrainer(config.trainer);
+            preloadTrainer(trainerName);
         }, { passive: true });
 
         button.addEventListener('click', async () => {
             // Добавляем тренажёр в список недавних
-            addToRecentTrainers(id);
+            addToRecentTrainers(btnId);
 
             // Загружаем тренажёр динамически
-            const loaded = await loadTrainer(config.trainer);
+            const loaded = await loadTrainer(trainerName);
             if (!loaded) {
                 console.error('Failed to load trainer');
                 return;
             }
 
             // После загрузки скриптов нужно создать custom element
-            const componentTag = config.screen.replace('-screen', '-trainer');
+            const componentTag = paths.screen.replace('-screen', '-trainer');
             let trainerElement = document.querySelector(componentTag);
 
             // Если элемент не существует, создаём его
@@ -641,12 +407,12 @@ function initMainMenu() {
                 document.getElementById('app').appendChild(trainerElement);
             }
 
-            showScreen(config.screen);
+            showScreen(paths.screen);
             // Получаем trainer из компонента, если ещё не получили
-            if (!trainers[config.trainer]) {
-                trainers[config.trainer] = document.querySelector(componentTag)?.trainer;
+            if (!trainers[trainerName]) {
+                trainers[trainerName] = document.querySelector(componentTag)?.trainer;
             }
-            trainers[config.trainer]?.startTest();
+            trainers[trainerName]?.startTest();
         });
     });
 }
@@ -663,12 +429,45 @@ function initTelegramBackButton() {
 
 // Вспомогательная функция для получения имени тренажёра по ID экрана
 function getTrainerNameByScreen(screenId) {
-    for (const [btnId, config] of Object.entries(trainerConfig)) {
-        if (config.screen === screenId) {
-            return config.trainer;
+    // Формат экрана: {kebab-name}-screen → trainer: camelCase
+    const match = screenId.match(/^(.+)-screen$/);
+    if (match) {
+        const trainerName = toCamelCase(match[1]);
+        // Проверяем, что такая кнопка существует в HTML
+        const btnId = getBtnIdFromTrainer(trainerName);
+        if (document.getElementById(btnId)) {
+            return trainerName;
         }
     }
     return null;
+}
+
+// Получить имя тренажёра по экрану настроек
+function getTrainerNameBySettingsScreen(screenId) {
+    // settings-screen — исключение для fractions
+    if (screenId === 'settings-screen') {
+        return 'fractions';
+    }
+    // Стандартный формат: {kebab-name}-settings-screen → trainer
+    const match = screenId.match(/^(.+)-settings-screen$/);
+    if (match) {
+        const trainerName = toCamelCase(match[1]);
+        // Проверяем, что такая кнопка существует
+        if (document.getElementById(getBtnIdFromTrainer(trainerName))) {
+            return trainerName;
+        }
+    }
+    return null;
+}
+
+// Проверяет, является ли экран основным экраном тренажёра
+function isTrainerScreen(screenId) {
+    return getTrainerNameByScreen(screenId) !== null;
+}
+
+// Проверяет, является ли экран экраном настроек
+function isSettingsScreen(screenId) {
+    return screenId === 'settings-screen' || screenId.endsWith('-settings-screen');
 }
 
 // Обработка нажатия кнопки "Назад"
@@ -676,7 +475,6 @@ function handleBackButton() {
     // Проверяем, открыто ли модальное окно "Поделиться"
     const activeModal = document.querySelector('.share-modal-overlay.active');
     if (activeModal) {
-        // Закрываем модальное окно
         activeModal.classList.remove('active');
         return;
     }
@@ -686,210 +484,32 @@ function handleBackButton() {
 
     const screenId = activeScreen.id;
 
-    // Логика навигации назад в зависимости от текущего экрана
-    switch (screenId) {
-        case 'multiplication-table-screen':
-        case 'square-roots-screen':
-        case 'powers-screen':
-        case 'fractions-screen':
-        case 'fraction-visual-screen':
-        case 'fraction-sense-screen':
-        case 'decimals-screen':
-        case 'negatives-screen':
-        case 'divisibility-screen':
-        case 'linear-equations-screen':
-        case 'linear-inequalities-screen':
-        case 'quadratic-equations-screen':
-        case 'quadratic-inequalities-screen':
-        case 'trigonometry-screen':
-        case 'trig-equations-screen':
-        case 'angle-conversion-screen':
-        case 'percentages-screen':
-        case 'system-of-equations-screen':
-        case 'system-of-inequalities-screen':
-        case 'polynomial-simplification-screen':
-        case 'polynomial-expand-screen':
-        case 'algebraic-identities-screen':
-        case 'definitions-screen':
-        case 'functions-screen':
-        case 'factoring-out-screen':
-        case 'coordinates-screen':
-        case 'vectors-screen':
-        case 'vector-operations-screen':
-        case 'areas-screen':
-            // Из экрана тренажёра - используем метод handleBackButtonClick тренажёра
-            // Это позволит показать подтверждение в режиме челленджа
-            const trainerName = getTrainerNameByScreen(screenId);
-            if (trainerName && trainers[trainerName] && trainers[trainerName].handleBackButtonClick) {
-                trainers[trainerName].handleBackButtonClick();
-            } else {
-                // Fallback на обычный выход
-                showScreen('main-menu');
-            }
-            break;
+    // Из главного меню — закрываем приложение
+    if (screenId === 'main-menu') {
+        if (tg) tg.close();
+        return;
+    }
 
-        case 'multiplication-table-settings-screen':
-            // Из настроек таблицы умножения возвращаемся к тренажёру таблицы умножения
-            showScreen('multiplication-table-screen');
-            trainers.multiplicationTable.generateNewProblem();
-            break;
+    // Из экрана тренажёра — вызываем handleBackButtonClick (для подтверждения в режиме челленджа)
+    if (isTrainerScreen(screenId)) {
+        const trainerName = getTrainerNameByScreen(screenId);
+        if (trainerName && trainers[trainerName]?.handleBackButtonClick) {
+            trainers[trainerName].handleBackButtonClick();
+        } else {
+            showScreen('main-menu');
+        }
+        return;
+    }
 
-        case 'square-roots-settings-screen':
-            // Из настроек корней возвращаемся к тренажёру корней
-            showScreen('square-roots-screen');
-            trainers.squareRoots.generateNewProblem();
-            break;
-
-        case 'powers-settings-screen':
-            // Из настроек степеней возвращаемся к тренажёру степеней
-            showScreen('powers-screen');
-            trainers.powers.generateNewProblem();
-            break;
-
-        case 'settings-screen':
-            // Из настроек дробей возвращаемся к тренажёру дробей
-            showScreen('fractions-screen');
-            trainers.fractions.generateNewProblem();
-            break;
-
-        case 'fraction-visual-settings-screen':
-            // Из настроек визуализации дробей возвращаемся к тренажёру визуализации дробей
-            showScreen('fraction-visual-screen');
-            trainers.fractionVisual.generateNewProblem();
-            break;
-
-        case 'fraction-sense-settings-screen':
-            // Из настроек чувства дроби возвращаемся к тренажёру чувства дроби
-            showScreen('fraction-sense-screen');
-            trainers.fractionSense.generateNewProblem();
-            break;
-
-        case 'decimals-settings-screen':
-            // Из настроек десятичных дробей возвращаемся к тренажёру десятичных дробей
-            showScreen('decimals-screen');
-            trainers.decimals.generateNewProblem();
-            break;
-
-        case 'negatives-settings-screen':
-            // Из настроек отрицательных чисел возвращаемся к тренажёру отрицательных чисел
-            showScreen('negatives-screen');
-            trainers.negatives.generateNewProblem();
-            break;
-
-        case 'divisibility-settings-screen':
-            // Из настроек делимости возвращаемся к тренажёру делимости
-            showScreen('divisibility-screen');
-            trainers.divisibility.generateNewProblem();
-            break;
-
-        case 'linear-equations-settings-screen':
-            // Из настроек линейных уравнений возвращаемся к тренажёру линейных уравнений
-            showScreen('linear-equations-screen');
-            trainers.linearEquations.generateNewProblem();
-            break;
-
-        case 'linear-inequalities-settings-screen':
-            // Из настроек линейных неравенств возвращаемся к тренажёру линейных неравенств
-            showScreen('linear-inequalities-screen');
-            trainers.linearInequalities.generateNewProblem();
-            break;
-
-        case 'quadratic-equations-settings-screen':
-            // Из настроек квадратных уравнений возвращаемся к тренажёру квадратных уравнений
-            showScreen('quadratic-equations-screen');
-            trainers.quadraticEquations.generateNewProblem();
-            break;
-
-        case 'quadratic-inequalities-settings-screen':
-            // Из настроек квадратных неравенств возвращаемся к тренажёру квадратных неравенств
-            showScreen('quadratic-inequalities-screen');
-            trainers.quadraticInequalities.generateNewProblem();
-            break;
-
-        case 'trigonometry-settings-screen':
-            // Из настроек тригонометрии возвращаемся к тренажёру тригонометрии
-            showScreen('trigonometry-screen');
-            trainers.trigonometry.generateNewProblem();
-            break;
-
-        case 'trig-equations-settings-screen':
-            // Из настроек простейших тригонометрических уравнений возвращаемся к тренажёру
-            showScreen('trig-equations-screen');
-            trainers.trigEquations.generateNewProblem();
-            break;
-
-        case 'angle-conversion-settings-screen':
-            // Из настроек перевода углов возвращаемся к тренажёру перевода углов
-            showScreen('angle-conversion-screen');
-            trainers.angleConversion.generateNewProblem();
-            break;
-
-        case 'percentages-settings-screen':
-            // Из настроек процентов возвращаемся к тренажёру процентов
-            showScreen('percentages-screen');
-            trainers.percentages.generateNewProblem();
-            break;
-
-        case 'system-of-equations-settings-screen':
-            // Из настроек систем уравнений возвращаемся к тренажёру систем уравнений
-            showScreen('system-of-equations-screen');
-            trainers.systemOfEquations.generateNewProblem();
-            break;
-
-        case 'polynomial-simplification-settings-screen':
-            // Из настроек приведения подобных возвращаемся к тренажёру приведения подобных
-            showScreen('polynomial-simplification-screen');
-            trainers.polynomialSimplification.generateNewProblem();
-            break;
-
-        case 'polynomial-expand-settings-screen':
-            // Из настроек раскрытия скобок возвращаемся к тренажёру раскрытия скобок
-            showScreen('polynomial-expand-screen');
-            trainers.polynomialExpand.generateNewProblem();
-            break;
-
-        case 'algebraic-identities-settings-screen':
-            // Из настроек ФСУ возвращаемся к тренажёру ФСУ
-            showScreen('algebraic-identities-screen');
-            trainers.algebraicIdentities.generateNewProblem();
-            break;
-
-        case 'definitions-settings-screen':
-            // Из настроек определений возвращаемся к тренажёру определений
-            showScreen('definitions-screen');
-            trainers.definitions.generateNewProblem();
-            break;
-
-        case 'functions-settings-screen':
-            // Из настроек функций возвращаемся к тренажёру
-            showScreen('functions-screen');
-            trainers.functions.generateNewProblem();
-            break;
-
-        case 'vector-operations-settings-screen':
-            // Из настроек действий над векторами возвращаемся к тренажёру
-            showScreen('vector-operations-screen');
-            trainers.vectorOperations.generateNewProblem();
-            break;
-
-        case 'areas-settings-screen':
-            // Из настроек площадей возвращаемся к тренажёру
-            showScreen('areas-screen');
-            trainers.areas.generateNewProblem();
-            break;
-
-        case 'system-of-inequalities-settings-screen':
-            // Из настроек площадей возвращаемся к тренажёру
-            showScreen('system-of-inequalities-screen');
-            trainers.areas.generateNewProblem();
-            break;
-
-        case 'main-menu':
-            // Из главного меню закрываем приложение
-            if (tg) {
-                tg.close();
-            }
-            break;
+    // Из экрана настроек — возвращаемся к тренажёру и генерируем новый пример
+    if (isSettingsScreen(screenId)) {
+        const trainerName = getTrainerNameBySettingsScreen(screenId);
+        if (trainerName) {
+            const paths = getTrainerPaths(trainerName);
+            showScreen(paths.screen);
+            trainers[trainerName]?.generateNewProblem();
+        }
+        return;
     }
 }
 
@@ -913,73 +533,21 @@ function initHistoryNavigation() {
     // Обработка события popstate (кнопка "Назад" браузера/Android)
     window.addEventListener('popstate', (event) => {
         if (event.state && event.state.screen) {
-            // Переходим на экран из истории без добавления в историю
             const screenId = event.state.screen;
             showScreen(screenId, false);
 
-            // Если это экран настроек, генерируем новый пример при возврате
-            if (screenId === 'multiplication-table-screen') {
-                trainers.multiplicationTable.generateNewProblem();
-            } else if (screenId === 'square-roots-screen') {
-                trainers.squareRoots.generateNewProblem();
-            } else if (screenId === 'fractions-screen') {
-                trainers.fractions.generateNewProblem();
-            } else if (screenId === 'fraction-sense-screen') {
-                trainers.fractionSense.generateNewProblem();
-            } else if (screenId === 'decimals-screen') {
-                trainers.decimals.generateNewProblem();
-            } else if (screenId === 'negatives-screen') {
-                trainers.negatives.generateNewProblem();
-            } else if (screenId === 'divisibility-screen') {
-                trainers.divisibility.generateNewProblem();
-            } else if (screenId === 'linear-equations-screen') {
-                trainers.linearEquations.generateNewProblem();
-            } else if (screenId === 'linear-inequalities-screen') {
-                trainers.linearInequalities.generateNewProblem();
-            } else if (screenId === 'quadratic-equations-screen') {
-                trainers.quadraticEquations.generateNewProblem();
-            } else if (screenId === 'quadratic-inequalities-screen') {
-                trainers.quadraticInequalities.generateNewProblem();
-            } else if (screenId === 'trigonometry-screen') {
-                trainers.trigonometry.generateNewProblem();
-            } else if (screenId === 'trig-equations-screen') {
-                trainers.trigEquations.generateNewProblem();
-            } else if (screenId === 'percentages-screen') {
-                trainers.percentages.generateNewProblem();
-            } else if (screenId === 'system-of-equations-screen') {
-                trainers.systemOfEquations.generateNewProblem();
-            } else if (screenId === 'system-of-inequalities-screen') {
-                trainers.systemOfInequalities.generateNewProblem();
-            } else if (screenId === 'polynomial-simplification-screen') {
-                trainers.polynomialSimplification?.generateNewProblem();
-            } else if (screenId === 'polynomial-expand-screen') {
-                trainers.polynomialExpand.generateNewProblem();
-            } else if (screenId === 'algebraic-identities-screen') {
-                trainers.algebraicIdentities.generateNewProblem();
-            } else if (screenId === 'definitions-screen') {
-                trainers.definitions.generateNewProblem();
-            } else if (screenId === 'functions-screen') {
-                trainers.functions.generateNewProblem();
-            } else if (screenId === 'coordinates-screen') {
-                trainers.coordinates.generateNewProblem();
-            } else if (screenId === 'vectors-screen') {
-                trainers.vectors.generateNewProblem();
-            } else if (screenId === 'vector-operations-screen') {
-                trainers.vectorOperations.generateNewProblem();
-            } else if (screenId === 'areas-screen') {
-                trainers.areas.generateNewProblem();
+            // Если это экран тренажёра — генерируем новый пример при возврате
+            const trainerName = getTrainerNameByScreen(screenId);
+            if (trainerName) {
+                trainers[trainerName]?.generateNewProblem();
             }
         } else {
-            // Если нет состояния, возвращаемся в главное меню
             showScreen('main-menu', false);
         }
     });
 
     // Предотвращаем закрытие приложения при нажатии "Назад" на главном экране
-    // Вместо этого добавляем пустую запись в историю
     window.addEventListener('load', () => {
-        // Добавляем дополнительную запись в историю
-        // Это предотвратит закрытие приложения при первом нажатии "Назад"
         history.pushState({ screen: 'main-menu' }, '', '#main-menu');
     });
 }
@@ -1055,22 +623,20 @@ function updateRecentTrainers() {
     const displayTrainers = recentTrainers.slice(0, 3);
 
     displayTrainers.forEach(trainerId => {
-        // Используем конфигурацию для получения названия
-        const config = trainerConfig[trainerId];
-        const name = config ? config.name : trainerId;
+        // Берём название из оригинальной кнопки в HTML
+        const originalButton = document.getElementById(trainerId);
+        if (!originalButton) return;
+
+        const name = originalButton.textContent;
 
         const button = document.createElement('button');
-        button.id = trainerId;
         button.className = 'menu-button';
         button.textContent = name;
 
-        // Добавляем обработчик клика
-        const originalButton = document.getElementById(trainerId);
-        if (originalButton) {
-            button.addEventListener('click', () => {
-                originalButton.click();
-            });
-        }
+        // Клик по копии вызывает клик по оригиналу
+        button.addEventListener('click', () => {
+            originalButton.click();
+        });
 
         recentContainer.appendChild(button);
     });
@@ -1124,61 +690,20 @@ function initDonateButton() {
 async function loadChallengeMode(params) {
     const { trainerName, settings, taskCount } = params;
 
-    // Маппинг имён тренажёров из URL в внутренние имена
-    // URL формат: multiplication-table, внутренний: multiplicationTable
-    const trainerNameMap = {
-        'multiplication-table': 'multiplicationTable',
-        'divisibility': 'divisibility',
-        'square-roots': 'squareRoots',
-        'percentages': 'percentages',
-        'negatives': 'negatives',
-        'fraction-visual': 'fractionVisual',
-        'fraction-sense': 'fractionSense',
-        'fractions': 'fractions',
-        'decimals': 'decimals',
-        'linear-equations': 'linearEquations',
-        'linear-inequalities': 'linearInequalities',
-        'quadratic-equations': 'quadraticEquations',
-        'quadratic-inequalities': 'quadraticInequalities',
-        'system-of-equations': 'systemOfEquations',
-        'system-of-inequalities': 'systemOfInequalities',
-        'trigonometry': 'trigonometry',
-        'trig-equations': 'trigEquations',
-        'angle-conversion': 'angleConversion',
-        'powers': 'powers',
-        'polynomial-simplification': 'polynomialSimplification',
-        'polynomial-expand': 'polynomialExpand',
-        'algebraic-identities': 'algebraicIdentities',
-        'factoring-out': 'factoringOut',
-        'definitions': 'definitions',
-        'functions': 'functions',
-        'coordinates': 'coordinates',
-        'vectors': 'vectors',
-        'vector-operations': 'vectorOperations',
-        'areas': 'areas'
-    };
+    // Конвертируем kebab-case из URL в camelCase (linear-equations → linearEquations)
+    const internalTrainerName = toCamelCase(trainerName);
+    const paths = getTrainerPaths(internalTrainerName);
 
-    const internalTrainerName = trainerNameMap[trainerName] || trainerName;
-
-    // Находим конфигурацию тренажёра по имени
-    let config = null;
-    let buttonId = null;
-    for (const [id, cfg] of Object.entries(trainerConfig)) {
-        if (cfg.trainer === internalTrainerName) {
-            config = cfg;
-            buttonId = id;
-            break;
-        }
-    }
-
-    if (!config) {
+    // Проверяем, что тренажёр существует (есть кнопка в HTML)
+    const btnId = getBtnIdFromTrainer(internalTrainerName);
+    if (!document.getElementById(btnId)) {
         console.error(`Trainer not found: ${trainerName}`);
         showScreen('main-menu');
         return;
     }
 
     // Загружаем тренажёр
-    const loaded = await loadTrainer(config.trainer);
+    const loaded = await loadTrainer(internalTrainerName);
     if (!loaded) {
         console.error('Failed to load trainer');
         showScreen('main-menu');
@@ -1186,7 +711,7 @@ async function loadChallengeMode(params) {
     }
 
     // Создаём custom element
-    const componentTag = config.screen.replace('-screen', '-trainer');
+    const componentTag = paths.screen.replace('-screen', '-trainer');
     let trainerElement = document.querySelector(componentTag);
 
     if (!trainerElement) {
@@ -1202,7 +727,7 @@ async function loadChallengeMode(params) {
         return;
     }
 
-    trainers[config.trainer] = trainer;
+    trainers[internalTrainerName] = trainer;
 
     // Применяем настройки из URL
     trainer.settings = settings;
@@ -1213,7 +738,7 @@ async function loadChallengeMode(params) {
     trainer.activateChallengeMode(taskCount);
 
     // Показываем экран тренажёра
-    showScreen(config.screen);
+    showScreen(paths.screen);
 
     // Запускаем тест
     trainer.startTest();

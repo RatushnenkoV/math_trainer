@@ -1,136 +1,319 @@
-# Тренажер Дробей - Telegram Mini App
+# Математический тренажёр — Telegram Mini App
 
-Приложение для тренировки навыков работы с дробями в виде Telegram Mini App.
+Telegram Mini App для тренировки математических навыков. 30 тренажёров по арифметике, алгебре, геометрии и тригонометрии.
 
-## Функционал
+## Быстрый старт для разработки
 
-- **Главное меню** с кнопкой "Дроби" для начала тестирования
-- **Случайная генерация примеров** с дробями
-- **Настраиваемые параметры:**
-  - Смешанные дроби
-  - Десятичные дроби (автоматическое отображение для знаменателей 2, 4, 5, 20 и степеней 10)
-  - Операции: сложение, вычитание, умножение, деление
-  - Отрицательные числа
-  - Требование сокращения дробей
-- **Система прогресса:**
-  - 4 уровня сложности
-  - Прогресс увеличивается при правильном ответе
-  - Прогресс сбрасывается при неправильном ответе
-  - Переход на новый уровень при достижении целей (10, 20, 50, 100 правильных ответов)
-- **Анимация эмодзи** при правильных и неправильных ответах
-- **Сохранение прогресса и настроек** в localStorage
+```bash
+# Локальный запуск — просто открыть index.html в браузере
+# Или использовать любой статический сервер:
+npx serve .
+```
 
-## Структура проекта
+---
+
+## Архитектура проекта
+
+### Точка входа
+- `index.html` — единственная HTML-страница (SPA)
+- `src/app.js` — главный JS-файл (~1200 строк), управляет всем приложением
+
+### Паттерн: Web Components + Lazy Loading
+
+Каждый тренажёр состоит из 3 файлов, которые загружаются динамически при клике:
 
 ```
-math_trainer/
-├── index.html              # Главный HTML файл
+[Generator] → [Trainer] → [Component]
+     ↓            ↓            ↓
+  Генерация   Логика      UI (Custom Element)
+  примеров    проверки    extends HTMLElement
+```
+
+**Пример для тренажёра дробей:**
+```
+src/utils/generators/FractionsGenerator.js  — генерирует примеры
+src/trainers/FractionsTrainer.js            — проверяет ответы, управляет прогрессом
+src/components/FractionsComponent.js        — рендерит HTML, регистрирует <fractions-trainer>
+```
+
+### Наследование
+
+```
+BaseTrainer                    BaseTrainerComponent (extends HTMLElement)
+     ↑                                   ↑
+FractionsTrainer               FractionsComponent
+LinearEquationsTrainer         LinearEquationsComponent
+QuadraticEquationsTrainer      QuadraticEquationsComponent
+... (30 тренажёров)            ...
+```
+
+---
+
+## Структура файлов
+
+```
+math trainer/
+├── index.html                      # Единственная HTML-страница
 ├── src/
+│   ├── app.js                      # Главная логика (1200 строк)
+│   │
 │   ├── styles/
-│   │   └── main.css       # Стили приложения
+│   │   ├── main.css                # Базовые стили
+│   │   ├── common/
+│   │   │   ├── components.css      # Общие компоненты (кнопки, поля)
+│   │   │   ├── animations.css      # Анимации
+│   │   │   └── shareModal.css      # Модалка "Поделиться"
+│   │   └── trainers/               # Стили для каждого тренажёра (29 файлов)
+│   │       ├── multiplication-table.css
+│   │       ├── linear-equations.css
+│   │       └── ...
+│   │
 │   ├── utils/
-│   │   ├── fractions.js   # Класс для работы с дробями
-│   │   ├── generator.js   # Генератор примеров
-│   │   └── progress.js    # Трекер прогресса
-│   └── app.js             # Главная логика приложения
-└── README.md              # Документация
+│   │   ├── fractions.js            # Класс Fraction для работы с дробями
+│   │   ├── progress.js             # ProgressTracker — сохранение прогресса
+│   │   ├── RealSet.js              # Работа с множествами (для неравенств)
+│   │   ├── powers.js               # Утилиты для степеней
+│   │   ├── Monomial.js             # Класс одночлена
+│   │   ├── Polynomial.js           # Класс многочлена
+│   │   ├── shareLink.js            # Генерация ссылок для челленджей
+│   │   ├── ShapeDrawer.js          # Рисование фигур (геометрия)
+│   │   ├── TriangleDrawer.js       # Рисование треугольников
+│   │   ├── ParallelogramDrawer.js  # Рисование параллелограммов
+│   │   ├── generators/             # Генераторы примеров (30 файлов)
+│   │   │   ├── FractionsGenerator.js
+│   │   │   ├── LinearEquationsGenerator.js
+│   │   │   └── ...
+│   │   └── data/
+│   │       └── definitionsData.js  # Данные для тренажёра определений
+│   │
+│   ├── trainers/                   # Логика тренажёров (30 файлов)
+│   │   ├── BaseTrainer.js          # Базовый класс
+│   │   ├── FractionsTrainer.js
+│   │   ├── LinearEquationsTrainer.js
+│   │   └── ...
+│   │
+│   └── components/                 # UI компоненты (30 файлов)
+│       ├── BaseTrainerComponent.js # Базовый класс (extends HTMLElement)
+│       ├── FractionsComponent.js
+│       ├── LinearEquationsComponent.js
+│       ├── MonomialInput.js        # Переиспользуемый компонент ввода
+│       ├── FactorInput.js          # Компонент ввода множителей
+│       └── ...
 ```
 
-## Запуск локально
+---
 
-1. Откройте файл `index.html` в браузере
-2. Приложение будет работать как обычная веб-страница
+## Ключевые механизмы в app.js
 
-## Деплой в Telegram
+### 1. Convention-based конфигурация (строка ~20)
 
-### Вариант 1: Использование GitHub Pages
+Все пути генерируются автоматически из имени тренажёра:
 
-1. Создайте репозиторий на GitHub
-2. Загрузите все файлы в репозиторий:
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit"
-   git branch -M main
-   git remote add origin https://github.com/ваш-username/math_trainer.git
-   git push -u origin main
-   ```
-3. Перейдите в Settings → Pages
-4. В разделе "Source" выберите ветку `main` и папку `/ (root)`
-5. Нажмите "Save"
-6. Через несколько минут ваше приложение будет доступно по адресу:
-   `https://ваш-username.github.io/math_trainer/`
+```javascript
+// Из имени 'linearEquations' автоматически генерируются:
+// → screen: 'linear-equations-screen'
+// → style: 'src/styles/trainers/linear-equations.css'
+// → scripts: ['...Generator.js', '...Trainer.js', '...Component.js']
 
-### Вариант 2: Использование других хостингов
+function getTrainerPaths(trainerName) {
+    const kebab = toKebabCase(trainerName);  // linearEquations → linear-equations
+    const pascal = toPascalCase(trainerName); // linearEquations → LinearEquations
+    return {
+        screen: `${kebab}-screen`,
+        style: `src/styles/trainers/${kebab}.css`,
+        scripts: [
+            `src/utils/generators/${pascal}Generator.js`,
+            `src/trainers/${pascal}Trainer.js`,
+            `src/components/${pascal}Component.js`
+        ]
+    };
+}
+```
 
-Вы можете использовать любой статический хостинг:
-- Vercel
-- Netlify
-- Cloudflare Pages
-- Firebase Hosting
+### 2. Исключения из конвенции (строка ~62)
 
-### Создание Telegram Mini App
+```javascript
+const trainerOverrides = {
+    // Тренажёры без CSS
+    squareRoots: { noStyle: true },
 
-1. Откройте [@BotFather](https://t.me/BotFather) в Telegram
-2. Создайте нового бота командой `/newbot` или используйте существующего
-3. Используйте команду `/newapp` для создания Mini App
-4. Следуйте инструкциям и укажите URL вашего хостинга
-5. Загрузите иконку и описание приложения
-6. После создания вы получите ссылку на ваше Mini App
+    // Дополнительные скрипты
+    areas: {
+        extraScripts: ['src/utils/ShapeDrawer.js', ...]
+    },
 
-## Как использовать
+    // Внешние библиотеки
+    functions: {
+        libraries: ['https://unpkg.com/d3@3/d3.min.js', ...]
+    }
+};
+```
 
-1. **Главное меню**: Нажмите кнопку "Дроби" для начала тестирования
-2. **Решение примеров**:
-   - Посмотрите на пример в центре экрана
-   - Введите ответ в три поля: целая часть, числитель, знаменатель
-   - Целую часть можно не указывать, если её нет
-   - Нажмите "Проверить"
-3. **Настройки**:
-   - Нажмите на иконку шестеренки в правом верхнем углу
-   - Включите/выключите нужные параметры
-   - Настройки сохраняются автоматически
-4. **Прогресс**:
-   - Следите за прогрессом в верхней части экрана
-   - При правильном ответе прогресс увеличивается
-   - При неправильном ответе прогресс сбрасывается
-   - Достижение целей переводит вас на следующий уровень
+### 3. Автоопределение тренажёров из HTML (строка ~114)
 
-## Технологии
+```javascript
+// Все кнопки тренажёров в HTML имеют id вида "{kebab-name}-btn"
+// Из этого автоматически вычисляется всё остальное:
+//   btnId: 'linear-equations-btn'
+//   → trainer: 'linearEquations'
+//   → name: текст кнопки из HTML
+//   → screen: 'linear-equations-screen'
 
-- Чистый HTML5, CSS3, JavaScript (ES6+)
-- Telegram WebApp API
-- LocalStorage для сохранения данных
+function getTrainerFromBtnId(btnId) {
+    return toCamelCase(btnId.replace('-btn', ''));
+}
 
-## Особенности реализации
+// В initMainMenu():
+document.querySelectorAll('.menu-button[id$="-btn"]').forEach(button => {
+    const trainerName = getTrainerFromBtnId(button.id);
+    // ...
+});
+```
 
-### Класс Fraction
-Полноценный класс для работы с дробями:
-- Сложение, вычитание, умножение, деление
-- Сокращение дробей
-- Преобразование в смешанные дроби
-- Работа с отрицательными числами
+### 4. Lazy Loading (строка ~202)
 
-### Генератор примеров
-Умный генератор, учитывающий настройки:
-- Избегает отрицательных результатов (если отключены)
-- Генерирует примеры разной сложности
-- Учитывает выбранные операции
+```javascript
+async function loadTrainer(trainerName) {
+    const paths = getTrainerPaths(trainerName);
+    const overrides = trainerOverrides[trainerName] || {};
 
-### Система прогресса
-- 4 уровня: 10, 20, 50, 100 правильных ответов подряд
-- Невозможно упасть на предыдущий уровень
-- Сохранение в localStorage
+    // Собираем скрипты: extraScripts + стандартные
+    const scripts = [...(overrides.extraScripts || []), ...paths.scripts];
 
-## Возможные улучшения
+    // Параллельная загрузка CSS + зависимостей, потом Component
+    await Promise.all([cssPromise, ...dependencyScripts.map(loadScript)]);
+    await loadScript(componentScript);
+}
+```
 
-- Добавление звуковых эффектов
-- Статистика решенных примеров
-- Режим на время
-- Таблица лидеров
-- Больше операций (степени, корни)
-- Темная тема
-- Мультиязычность
+### 5. Универсальная навигация (строка ~490)
+
+```javascript
+function handleBackButton() {
+    // Вместо switch на 200 строк — 3 простых проверки:
+    if (isTrainerScreen(screenId)) {
+        trainers[trainerName]?.handleBackButtonClick();
+    } else if (isSettingsScreen(screenId)) {
+        showScreen(getTrainerPaths(trainerName).screen);
+    }
+}
+```
+
+### 6. Режим челленджа (строка ~720)
+
+```javascript
+function loadChallengeMode() {
+    // Парсит base64 из URL параметра tgWebAppStartParam
+    // Загружает настройки челленджа
+    // Запускает тренажёр с заданными параметрами
+}
+```
+
+---
+
+## Список тренажёров (30 штук)
+
+| Раздел | Тренажёры |
+|--------|-----------|
+| **Арифметика** | Таблица умножения, Делимость, Проценты, Отрицательные числа, Квадратные корни |
+| **Дроби** | Определение дроби (визуальное), Чувство дроби, Обыкновенные дроби, Десятичные дроби |
+| **Уравнения** | Линейные, Системы линейных, Квадратные |
+| **Неравенства** | Линейные, Квадратные, Системы неравенств |
+| **Алгебра** | Степени, Приведение подобных, Раскрытие скобок, Формулы сокращённого умножения, Вынесение множителя, Графики функций |
+| **Геометрия** | Определения, Координаты, Векторы, Действия над векторами, Площади |
+| **Тригонометрия** | Перевод градусов в радианы, Табличные значения, Простейшие уравнения |
+
+---
+
+## Внешние зависимости
+
+```html
+<!-- Всегда загружаются -->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+
+<!-- Загружаются динамически только для тренажёра "Графики функций" -->
+<script src="https://unpkg.com/d3@3/d3.min.js"></script>
+<script src="https://unpkg.com/function-plot@1/dist/function-plot.js"></script>
+```
+
+- **Telegram WebApp API** — интеграция с Telegram (BackButton, expand, popups)
+- **KaTeX** — рендеринг математических формул
+- **D3.js + function-plot** — построение графиков функций
+
+---
+
+## Хранение данных
+
+Всё хранится в `localStorage`:
+
+| Ключ | Описание |
+|------|----------|
+| `{trainer}-progress` | Прогресс тренажёра (уровень, очки) |
+| `{trainer}-settings` | Настройки тренажёра |
+| `recent-trainers` | Список недавних тренажёров (макс. 3) |
+| `menu-section-{name}` | Состояние секций меню (свёрнуто/развёрнуто) |
+
+---
+
+## Система прогресса
+
+Каждый тренажёр имеет 4 уровня сложности:
+- **Уровень 1**: 0-10 правильных ответов подряд
+- **Уровень 2**: 10-20 правильных ответов подряд
+- **Уровень 3**: 20-50 правильных ответов подряд
+- **Уровень 4**: 50+ правильных ответов подряд
+
+При ошибке прогресс сбрасывается до начала текущего уровня (не ниже).
+
+---
+
+## Режим челленджа
+
+Пользователь может создать ссылку с определёнными настройками:
+1. Настройки кодируются в base64
+2. Передаются через `tgWebAppStartParam` в URL
+3. При открытии ссылки тренажёр запускается с этими настройками
+4. Отображается специальный UI с количеством заданий
+
+---
+
+## Оптимизации производительности
+
+1. **Параллельная загрузка** — CSS, Generator, Trainer загружаются одновременно
+2. **Предзагрузка** — загрузка начинается при `touchstart`/`mouseenter` на кнопку
+3. **Динамическая загрузка D3** — тяжёлые библиотеки загружаются только для графиков
+4. **Кеширование** — загруженные тренажёры не загружаются повторно
+5. **Preconnect** — заранее устанавливается соединение с CDN
+
+---
+
+## Типичный flow пользователя
+
+```
+1. Открывает Mini App в Telegram
+2. Видит главное меню с 7 секциями
+3. Кликает на тренажёр → loadTrainer() загружает 3 файла
+4. Component создаёт Custom Element и добавляет в DOM
+5. Trainer.startTest() генерирует первый пример
+6. Пользователь вводит ответ → Trainer.checkAnswer()
+7. При правильном ответе → обновляется прогресс, генерируется новый пример
+8. Кнопка "Назад" → возврат в меню (handleBackButton)
+```
+
+---
+
+## Для разработки нового тренажёра
+
+1. Создать `src/utils/generators/NewTrainerGenerator.js`
+2. Создать `src/trainers/NewTrainer.js` (extends BaseTrainer)
+3. Создать `src/components/NewTrainerComponent.js` (extends BaseTrainerComponent)
+4. (Опционально) Создать `src/styles/trainers/new-trainer.css`
+5. Добавить в `trainerConfig`, `trainerStyles`, `trainerScripts` в app.js
+6. Добавить кнопку в index.html
+7. Добавить обработку в `handleBackButton()`
+
+---
 
 ## Лицензия
 
