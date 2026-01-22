@@ -429,15 +429,14 @@ function initTelegramBackButton() {
 
 // Вспомогательная функция для получения имени тренажёра по ID экрана
 function getTrainerNameByScreen(screenId) {
+    // Исключаем main-menu и settings-screen
+    if (screenId === 'main-menu' || screenId.endsWith('-settings-screen') || screenId === 'settings-screen') {
+        return null;
+    }
     // Формат экрана: {kebab-name}-screen → trainer: camelCase
     const match = screenId.match(/^(.+)-screen$/);
     if (match) {
-        const trainerName = toCamelCase(match[1]);
-        // Проверяем, что такая кнопка существует в HTML
-        const btnId = getBtnIdFromTrainer(trainerName);
-        if (document.getElementById(btnId)) {
-            return trainerName;
-        }
+        return toCamelCase(match[1]);
     }
     return null;
 }
@@ -451,11 +450,7 @@ function getTrainerNameBySettingsScreen(screenId) {
     // Стандартный формат: {kebab-name}-settings-screen → trainer
     const match = screenId.match(/^(.+)-settings-screen$/);
     if (match) {
-        const trainerName = toCamelCase(match[1]);
-        // Проверяем, что такая кнопка существует
-        if (document.getElementById(getBtnIdFromTrainer(trainerName))) {
-            return trainerName;
-        }
+        return toCamelCase(match[1]);
     }
     return null;
 }
