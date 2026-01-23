@@ -65,6 +65,10 @@ class AlgebraicIdentitiesTrainer extends BaseTrainer {
             addFactorBtn: document.getElementById('add-factor-btn'),
             variablesPanel: document.getElementById('variables-panel-ai'),
 
+            // Инструкции
+            instructionsExpansion: document.getElementById('algebraic-identities-instructions-expansion'),
+            instructionsFactorization: document.getElementById('algebraic-identities-instructions-factorization'),
+
             // Кнопка "Поделиться"
             shareBtn: document.getElementById('algebraic-identities-share-btn')
         };
@@ -237,6 +241,10 @@ class AlgebraicIdentitiesTrainer extends BaseTrainer {
         this.elements.expansionContainer.style.display = 'flex';
         this.elements.factorizationContainer.style.display = 'none';
 
+        // Показываем соответствующую инструкцию
+        this.elements.instructionsExpansion.style.display = 'block';
+        this.elements.instructionsFactorization.style.display = 'none';
+
         // Очищаем и инициализируем
         this.monomialInputs = [];
         this.factorInputs = [];
@@ -253,6 +261,10 @@ class AlgebraicIdentitiesTrainer extends BaseTrainer {
         // Показываем контейнер для разложения на множители
         this.elements.expansionContainer.style.display = 'none';
         this.elements.factorizationContainer.style.display = 'flex';
+
+        // Показываем соответствующую инструкцию
+        this.elements.instructionsExpansion.style.display = 'none';
+        this.elements.instructionsFactorization.style.display = 'block';
 
         // Очищаем и инициализируем
         this.monomialInputs = [];
@@ -516,6 +528,8 @@ class AlgebraicIdentitiesTrainer extends BaseTrainer {
         this.elements.problemDisplay.innerHTML = '<span class="no-operations-message">Выберите режим и формулы в настройках</span>';
         this.elements.expansionContainer.style.display = 'none';
         this.elements.factorizationContainer.style.display = 'none';
+        this.elements.instructionsExpansion.style.display = 'none';
+        this.elements.instructionsFactorization.style.display = 'none';
     }
 
     hideNoOperationsMessage() {

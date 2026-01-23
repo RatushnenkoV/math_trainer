@@ -280,6 +280,26 @@ if (window.Telegram && window.Telegram.WebApp) {
     tg = window.Telegram.WebApp;
     tg.ready();
     tg.expand();
+
+    // Подписываемся на событие activated (когда Mini App получает фокус после перехода по ссылке)
+    // Это позволяет обрабатывать повторные переходы по ссылкам челленджа
+    if (tg.onEvent) {
+        tg.onEvent('activated', handleTelegramActivated);
+    }
+}
+
+// Обработчик события activated от Telegram
+// Вызывается когда пользователь переходит по ссылке и Mini App уже открыт
+async function handleTelegramActivated() {
+    // Проверяем, есть ли новые параметры челленджа
+    const challengeParams = ShareLinkUtil.decodeFromURL();
+    const challengeClosed = sessionStorage.getItem('challengeClosed');
+
+    if (challengeParams && !challengeClosed) {
+        // Сбрасываем флаг закрытия для нового челленджа
+        sessionStorage.removeItem('challengeClosed');
+        await loadChallengeMode(challengeParams);
+    }
 }
 
 // Инициализация приложения

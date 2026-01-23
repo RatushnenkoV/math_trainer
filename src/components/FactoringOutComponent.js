@@ -39,6 +39,10 @@ class FactoringOutComponent extends BaseTrainerComponent {
                     <div id="variables-panel-fo" class="variables-panel">
                     </div>
 
+                    <div class="instructions">
+                        Перенесите общий множитель за скобки, а остаток — внутрь скобок.
+                    </div>
+
                     <button id="factoring-out-check-btn" class="check-button">Проверить</button>
                     <div id="factoring-out-result-message" class="result-message"></div>
                 </div>

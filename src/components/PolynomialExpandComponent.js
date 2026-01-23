@@ -41,6 +41,10 @@ class PolynomialExpandComponent extends BaseTrainerComponent {
                     <div id="variables-panel" class="variables-panel">
                     </div>
 
+                    <div class="instructions">
+                        Добавьте одночлен по кнопке «+» и перенесите в него множители.
+                    </div>
+
                     <button id="polynomial-expand-check-btn" class="check-button">Проверить</button>
                     <div id="polynomial-expand-result-message" class="result-message"></div>
                 </div>

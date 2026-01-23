@@ -49,6 +49,13 @@ class AlgebraicIdentitiesComponent extends BaseTrainerComponent {
                     <div id="variables-panel-ai" class="variables-panel">
                     </div>
 
+                    <div id="algebraic-identities-instructions-expansion" class="instructions">
+                        Добавьте одночлен по кнопке «+» и перенесите в него множители.
+                    </div>
+                    <div id="algebraic-identities-instructions-factorization" class="instructions" style="display: none;">
+                        Добавьте множитель по кнопке «( ) +» и соберите в нём одночлены.
+                    </div>
+
                     <button id="algebraic-identities-check-btn" class="check-button">Проверить</button>
                     <div id="algebraic-identities-result-message" class="result-message"></div>
                 </div>

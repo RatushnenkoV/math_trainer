@@ -49,10 +49,18 @@ class ShareLinkUtil {
         // Проверяем, запущено ли в Telegram
         const tg = window.Telegram?.WebApp;
 
-        if (tg && tg.initDataUnsafe && tg.initDataUnsafe.start_param) {
+        // Получаем start_param из разных источников (для совместимости с разными версиями)
+        let startParam = null;
+        if (tg) {
+            // Пробуем получить из launchParams (новый API, может обновляться)
+            startParam = tg.launchParams?.startParam
+                || tg.initDataUnsafe?.start_param
+                || null;
+        }
+
+        if (tg && startParam) {
             // Telegram Mini App: декодируем из одной base64 строки
             try {
-                const startParam = tg.initDataUnsafe.start_param;
                 // Восстанавливаем стандартный base64 формат
                 const base64 = startParam
                     .replace(/-/g, '+')
